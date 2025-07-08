@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>부산은행 외화예금 상품페이지</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-toggle {
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+      user-select: none;
+    }
+
+    .arrow {
+      margin-left: 5px;
+      font-size: 12px;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 5px;
+      z-index: 1;
+      width: 120px;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      color: black;
+      text-decoration: none;
+      margin: 5px 0;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+<a href="#">외화</a> >
+
+<div class="dropdown">
+    <span class="dropdown-toggle" onclick="toggleMenu()">
+      외화예금<span id="arrow" class="arrow">▼</span>
+    </span>
+    <div class="dropdown-menu" id="dropdownMenu">
+      <a href="#">환전</a>
+      <a href="#">수입</a>
+    </div>
+ </div>
+ 
+ >
+ 
+ <div class="dropdown">
+    <span class="dropdown-toggle" onclick="toggleMenu()">
+      외화예금상품<span id="arrow" class="arrow">▼</span>
+    </span>
+    <div class="dropdown-menu" id="dropdownMenu">
+      <a href="#">예금</a>
+      <a href="#">적금</a>
+    </div>
+  </div>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("dropdownMenu");
+      const arrow = document.getElementById("arrow");
+      const isVisible = menu.style.display === "block";
+
+      menu.style.display = isVisible ? "none" : "block";
+      arrow.textContent = isVisible ? "▼" : "▲";
+    }
+
+    // 외부 클릭 시 메뉴 닫기
+    document.addEventListener("click", function(event) {
+      const dropdown = document.querySelector(".dropdown");
+      const menu = document.getElementById("dropdownMenu");
+      const arrow = document.getElementById("arrow");
+
+      if (!dropdown.contains(event.target)) {
+        menu.style.display = "none";
+        arrow.textContent = "▼";
+      }
+    });
+  </script>
+
+</body>
+</html>
