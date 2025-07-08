@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>외화 금융상품 추천</title>
+  <style>
+    html {
+      font-size: 16px;
+    }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #ffffff;
+      color: #000000;
+      margin: 0;
+      padding: 40px 0;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark-mode {
+      background-color: #111;
+      color: #eee;
+    }
+    .container {
+      width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    h2 {
+      font-size: 1.8rem;
+      color: #e60012;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #e60012;
+      padding-bottom: 10px;
+    }
+    .accessibility-controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .accessibility-controls button {
+      margin: 0 5px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #e60012;
+      color: white;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    .accessibility-controls button:hover {
+      background-color: #c0000f;
+    }
+    .currency-filter {
+      margin-bottom: 25px;
+      padding: 20px;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      background-color: #fefefe;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark-mode .currency-filter {
+      background-color: #222;
+      border-color: #444;
+      color: #eee;
+    }
+    .currency-filter strong {
+      display: block;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: inherit;
+    }
+    .currency-filter label {
+      display: inline-block;
+      margin: 5px 8px;
+      background: #f4f4f4;
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: inherit;
+    }
+    body.dark-mode .currency-filter label {
+      background: #333;
+      border-color: #666;
+      color: #fff;
+    }
+    .currency-filter input[type="checkbox"] {
+      margin-right: 6px;
+    }
+    .notice {
+      font-size: 0.85rem;
+      color: inherit;
+      margin-top: 8px;
+    }
+    .filter-buttons {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .filter-buttons button {
+      background-color: #e60012;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      margin: 0 5px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.3s;
+    }
+    .filter-buttons button:hover {
+      background-color: #c0000f;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+    .product-card {
+      background: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.04);
+      transition: background-color 0.3s, color 0.3s;
+    }
+    body.dark-mode .product-card {
+      background-color: #1a1a1a;
+      border-color: #333;
+      color: #eee;
+    }
+    .signup-links a {
+      display: inline-block;
+      padding: 4px 10px;
+      margin-right: 6px;
+      border-radius: 20px;
+      background-color: #f7f7f7;
+      border: 1px solid #ccc;
+      font-size: 0.75rem;
+      text-decoration: none;
+      color: #e60012;
+      font-weight: 500;
+      transition: background-color 0.3s;
+    }
+    body.dark-mode .signup-links a {
+      background-color: #333;
+      border-color: #777;
+      color: #e60012;
+    }
+    .product-name {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: inherit;
+      margin-bottom: 10px;
+    }
+    .shield-icon {
+      position: relative;
+      cursor: pointer;
+    }
+    .shield-icon::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 130%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #333;
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 10;
+    }
+    .shield-icon:hover::after {
+      opacity: 1;
+    }
+    .recommendation {
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+    .toggle-btn {
+      background-color: #e60012;
+      border: none;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .toggle-btn:hover {
+      background-color: #c0000f;
+    }
+    .details {
+      display: none;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      margin-top: 12px;
+      border-top: 1px solid #ddd;
+      padding-top: 12px;
+    }
+    body.dark-mode .details {
+      border-color: #555;
+    }
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>외화 금융상품 리스트</h2>
+    <div class="accessibility-controls">
+      <button onclick="decreaseFontSize()">A−</button>
+      <button onclick="increaseFontSize()">A+</button>
+      <button onclick="toggleDarkMode()">🌓 다크/고대비</button>
+      <button onclick="readTTS()">🔊 읽기</button>
+    </div>
+    <div class="currency-filter">
+      <strong>가입할 통화를 선택하세요.</strong>
+      <label><input type="checkbox" value="USD"> 미국달러화(USD)</label>
+      <label><input type="checkbox" value="JPY"> 일본엔화(JPY)</label>
+      <label><input type="checkbox" value="EUR"> 유로화(EUR)</label>
+      <label><input type="checkbox" value="AUD"> 호주달러화(AUD)</label>
+      <label><input type="checkbox" value="GBP"> 영국파운드화(GBP)</label>
+      <label><input type="checkbox" value="CHF"> 스위스프랑화(CHF)</label>
+      <label><input type="checkbox" value="CAD"> 캐나다달러화(CAD)</label>
+      <label><input type="checkbox" value="CNY"> 중국위안화(CNY)</label>
+      <div class="notice">* 그 외 통화는 영업점 개별 문의 바랍니다.</div>
+    </div>
+    <div class="filter-buttons">
+      <button onclick="filterProducts('all')">전체</button>
+      <button onclick="filterProducts('정기예금')">정기예금</button>
+      <button onclick="filterProducts('적금')">적금</button>
+      <button onclick="filterProducts('입출금예금')">입출금예금</button>
+      <button onclick="filterProducts('복합형')">복합형</button>
+    </div>
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+  <script>
+    let currentFontSize = 16;
+    function increaseFontSize() {
+      if (currentFontSize < 24) currentFontSize += 1;
+      document.documentElement.style.fontSize = currentFontSize + 'px';
+    }
+    function decreaseFontSize() {
+      if (currentFontSize > 12) currentFontSize -= 1;
+      document.documentElement.style.fontSize = currentFontSize + 'px';
+    }
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+    function readTTS() {
+      const text = document.querySelector('.container').innerText;
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'ko-KR';
+      speechSynthesis.speak(utter);
+    }
+    const products = [
+      { name: "꿈이룸 외화자유적금", type: "적금", description: "자동이체로 외화 목돈을 차곡차곡 모으고 싶은 분께 추천", period: "12개월", currencies: ["USD"], join: ["영업점 가입"] },
+      { name: "BNK모아드림외화적금", type: "적금", description: "짧은 기간에도 꾸준히 외화를 모으고 싶은 분께", period: "1~12개월", currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"] },
+      { name: "BNK UP & UP 외화정기예금", type: "정기예금", description: "예치기간 따라 금리가 올라가는 안정형 외화 예금", period: "1년", currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"] },
+      { name: "외화정기예금", type: "정기예금", description: "가장 높은 금리를 원하고 장기 예치가 가능한 분께", period: "1개월~3년", currencies: ["USD", "JPY", "GBP", "CHF", "EUR", "AUD", "CAD"], join: ["영업점 가입", "인터넷 가입"] },
+      { name: "업앤업 외화MMDA", type: "입출금예금", description: "하루만 맡겨도 이자가 쌓이는 유동성 높은 외화예금", period: "제한 없음", currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"] },
+      { name: "외화당좌예금", type: "입출금예금", description: "외화수표 발행이 필요한 기업 고객에게 적합", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF"], join: ["영업점 가입"] },
+      { name: "외화보통예금", type: "입출금예금", description: "외화를 자주 입출금하는 개인 고객에게 추천", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF", "CAD", "AUD", "CNY"], join: ["영업점 가입"] },
+      { name: "EASY 환테크 듀얼통장", type: "복합형", description: "환율 시세 걱정 없이 자동으로 외화를 사고팔고 싶은 분께", period: "제한 없음", currencies: ["USD"], join: ["영업점 가입"] }
+    ];
+    let currentType = 'all';
+    function toggleDetails(button) {
+      const detail = button.nextElementSibling;
+      const show = detail.style.display !== 'block';
+      detail.style.display = show ? 'block' : 'none';
+      button.textContent = show ? '접기' : '자세히 보기';
+    }
+    function filterProducts(type) {
+      currentType = type;
+      renderProducts();
+    }
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      const selected = Array.from(document.querySelectorAll('.currency-filter input:checked')).map(cb => cb.value);
+      products.forEach(p => {
+        const matchType = currentType === 'all' || p.type === currentType;
+        const matchCurr = selected.length === 0 || p.currencies.some(c => selected.includes(c));
+        if (matchType && matchCurr) {
+          const card = document.createElement('div'); card.className = 'product-card';
+          const joins = p.join.map(j => `<a href="#">${j}</a>`).join(' ');
+          card.innerHTML = `<div class="signup-links">${joins}</div>
+            <div class="product-name">${p.name} <span class="shield-icon" data-tooltip="예금자보호 대상 금융상품입니다.">🛡️</span></div>
+            <div class="recommendation">${p.description}</div>
+            <button class="toggle-btn" onclick="toggleDetails(this)">자세히 보기</button>
+            <div class="details">• 가입기간: ${p.period}<br>• 대상통화: ${p.currencies.map(c=>currencyLabel(c)).join(', ')}</div>`;
+          grid.appendChild(card);
+        }
+      });
+    }
+    function currencyLabel(code) {
+      const map = {USD:"미국달러화(USD)",JPY:"일본엔화(JPY)",EUR:"유로화(EUR)",AUD:"호주달러화(AUD)",GBP:"영국파운드화(GBP)",CHF:"스위스프랑화(CHF)",CAD:"캐나다달러화(CAD)",CNY:"중국위안화(CNY)"};
+      return map[code]||code;
+    }
+    document.addEventListener('DOMContentLoaded',() => {document.querySelectorAll('.currency-filter input').forEach(cb=>cb.addEventListener('change',renderProducts)); renderProducts();});
+  </script>
+</body>
+</html>
