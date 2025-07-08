@@ -20,9 +20,9 @@ import lombok.RequiredArgsConstructor;
 public class LoginController {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    // 로그인 페이지 표시
+    // 로그인 페이지
     @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("userDto", new UserDto());
@@ -49,48 +49,81 @@ public class LoginController {
         if ("ROLE_ADMIN".equals(user.getRole())) {
             return "redirect:/admin/home";
         } else if ("ROLE_CEO".equals(user.getRole())) {
-            return "redirect:/company/home";
+            return "redirect:/user/import";
         } else {
-            return "redirect:/user/home";
+            return "redirect:/user/userhome";
         }
-    }
-
-    // 유저 홈
-    @GetMapping("/user/home")
-    public String userHome(HttpSession session, Model model) {
-        return checkAccess(session, model, "ROLE_USER", "user/user_home");
     }
 
     // 관리자 홈
     @GetMapping("/admin/home")
     public String adminHome(HttpSession session, Model model) {
-        return checkAccess(session, model, "ROLE_ADMIN", "admin/admin_home");
+        return checkAccess(session, model, "admin/home", "ROLE_ADMIN");
     }
 
-    // 회사 대표 홈
-    @GetMapping("/company/home")
-    public String companyHome(HttpSession session, Model model) {
-        return checkAccess(session, model, "ROLE_CEO", "company/company_home");
+    // 일반 사용자 홈
+    @GetMapping("/user/userhome")
+    public String userHome(HttpSession session, Model model) {
+        return checkAccess(session, model, "user/userhome", "ROLE_USER");
     }
 
-    // 세션 체크 및 권한 검사
-    private String checkAccess(HttpSession session, Model model, String requiredRole, String viewName) {
-        String username = (String) session.getAttribute("username");
+    @GetMapping("/user/import")
+    public String importPage() {
+        return "user/import";
+    }
+
+    // FIND 시스템 - CEO만
+    @GetMapping("/user/goFind")
+    public String goFind(HttpSession session) {
         String role = (String) session.getAttribute("role");
-
-        if (username == null || role == null || !role.equals(requiredRole)) {
-            return "redirect:/login"; // 권한 없을 경우 로그인 페이지로 리다이렉트
+        if (role == null || !"ROLE_CEO".equals(role)) {
+            return "redirect:/login";
         }
+        return "redirect:https://www.kofind.co.kr/fw/FWCOM01R1.do";
+    }
 
-        model.addAttribute("username", username);
-        model.addAttribute("role", role);
-        return viewName;
+    // 원클릭 시스템 - CEO만
+    @GetMapping("/user/goOneclick")
+    public String goOneclick(HttpSession session) {
+        String role = (String) session.getAttribute("role");
+        if (role == null || !"ROLE_CEO".equals(role)) {
+            return "redirect:/login";
+        }
+        return "redirect:https://www.one-click.co.kr/cm/CM0100M001GE.nice?cporcd=033&pdt_seq=14";
+    }
+
+    // 업로드 폼 - CEO만
+    @GetMapping("/user/uploadForm")
+    public String uploadForm(HttpSession session) {
+        String role = (String) session.getAttribute("role");
+        if (role == null || !"ROLE_CEO".equals(role)) {
+            return "redirect:/login";
+        }
+        return "user/uploadForm";
     }
 
     // 로그아웃
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
+        return "redirect:/login";
+    }
+
+    // 공통 권한 체크
+    private String checkAccess(HttpSession session, Model model, String viewName, String requiredRole) {
+        String username = (String) session.getAttribute("username");
+        String role = (String) session.getAttribute("role");
+
+        if (username == null || role == null) {
+            return "redirect:/login";
+        }
+
+        if (role.equals(requiredRole)) {
+            model.addAttribute("username", username);
+            model.addAttribute("role", role);
+            return viewName;
+        }
+
         return "redirect:/login";
     }
 }
