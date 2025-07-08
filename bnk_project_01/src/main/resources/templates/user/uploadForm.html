@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>서식 업로드</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      background-color: #f9f9f9;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background-color: #ddd;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 60px;
+    }
+
+    td {
+      padding: 10px;
+    }
+
+    input[type="file"] {
+      width: 100%;
+    }
+
+    .upload-status {
+      font-size: 20px;
+      display: inline-block;
+      width: 30px;
+      text-align: center;
+    }
+
+    .button-group {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="back-btn" onclick="location.href='/user/import'">◀</button>
+
+  <form method="post" enctype="multipart/form-data" action="/user/upload">
+    <table>
+      <tr>
+        <td>Invoice</td>
+        <td><input type="file" name="invoice" id="invoice" onchange="checkFile('invoice')" /></td>
+        <td><span class="upload-status" id="status-invoice">⏳</span></td>
+      </tr>
+      <tr>
+        <td>Packing List (PL)</td>
+        <td><input type="file" name="pl" id="pl" onchange="checkFile('pl')" /></td>
+        <td><span class="upload-status" id="status-pl">⏳</span></td>
+      </tr>
+      <tr>
+        <td>Bill of Lading (BL)</td>
+        <td><input type="file" name="bl" id="bl" onchange="checkFile('bl')" /></td>
+        <td><span class="upload-status" id="status-bl">⏳</span></td>
+      </tr>
+    </table>
+
+    <div class="button-group">
+      <button type="button" onclick="saveFiles()">저장</button>
+      <button type="submit">제출하기</button>
+    </div>
+  </form>
+
+  <script>
+    function checkFile(id) {
+      const input = document.getElementById(id);
+      const status = document.getElementById('status-' + id);
+
+      if (input.files.length > 0) {
+        status.textContent = '✅';
+      } else {
+        status.textContent = '❌';
+      }
+    }
+
+    function saveFiles() {
+      alert('파일이 임시로 저장되었습니다.');
+      // 추후: fetch() 또는 XMLHttpRequest 로 서버에 저장 요청
+    }
+  </script>
+
+</body>
+</html>

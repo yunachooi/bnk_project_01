@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>기업 시스템</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 0;
+        padding: 30px;
+        background-color: #f9f9f9;
+    }
+
+    .home-btn {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background-color: #ddd;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .description {
+        max-width: 700px;
+        margin: 0 auto 30px;
+        font-size: 18px;
+        line-height: 1.6;
+        color: #333;
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .button-box {
+        background-color: #d3d3d3;
+        padding: 20px;
+        margin: 15px auto;
+        width: 80%;
+        max-width: 700px;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .button-box:hover {
+        background-color: #bcbcbc;
+    }
+
+    .divider {
+        width: 80%;
+        margin: 30px auto;
+        border-top: 1px solid #333;
+    }
+</style>
+</head>
+<body>
+
+    <button class="home-btn" onclick="location.href='/'">⬆</button>
+
+    <div class="description">
+        <h2>개인사업자 수입업무 페이지</h2>
+        <p>
+            본 페이지는 개인사업자를 위한 수입업무 제출 시스템입니다.<br>
+            아래의 버튼을 통해 수입에 필요한 시스템 접속 및 서류 업로드를 진행할 수 있습니다.<br><br>
+            <strong>필요 서류:</strong> 인보이스(Invoice), 포장명세서(Packing List), 선하증권(BL)<br>
+            해당 서류들을 사전에 준비하신 후 업로드해 주세요.
+        </p>
+    </div>
+
+    <div class="button-box" onclick="location.href='/user/goFind'">FIND 시스템</div>
+    <div class="button-box" onclick="location.href='/user/goOneclick'">원클릭 시스템</div>
+
+    <div class="divider"></div>
+
+    <div class="button-box" onclick="location.href='/user/uploadForm'">기업 자체 서식 업로드</div>
+
+</body>
+</html>
