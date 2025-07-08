@@ -14,4 +14,9 @@ public class MainController {
 	public String productDetailP() {
 		return "productDetail";
 	}
+	
+	@GetMapping("/product")
+	public String productP() {
+		return "product";
+	}
 }
