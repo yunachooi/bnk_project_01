@@ -1,4 +1,4 @@
-package main.java.com.example.bnk_project_01;
+package com.example.bnk_project_01;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
