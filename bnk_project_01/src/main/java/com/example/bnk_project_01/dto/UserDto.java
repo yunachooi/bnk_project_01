@@ -1,15 +1,18 @@
 package com.example.bnk_project_01.dto;
 
-import lombok.AllArgsConstructor;
+
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class UserDto {
 
+	@NotBlank(message = "아이디를 입력하세요.")
 	private String username;
+	
+	@NotBlank(message = "비밀번호를 입력하세요.")
 	private String password;
+	
 	private String role;
+
 }
