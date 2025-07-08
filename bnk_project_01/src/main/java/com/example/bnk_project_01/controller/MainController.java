@@ -9,4 +9,14 @@ public class MainController {
 	public String root() {
 		return "index";
 	}
+	
+	@GetMapping("/productDetail")
+	public String productDetailP() {
+		return "productDetail";
+	}
+	
+	@GetMapping("/product")
+	public String productP() {
+		return "product";
+	}
 }

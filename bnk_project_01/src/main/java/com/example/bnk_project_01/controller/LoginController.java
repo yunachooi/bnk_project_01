@@ -3,7 +3,6 @@ package com.example.bnk_project_01.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +13,6 @@ import com.example.bnk_project_01.repository.UserRepository;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -22,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class LoginController {
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     // 로그인 페이지
     @GetMapping("/login")
@@ -33,14 +31,9 @@ public class LoginController {
 
     // 로그인 처리
     @PostMapping("/login")
-    public String doLogin(@ModelAttribute("userDto") @Valid UserDto userDto,
-                          BindingResult bindingResult,
+    public String doLogin(@ModelAttribute("userDto") UserDto userDto,
                           HttpServletRequest request,
                           Model model) {
-
-        if (bindingResult.hasErrors()) {
-            return "login";
-        }
 
         User user = userRepository.findByUsername(userDto.getUsername());
 
@@ -53,11 +46,10 @@ public class LoginController {
         session.setAttribute("username", user.getUsername());
         session.setAttribute("role", user.getRole());
 
-        // 권한에 따라 리다이렉트
         if ("ROLE_ADMIN".equals(user.getRole())) {
             return "redirect:/admin/home";
         } else if ("ROLE_CEO".equals(user.getRole())) {
-            return "redirect:/user/ceohome";
+            return "redirect:/user/import";
         } else {
             return "redirect:/user/userhome";
         }
@@ -75,10 +67,39 @@ public class LoginController {
         return checkAccess(session, model, "user/userhome", "ROLE_USER");
     }
 
-    // 기업 사용자 홈
-    @GetMapping("/user/ceohome")
-    public String ceoHome(HttpSession session, Model model) {
-        return checkAccess(session, model, "user/ceohome", "ROLE_CEO");
+    @GetMapping("/user/import")
+    public String importPage() {
+        return "user/import";
+    }
+
+    // FIND 시스템 - CEO만
+    @GetMapping("/user/goFind")
+    public String goFind(HttpSession session) {
+        String role = (String) session.getAttribute("role");
+        if (role == null || !"ROLE_CEO".equals(role)) {
+            return "redirect:/login";
+        }
+        return "redirect:https://www.kofind.co.kr/fw/FWCOM01R1.do";
+    }
+
+    // 원클릭 시스템 - CEO만
+    @GetMapping("/user/goOneclick")
+    public String goOneclick(HttpSession session) {
+        String role = (String) session.getAttribute("role");
+        if (role == null || !"ROLE_CEO".equals(role)) {
+            return "redirect:/login";
+        }
+        return "redirect:https://www.one-click.co.kr/cm/CM0100M001GE.nice?cporcd=033&pdt_seq=14";
+    }
+
+    // 업로드 폼 - CEO만
+    @GetMapping("/user/uploadForm")
+    public String uploadForm(HttpSession session) {
+        String role = (String) session.getAttribute("role");
+        if (role == null || !"ROLE_CEO".equals(role)) {
+            return "redirect:/login";
+        }
+        return "user/uploadForm";
     }
 
     // 로그아웃
@@ -88,8 +109,8 @@ public class LoginController {
         return "redirect:/login";
     }
 
-    // 권한 체크 메서드
-    private String checkAccess(HttpSession session, Model model, String viewName, String... allowedRoles) {
+    // 공통 권한 체크
+    private String checkAccess(HttpSession session, Model model, String viewName, String requiredRole) {
         String username = (String) session.getAttribute("username");
         String role = (String) session.getAttribute("role");
 
@@ -97,12 +118,10 @@ public class LoginController {
             return "redirect:/login";
         }
 
-        for (String allowed : allowedRoles) {
-            if (role.equals(allowed)) {
-                model.addAttribute("username", username);
-                model.addAttribute("role", role);
-                return viewName;
-            }
+        if (role.equals(requiredRole)) {
+            model.addAttribute("username", username);
+            model.addAttribute("role", role);
+            return viewName;
         }
 
         return "redirect:/login";

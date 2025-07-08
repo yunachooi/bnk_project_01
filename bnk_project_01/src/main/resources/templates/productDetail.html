@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>부산은행 외화예금 상품페이지</title>
+ <style>
+    .container {
+      width: 1000px;
+      margin: 0 auto;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 18px;          
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb a,
+    .breadcrumb span {
+      color: black;
+      text-decoration: none;    
+      font-weight: bold;       
+      font-size: 20px;          
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-toggle {
+      cursor: pointer;
+      color: blue;
+      text-decoration: none;
+      user-select: none;
+      font-weight: bold;
+      font-size: 20px;       
+    }
+
+    .dropdown-toggle#red {
+      color: red;  
+    }
+
+    .dropdown-toggle#red .arrow {
+      color: red; 
+    }
+
+    .arrow {
+      margin-left: 5px;
+      font-size: 14px;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 5px;
+      z-index: 1;
+      width: 150px;
+    }
+
+    .dropdown-menu a {
+      display: block;
+      color: black;
+      text-decoration: none;
+      margin: 5px 0;
+      font-size: 18px;
+    }
+
+    .dropdown-menu a:hover {
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="breadcrumb">
+      <a href="#">외화</a>
+      <span>&gt;</span>
+
+      <div class="dropdown">
+        <span class="dropdown-toggle" onclick="toggleMenu(this)">
+          외화예금<span class="arrow">▼</span>
+        </span>
+        <div class="dropdown-menu">
+          <a href="#">환전</a>
+          <a href="#">수입</a>
+        </div>
+      </div>
+
+      <span>&gt;</span>
+
+      <div class="dropdown">
+        <span class="dropdown-toggle" id="red" onclick="toggleMenu(this)">
+          외화예금상품<span class="arrow">▼</span>
+        </span>
+        <div class="dropdown-menu">
+          <a href="#">예금</a>
+          <a href="#">적금</a>
+        </div>
+      </div>
+    </div>
+    <hr>
+    
+<div>
+	<div>
+	
+	</div>
+</div>
+    
+  </div>
+
+  <script>
+    function toggleMenu(element) {
+      const dropdown = element.parentElement;
+      const menu = dropdown.querySelector('.dropdown-menu');
+      const arrow = dropdown.querySelector('.arrow');
+
+      const isVisible = menu.style.display === 'block';
+
+      // 모든 메뉴 닫기
+      document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = 'none');
+      document.querySelectorAll('.arrow').forEach(a => a.textContent = '▼');
+
+      // 현재 메뉴 열기
+      if (!isVisible) {
+        menu.style.display = 'block';
+        arrow.textContent = '▲';
+      }
+    }
+
+    // 외부 클릭 시 모든 드롭다운 닫기
+    document.addEventListener('click', function (event) {
+      if (!event.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.style.display = 'none');
+        document.querySelectorAll('.arrow').forEach(arrow => arrow.textContent = '▼');
+      }
+    });
+  </script>
+
+</body>
+</html>
