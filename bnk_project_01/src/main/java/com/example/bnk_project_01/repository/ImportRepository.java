@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.bnk_project_01.entity.Import;
-public interface ImportRepository extends JpaRepository<Import, Long> {
+public interface ImportRepository extends JpaRepository<Import, String> {
 
     List<Import> findByUsername(String username);
 
     List<Import> findByUsernameAndIfilecode(String username, String ifilecode);
+    
+    Import findTopByOrderByInoDesc();
 }

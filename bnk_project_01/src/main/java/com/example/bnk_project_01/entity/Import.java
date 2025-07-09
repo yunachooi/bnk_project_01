@@ -19,15 +19,14 @@ import lombok.Data;
 public class Import {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long iid;
+    private String ino;
 
-    private String username;        // 사용자 ID
-    private String ifilecode;       // 문서 코드 (예: INVOICE, PL, BL)
-    private String iname;           // 업로드된 원본 파일명
-    private String ipath;           // 저장된 파일 경로
-    private String iinfo;           // 설명
-    private String istatus;         // 상태 (예: 제출됨)
+    private String username;
+    private String ifilecode;
+    private String iname;
+    private String ipath;
+    private String iinfo;
+    private String istatus;
     
     @CreationTimestamp
     @Column(name = "icreatedate")
