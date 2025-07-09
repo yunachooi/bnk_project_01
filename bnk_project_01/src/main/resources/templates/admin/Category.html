@@ -15,7 +15,7 @@
     <button id="btnAdd">+ 등록</button>
     <table>
       <thead><tr>
-        <th>대분류</th><th>중분류</th><th>소분류</th><th>삭제</th>
+        <th>코드</th><th>대분류</th><th>중분류</th><th>소분류</th><th>삭제</th>
       </tr></thead>
       <tbody id="tbody"><!-- JS 렌더링 --></tbody>
     </table>
@@ -27,6 +27,7 @@
   <div class="box">
     <h3>카테고리 등록</h3>
     <form id="frmAdd">
+      <label>코드 <input name="cno" required /></label>
       <label>대분류 <input name="large" required /></label>
       <label>중분류 <input name="medium" /></label>
       <label>소분류 <input name="small" /></label>
