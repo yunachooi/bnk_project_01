@@ -22,12 +22,4 @@ public class Category {
 	private String large;
 	private String medium;
 	private String small;
-	
-	@PrePersist
-    private void prePersist() {
-        if (cno == null || cno.isBlank()) {
-            cno = UUID.randomUUID().toString();
-        }
-    }
-
 }
