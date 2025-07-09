@@ -9,19 +9,28 @@ document.addEventListener('DOMContentLoaded', function() {
     searchData();
 });
 
-
-
-// 삭제 버튼 추가
+// 삭제/등록 버튼 추가
 function addDeleteButton() {
-    const container = document.querySelector('.container');
-    const h2 = container.querySelector('h2');
+    // 기존 버튼이 있다면 제거
+    const existingDeleteBtn = document.getElementById('deleteSelectedBtn');
+    const existingRegisterBtn = document.getElementById('registerBtn');
+    if (existingDeleteBtn) existingDeleteBtn.remove();
+    if (existingRegisterBtn) existingRegisterBtn.remove();
     
-    if (h2 && !document.getElementById('deleteSelectedBtn')) {
-        // 삭제 버튼
-        const deleteButton = document.createElement('button');
-        deleteButton.id = 'deleteSelectedBtn';
-        deleteButton.textContent = '삭제';
-        deleteButton.onclick = deleteSelected;
+    // 조회 결과 섹션 찾기
+    const resultBox = document.querySelector('.result-box');
+    const resultTitle = document.getElementById('resultTitle');
+    
+    if (resultBox && resultTitle) {
+        // 버튼 컨테이너 생성
+        let buttonContainer = document.querySelector('.button-container');
+        if (!buttonContainer) {
+            buttonContainer = document.createElement('div');
+            buttonContainer.className = 'button-container';
+            
+            // resultTitle 다음에 버튼 컨테이너 삽입
+            resultTitle.parentNode.insertBefore(buttonContainer, resultTitle.nextSibling);
+        }
         
         // 등록 버튼
         const registerButton = document.createElement('button');
@@ -29,8 +38,14 @@ function addDeleteButton() {
         registerButton.textContent = '등록';
         registerButton.onclick = addNewRowFromTopButton;
         
-        h2.appendChild(deleteButton);
-        h2.appendChild(registerButton);
+        // 삭제 버튼
+        const deleteButton = document.createElement('button');
+        deleteButton.id = 'deleteSelectedBtn';
+        deleteButton.textContent = '선택 삭제';
+        deleteButton.onclick = deleteSelected;
+        
+        buttonContainer.appendChild(registerButton);
+        buttonContainer.appendChild(deleteButton);
     }
 }
 
@@ -66,12 +81,6 @@ function addNewRowFromTopButton() {
 function changeSearchType() {
     const searchType = document.getElementById('searchType').value;
     
-    // 속성값 조회일 때만 추가 필터 표시
-    const attributeFilters = document.getElementById('attributeFilters');
-    if (attributeFilters) {
-        attributeFilters.style.display = searchType === 'attribute' ? 'flex' : 'none';
-    }
-    
     // 테이블 헤더 업데이트
     updateTableHeader(searchType);
     
@@ -92,7 +101,7 @@ function updateTableHeader(searchType) {
         },
         attribute: {
             title: '외화 상품 속성값 조회 결과',
-            headers: ['<input type="checkbox" id="selectAll" onchange="toggleSelectAll()">', '순번', '속성값코드', '상품명', '속성명', '속성값']
+            headers: ['<input type="checkbox" id="selectAll" onchange="toggleSelectAll()">', '순번', '속성값코드', '상품코드', '상품명', '속성코드', '속성명', '속성값']
         }
     };
     
@@ -173,7 +182,8 @@ function filterData(data, keyword, searchType) {
         
         attribute: (item) => 
             [item.ano, item.avalue, 
-             item.product?.pname, item.property?.prname]
+             item.product?.pno, item.product?.pname, 
+             item.property?.prno, item.property?.prname]
             .some(field => field && field.toString().toLowerCase().includes(lowerKeyword))
     };
     
@@ -181,7 +191,7 @@ function filterData(data, keyword, searchType) {
 }
 
 // 결과 표시
-function displayResults(data, searchType) {
+async function displayResults(data, searchType) {
     const tbody = document.getElementById('resultBody');
     
     if (!tbody) {
@@ -199,6 +209,11 @@ function displayResults(data, searchType) {
     console.log('데이터 표시 시작:', data.length + '개 항목');
     
     try {
+        // attribute 타입인 경우 추가 데이터 로드
+        if (searchType === 'attribute') {
+            data = await enrichAttributeData(data);
+        }
+        
         const rowsHTML = data.map((item, index) => {
             const rowHTML = createRowHTML(item, index + 1, searchType);
             console.log(`행 ${index + 1} HTML 생성:`, rowHTML);
@@ -206,11 +221,49 @@ function displayResults(data, searchType) {
         }).join('');
         
         tbody.innerHTML = rowsHTML;
+        
+        // 더블클릭 이벤트 설정
+        setupDoubleClickEvents(searchType);
+        
         console.log('테이블 업데이트 완료');
         
     } catch (error) {
         console.error('테이블 렌더링 오류:', error);
         showMessage('데이터 표시 중 오류가 발생했습니다.');
+    }
+}
+
+// 속성값 데이터에 상품명, 속성명 추가
+async function enrichAttributeData(data) {
+    try {
+        // 상품과 속성 데이터를 병렬로 가져오기
+        const [productResponse, propertyResponse] = await Promise.all([
+            fetch('/admin/find/product'),
+            fetch('/admin/find/property')
+        ]);
+        
+        const products = await productResponse.json();
+        const properties = await propertyResponse.json();
+        
+        // 데이터 매핑을 위한 Map 생성
+        const productMap = new Map(products.map(p => [p.pno, p]));
+        const propertyMap = new Map(properties.map(pr => [pr.prno, pr]));
+        
+        // 각 속성값 데이터에 상품명, 속성명 추가
+        return data.map(item => ({
+            ...item,
+            product: productMap.get(item.pno) || { pno: item.pno, pname: '알 수 없음' },
+            property: propertyMap.get(item.prno) || { prno: item.prno, prname: '알 수 없음' }
+        }));
+        
+    } catch (error) {
+        console.error('데이터 보강 중 오류:', error);
+        // 오류 시 원본 데이터 반환
+        return data.map(item => ({
+            ...item,
+            product: { pno: item.pno, pname: '로드 실패' },
+            property: { prno: item.prno, prname: '로드 실패' }
+        }));
     }
 }
 
@@ -226,35 +279,34 @@ function createRowHTML(item, index, searchType) {
             const statusText = statusMap[item.pstatus] || item.pstatus || '';
             
             return `
-                <tr>
-					<td><input type="checkbox" class="row-checkbox" value="${item.pno}"></td>
+                <tr data-id="${item.pno}" data-type="${searchType}">
+                    <td><input type="checkbox" class="row-checkbox" value="${item.pno}"></td>
                     <td>${index}</td>
-                    <td>${item.pno || ''}</td>
-                    <td>${item.pname || ''}</td>
-                    <td>${statusText}</td>
+                    <td class="non-editable">${item.pno || ''}</td>
+                    <td class="editable" data-field="pname">${item.pname || ''}</td>
+                    <td class="non-editable">${statusText}</td>
                 </tr>
             `;
         },
         property: (item, index) => `
-            <tr>
-				<td><input type="checkbox" class="row-checkbox" value="${item.prno}"></td>
+            <tr data-id="${item.prno}" data-type="${searchType}">
+                <td><input type="checkbox" class="row-checkbox" value="${item.prno}"></td>
                 <td>${index}</td>
-                <td>${item.prno || ''}</td>
-                <td>${item.prname || ''}</td>
+                <td class="non-editable">${item.prno || ''}</td>
+                <td class="editable" data-field="prname">${item.prname || ''}</td>
             </tr>
         `,
         attribute: (item, index) => {
-            const productName = item.product ? item.product.pname : (item.productName || '');
-            const propertyName = item.property ? item.property.prname : (item.propertyName || '');
-            
             return `
-                <tr>
+                <tr data-id="${item.ano}" data-type="${searchType}">
                     <td><input type="checkbox" class="row-checkbox" value="${item.ano}"></td>
                     <td>${index}</td>
-                    <td>${item.ano || ''}</td>
-                    <td>${productName}</td>
-                    <td>${propertyName}</td>
-                    <td>${item.avalue || ''}</td>
+                    <td class="non-editable">${item.ano || ''}</td>
+                    <td class="editable" data-field="pno">${item.product?.pno || ''}</td>
+                    <td class="non-editable">${item.product?.pname || ''}</td>
+                    <td class="editable" data-field="prno">${item.property?.prno || ''}</td>
+                    <td class="non-editable">${item.property?.prname || ''}</td>
+                    <td class="editable" data-field="avalue">${item.avalue || ''}</td>
                 </tr>
             `;
         }
@@ -263,11 +315,268 @@ function createRowHTML(item, index, searchType) {
     return rowTemplates[searchType](item, index);
 }
 
+// 더블클릭 이벤트 설정
+function setupDoubleClickEvents(searchType) {
+    const editableCells = document.querySelectorAll('.editable');
+    
+    editableCells.forEach(cell => {
+        cell.addEventListener('dblclick', function() {
+            if (this.querySelector('input') || this.querySelector('select')) {
+                return; // 이미 수정 모드인 경우 무시
+            }
+            
+            const field = this.dataset.field;
+            // 상품코드나 속성코드 선택 시 드롭다운 표시
+            if (field === 'pno' || field === 'prno') {
+                makeSelectableCell(this, field);
+            } else {
+                makeEditable(this, false); // 일반 텍스트 입력만 사용
+            }
+        });
+    });
+}
+
+// 선택 가능한 셀 만들기 (상품코드, 속성코드용)
+async function makeSelectableCell(cell, field) {
+    const currentValue = cell.textContent.trim();
+    
+    try {
+        // 상품 또는 속성 목록 가져오기
+        const url = field === 'pno' ? '/admin/find/product' : '/admin/find/property';
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error('데이터 조회 실패');
+        }
+        
+        const data = await response.json();
+        
+        // 선택 박스 생성
+        const select = document.createElement('select');
+        select.style.width = '100%';
+        select.style.border = '1px solid #ccc';
+        select.style.padding = '2px';
+        
+        // 빈 옵션 추가
+        const emptyOption = document.createElement('option');
+        emptyOption.value = '';
+        emptyOption.textContent = '선택하세요';
+        select.appendChild(emptyOption);
+        
+        // 데이터 옵션 추가
+        data.forEach(item => {
+            const option = document.createElement('option');
+            if (field === 'pno') {
+                option.value = item.pno;
+                option.textContent = `${item.pno} - ${item.pname}`;
+                if (item.pno === currentValue) {
+                    option.selected = true;
+                }
+            } else {
+                option.value = item.prno;
+                option.textContent = `${item.prno} - ${item.prname}`;
+                if (item.prno === currentValue) {
+                    option.selected = true;
+                }
+            }
+            select.appendChild(option);
+        });
+        
+        cell.innerHTML = '';
+        cell.appendChild(select);
+        select.focus();
+        
+        // 선택 변경 시 저장
+        select.addEventListener('change', function() {
+            if (this.value) {
+                saveEditedCell(cell, this.value, field);
+                // 선택 시 해당 행의 상품명/속성명도 업데이트
+                updateRelatedNameCell(cell, this.value, field, data);
+            }
+        });
+        
+        // 포커스 해제 시 저장
+        select.addEventListener('blur', function() {
+            if (this.value) {
+                saveEditedCell(cell, this.value, field);
+                updateRelatedNameCell(cell, this.value, field, data);
+            } else {
+                cancelEdit(cell, currentValue, field);
+            }
+        });
+        
+        // ESC 키로 취소
+        select.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                cancelEdit(cell, currentValue, field);
+            }
+        });
+        
+    } catch (error) {
+        console.error('선택 목록 조회 오류:', error);
+        alert('선택 목록을 불러오는 중 오류가 발생했습니다.');
+        // 실패 시 일반 텍스트 입력으로 대체
+        makeEditable(cell, false);
+    }
+}
+
+// 관련 이름 셀 업데이트
+function updateRelatedNameCell(cell, selectedValue, field, data) {
+    const row = cell.closest('tr');
+    
+    if (field === 'pno') {
+        // 상품명 업데이트
+        const selectedItem = data.find(item => item.pno === selectedValue);
+        if (selectedItem) {
+            const nameCell = row.querySelector('td:nth-child(5)'); // 상품명 셀
+            if (nameCell) {
+                nameCell.textContent = selectedItem.pname;
+            }
+        }
+    } else if (field === 'prno') {
+        // 속성명 업데이트
+        const selectedItem = data.find(item => item.prno === selectedValue);
+        if (selectedItem) {
+            const nameCell = row.querySelector('td:nth-child(7)'); // 속성명 셀
+            if (nameCell) {
+                nameCell.textContent = selectedItem.prname;
+            }
+        }
+    }
+}
+
+// 셀을 수정 가능하게 만들기
+function makeEditable(cell, isSelect = false) {
+    const currentValue = cell.textContent.trim();
+    const field = cell.dataset.field;
+    
+    // 일반 텍스트 입력만 처리 (상태 선택박스 제거)
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = currentValue;
+    input.style.width = '100%';
+    input.style.border = '1px solid #ccc';
+    input.style.padding = '2px';
+    
+    cell.innerHTML = '';
+    cell.appendChild(input);
+    input.focus();
+    input.select();
+    
+    // 엔터키로 저장
+    input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            saveEditedCell(cell, input.value, field);
+        }
+    });
+    
+    // 포커스 해제 시 저장
+    input.addEventListener('blur', function() {
+        saveEditedCell(cell, input.value, field);
+    });
+    
+    // ESC 키로 취소
+    input.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            cancelEdit(cell, currentValue, field);
+        }
+    });
+}
+
+// 수정된 셀 저장
+async function saveEditedCell(cell, newValue, field) {
+    const row = cell.closest('tr');
+    const id = row.dataset.id;
+    const type = row.dataset.type;
+    
+    console.log('수정 시작:', { id, type, field, newValue });
+    
+    // 빈 값 검증
+    if (!newValue.trim()) {
+        alert('값을 입력해주세요.');
+        // 원래 값으로 복원
+        const originalValue = cell.textContent.trim();
+        restoreCell(cell, originalValue, field);
+        return;
+    }
+    
+    try {
+        // 서버에 수정 요청 - 컨트롤러 URL 패턴에 맞게 수정
+        const updateData = {
+            [field]: newValue
+        };
+        
+        console.log('전송할 데이터:', updateData);
+        console.log('요청 URL:', `/admin/update/${type}/${id}`);
+        
+        const response = await fetch(`/admin/update/${type}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateData)
+        });
+        
+        console.log('응답 상태:', response.status);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('서버 응답 오류:', errorText);
+            throw new Error(`수정 실패: ${response.status} - ${errorText}`);
+        }
+        
+        const updatedData = await response.json();
+        console.log('수정 성공:', updatedData);
+        
+        // 성공 시 표시 값 업데이트
+        updateCellDisplay(cell, newValue, field);
+        
+        // 성공 피드백
+        cell.style.backgroundColor = '#d4edda';
+        setTimeout(() => {
+            cell.style.backgroundColor = '';
+        }, 1000);
+        
+    } catch (error) {
+        console.error('수정 오류:', error);
+        alert('수정 중 오류가 발생했습니다: ' + error.message);
+        
+        // 오류 시 원래 값으로 복원
+        const originalValue = cell.textContent.trim();
+        restoreCell(cell, originalValue, field);
+    }
+}
+
+// 수정 취소
+function cancelEdit(cell, originalValue, field) {
+    restoreCell(cell, originalValue, field);
+}
+
+// 셀을 원래 상태로 복원
+function restoreCell(cell, value, field) {
+    cell.innerHTML = value;
+}
+
+// 셀 표시 업데이트
+function updateCellDisplay(cell, value, field) {
+    cell.innerHTML = value;
+}
+
+// 타입별 ID 필드 반환
+function getIdField(type) {
+    const idFields = {
+        product: 'pno',
+        property: 'prno',
+        attribute: 'ano'
+    };
+    return idFields[type];
+}
+
 // 메시지 표시 (유틸리티)
 function showMessage(message, type = 'no-data') {
     const searchType = document.getElementById('searchType').value;
-    const colSpan = searchType === 'property' ? 5 : 
-                   searchType === 'product' ? 6 : 7;
+    const colSpan = searchType === 'property' ? 4 : 
+                   searchType === 'product' ? 5 : 8;
     
     const resultBody = document.getElementById('resultBody');
     if (resultBody) {
@@ -318,8 +627,10 @@ function addNewRow(searchType) {
                 <td></td>
                 <td>${currentRows + 1}</td>
                 <td><input type="text" name="ano" placeholder="속성값코드"></td>
-                <td><input type="text" name="pno" placeholder="상품코드"></td>
-                <td><input type="text" name="prno" placeholder="속성코드"></td>
+                <td><select name="pno" onchange="updateProductName(this)"><option value="">상품 선택</option></select></td>
+                <td class="product-name-display">자동 표시</td>
+                <td><select name="prno" onchange="updatePropertyName(this)"><option value="">속성 선택</option></select></td>
+                <td class="property-name-display">자동 표시</td>
                 <td><input type="text" name="avalue" placeholder="속성값"></td>
                 <td><button class="save-btn" onclick="saveRow(this, '${searchType}')">저장</button></td>
             `;
@@ -329,12 +640,95 @@ function addNewRow(searchType) {
     newRow.innerHTML = inputFields;
     tbody.appendChild(newRow);
     
+    // attribute 타입인 경우 상품, 속성 선택박스 데이터 로드
+    if (searchType === 'attribute') {
+        loadSelectOptions(newRow);
+    }
+    
     console.log('새 행 추가됨');
     
     // 첫 번째 입력 필드에 포커스
     const firstInput = newRow.querySelector('input');
     if (firstInput) {
         firstInput.focus();
+    }
+}
+
+// 선택박스 옵션 로드
+async function loadSelectOptions(row) {
+    try {
+        // 상품 목록 로드
+        const productResponse = await fetch('/admin/find/product');
+        const productData = await productResponse.json();
+        
+        const productSelect = row.querySelector('select[name="pno"]');
+        productData.forEach(product => {
+            const option = document.createElement('option');
+            option.value = product.pno;
+            option.textContent = `${product.pno} - ${product.pname}`;
+            productSelect.appendChild(option);
+        });
+        
+        // 속성 목록 로드
+        const propertyResponse = await fetch('/admin/find/property');
+        const propertyData = await propertyResponse.json();
+        
+        const propertySelect = row.querySelector('select[name="prno"]');
+        propertyData.forEach(property => {
+            const option = document.createElement('option');
+            option.value = property.prno;
+            option.textContent = `${property.prno} - ${property.prname}`;
+            propertySelect.appendChild(option);
+        });
+        
+    } catch (error) {
+        console.error('선택박스 옵션 로드 오류:', error);
+    }
+}
+
+// 상품명 업데이트 함수
+async function updateProductName(selectElement) {
+    const selectedValue = selectElement.value;
+    const row = selectElement.closest('tr');
+    const nameDisplay = row.querySelector('.product-name-display');
+    
+    if (selectedValue) {
+        try {
+            const response = await fetch('/admin/find/product');
+            const data = await response.json();
+            const selectedProduct = data.find(product => product.pno === selectedValue);
+            
+            if (selectedProduct) {
+                nameDisplay.textContent = selectedProduct.pname;
+            }
+        } catch (error) {
+            console.error('상품명 조회 오류:', error);
+        }
+    } else {
+        nameDisplay.textContent = '상품명 표시';
+    }
+}
+
+// 속성명 업데이트 함수
+async function updatePropertyName(selectElement) {
+    const selectedValue = selectElement.value;
+    const row = selectElement.closest('tr');
+    const nameDisplay = row.querySelector('.property-name-display');
+    
+    if (selectedValue) {
+        try {
+            const response = await fetch('/admin/find/property');
+            const data = await response.json();
+            const selectedProperty = data.find(property => property.prno === selectedValue);
+            
+            if (selectedProperty) {
+                nameDisplay.textContent = selectedProperty.prname;
+            }
+        } catch (error) {
+            console.error('속성명 조회 오류:', error);
+        }
+    } else {
+        nameDisplay.textContent = '속성명 표시';
     }
 }
 
@@ -370,7 +764,7 @@ async function saveRow(button, searchType) {
     button.textContent = '저장 중...';
     
     try {
-        const response = await fetch(`/admin/save/${searchType}`, {
+        const response = await fetch(`/admin/save/${searchType === 'attribute' ? 'Attribute' : searchType}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -417,7 +811,7 @@ function validateData(data, searchType) {
 }
 
 // 행을 읽기 전용으로 변경
-function updateRowToReadOnly(row, savedData, currentIndex, searchType) {
+async function updateRowToReadOnly(row, savedData, currentIndex, searchType) {
     let savedContent = '';
     
     switch(searchType) {
@@ -425,34 +819,65 @@ function updateRowToReadOnly(row, savedData, currentIndex, searchType) {
             savedContent = `
                 <td><input type="checkbox" class="row-checkbox" value="${savedData.pno}"></td>
                 <td>${currentIndex}</td>
-                <td>${savedData.pno}</td>
-                <td>${savedData.pname}</td>
-                <td>${savedData.pstatus === 'Y' ? '활성' : savedData.pstatus === 'N' ? '보류' : savedData.pstatus}</td>
+                <td class="non-editable">${savedData.pno}</td>
+                <td class="editable" data-field="pname">${savedData.pname}</td>
+                <td class="non-editable">${savedData.pstatus === 'Y' ? '활성' : '보류'}</td>
             `;
             break;
         case 'property':
             savedContent = `
                 <td><input type="checkbox" class="row-checkbox" value="${savedData.prno}"></td>
                 <td>${currentIndex}</td>
-                <td>${savedData.prno}</td>
-                <td>${savedData.prname}</td>
+                <td class="non-editable">${savedData.prno}</td>
+                <td class="editable" data-field="prname">${savedData.prname}</td>
             `;
-            alert('등록되었습니다');
             break;
         case 'attribute':
+            // 상품명과 속성명을 가져오기 위해 추가 API 호출
+            let productName = '로드 중...';
+            let propertyName = '로드 중...';
+            
+            try {
+                const [productResponse, propertyResponse] = await Promise.all([
+                    fetch('/admin/find/product'),
+                    fetch('/admin/find/property')
+                ]);
+                
+                const products = await productResponse.json();
+                const properties = await propertyResponse.json();
+                
+                const product = products.find(p => p.pno === savedData.pno);
+                const property = properties.find(pr => pr.prno === savedData.prno);
+                
+                productName = product ? product.pname : '알 수 없음';
+                propertyName = property ? property.prname : '알 수 없음';
+                
+            } catch (error) {
+                console.error('상품명/속성명 조회 오류:', error);
+                productName = '로드 실패';
+                propertyName = '로드 실패';
+            }
+            
             savedContent = `
                 <td><input type="checkbox" class="row-checkbox" value="${savedData.ano}"></td>
                 <td>${currentIndex}</td>
-                <td>${savedData.ano}</td>
-                <td>${savedData.pno}</td>
-                <td>${savedData.prno}</td>
-                <td>${savedData.avalue}</td>
+                <td class="non-editable">${savedData.ano}</td>
+                <td class="editable" data-field="pno">${savedData.pno}</td>
+                <td class="non-editable">${productName}</td>
+                <td class="editable" data-field="prno">${savedData.prno}</td>
+                <td class="non-editable">${propertyName}</td>
+                <td class="editable" data-field="avalue">${savedData.avalue}</td>
             `;
             break;
     }
     
     row.className = 'saved-row';
     row.innerHTML = savedContent;
+    row.dataset.id = savedData[getIdField(searchType)];
+    row.dataset.type = searchType;
+    
+    // 새로 생성된 행에도 더블클릭 이벤트 설정
+    setupDoubleClickEvents(searchType);
 }
 
 // 전체 선택/해제
@@ -513,6 +938,11 @@ async function deleteSelected() {
             
         } catch (error) {
             console.error(`ID ${id} 삭제 오류:`, error);
+            
+            // 참조 관계 오류 메시지를 사용자 친화적으로 변경
+            const friendlyMessage = getFriendlyDeleteErrorMessage(id, searchType, error.message);
+            alert(friendlyMessage);
+            
             failCount++;
         }
     }
@@ -545,4 +975,38 @@ function reorderTableRows() {
             numberCell.textContent = index + 1;
         }
     });
+}
+
+// 사용자 친화적인 삭제 오류 메시지 생성
+function getFriendlyDeleteErrorMessage(id, searchType, errorMessage) {
+    const itemNames = {
+        'product': '상품',
+        'property': '속성', 
+        'attribute': '속성값'
+    };
+    
+    const currentItem = itemNames[searchType] || '항목';
+    
+    // 참조 관계 오류인지 확인
+    const isReferenceError = errorMessage && (
+        errorMessage.includes('foreign key') || 
+        errorMessage.includes('constraint') ||
+        errorMessage.includes('referenced') ||
+        errorMessage.includes('참조') ||
+        errorMessage.includes('사용중') ||
+        errorMessage.includes('cannot delete') ||
+        errorMessage.includes('violates') ||
+        errorMessage.includes('409') ||
+        errorMessage.includes('Conflict')
+    );
+    
+    if (isReferenceError) {
+        let message = `${currentItem} '${id}'을(를) 삭제할 수 없습니다.\n\n`;
+            message += `이 항목이 다른 곳에서 사용되고 있어서 삭제할 수 없습니다.\n`;
+            message += ` • 관련된 데이터를 먼저 정리한 후 다시 시도해주세요.`;
+        return message;
+    } else {
+        // 일반적인 삭제 오류
+        return `${currentItem} '${id}' 삭제 중 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.`;
+    }
 }

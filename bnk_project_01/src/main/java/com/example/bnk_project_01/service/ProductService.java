@@ -1,6 +1,7 @@
 package com.example.bnk_project_01.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,6 @@ import com.example.bnk_project_01.util.ProductConverter;
 public class ProductService {
     @Autowired
     ProductRepository productRepository;
-    @Autowired
-    ProductConverter productConverter;
     
     public List<ProductDto> getAll() {
         return productRepository.findAll()
@@ -26,16 +25,33 @@ public class ProductService {
     }
     
     public ProductDto save(ProductDto productDto) {
-        Product savedProduct = productRepository.save(productConverter.toEntity(productDto));
+        Product product = ProductConverter.toEntity(productDto);
+        Product savedProduct = productRepository.save(product);
         return ProductConverter.toDto(savedProduct);
     }
+    
+    public ProductDto update(ProductDto productDto) {
 
-	public ProductDto update(ProductDto productDto) {
-		Product updatedProduct = productRepository.save(productConverter.toEntity(productDto));
-	    return ProductConverter.toDto(updatedProduct);
-	}
-
-	public void delete(String id) {
-		productRepository.deleteById(id);
-	}
+        Optional<Product> existingProductOpt = productRepository.findById(productDto.getPno());
+        
+        if (existingProductOpt.isPresent()) {
+            Product existingProduct = existingProductOpt.get();
+            
+            if (productDto.getPname() != null && !productDto.getPname().trim().isEmpty()) {
+                existingProduct.setPname(productDto.getPname());
+            }
+            if (productDto.getPstatus() != null && !productDto.getPstatus().trim().isEmpty()) {
+                existingProduct.setPstatus(productDto.getPstatus());
+            }
+            
+            Product updatedProduct = productRepository.save(existingProduct);
+            return ProductConverter.toDto(updatedProduct);
+        } else {
+            throw new RuntimeException("상품을 찾을 수 없습니다: " + productDto.getPno());
+        }
+    }
+    
+    public void delete(String id) {
+        productRepository.deleteById(id);
+    }
 }
