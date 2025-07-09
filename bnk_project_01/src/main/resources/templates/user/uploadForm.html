@@ -100,7 +100,7 @@
           <td th:text="${plImport != null} ? ${#temporals.format(plImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
           <td>
             <a th:if="${hasPL}" th:href="@{/user/deleteFileDb(code='PL')}">
-              <button type="button">DB 삭제</button>
+              <button type="button">제출파일 삭제</button>
             </a>
           </td>
         </tr>
@@ -117,7 +117,7 @@
           <td th:text="${blImport != null} ? ${#temporals.format(blImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
           <td>
             <a th:if="${hasBL}" th:href="@{/user/deleteFileDb(code='BL')}">
-              <button type="button">DB 삭제</button>
+              <button type="button">제출파일 삭제</button>
             </a>
           </td>
         </tr>
