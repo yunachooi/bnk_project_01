@@ -16,11 +16,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
-@RequiredArgsConstructor
 public class LoginController {
 
     @Autowired
-    private final UserRepository userRepository;
+    private UserRepository userRepository;
 
     // 로그인 페이지
     @GetMapping("/login")
@@ -46,7 +45,9 @@ public class LoginController {
         session.setAttribute("username", user.getUsername());
         session.setAttribute("role", user.getRole());
 
-        if ("ROLE_ADMIN".equals(user.getRole())) {
+
+        if ("ROLE_ADMIN".equals(user.getRole()) || "ROLE_SUP".equals(user.getRole())) {
+
             return "redirect:/admin";
         } else if ("ROLE_CEO".equals(user.getRole())) {
             return "redirect:/user/import";
@@ -55,10 +56,12 @@ public class LoginController {
         }
     }
 
-    // 관리자 홈
+
+    // 관리자 홈 (ROLE_ADMIN 또는 ROLE_SUP 가능)
     @GetMapping("/admin")
     public String adminHome(HttpSession session, Model model) {
-        return checkAccess(session, model, "admin/shell", "ROLE_ADMIN");
+        return checkMultiRoleAccess(session, model, "admin/shell", "ROLE_ADMIN", "ROLE_SUP");
+
     }
 
     // 일반 사용자 홈
@@ -67,6 +70,7 @@ public class LoginController {
         return checkAccess(session, model, "user/userhome", "ROLE_USER");
     }
 
+    // CEO용 문서 업로드 진입
     @GetMapping("/user/import")
     public String importPage() {
         return "user/import";
@@ -76,7 +80,7 @@ public class LoginController {
     @GetMapping("/user/goFind")
     public String goFind(HttpSession session) {
         String role = (String) session.getAttribute("role");
-        if (role == null || !"ROLE_CEO".equals(role)) {
+        if (!"ROLE_CEO".equals(role)) {
             return "redirect:/login";
         }
         return "redirect:https://www.kofind.co.kr/fw/FWCOM01R1.do";
@@ -86,20 +90,10 @@ public class LoginController {
     @GetMapping("/user/goOneclick")
     public String goOneclick(HttpSession session) {
         String role = (String) session.getAttribute("role");
-        if (role == null || !"ROLE_CEO".equals(role)) {
+        if (!"ROLE_CEO".equals(role)) {
             return "redirect:/login";
         }
         return "redirect:https://www.one-click.co.kr/cm/CM0100M001GE.nice?cporcd=033&pdt_seq=14";
-    }
-
-    // 업로드 폼 - CEO만
-    @GetMapping("/user/uploadForm")
-    public String uploadForm(HttpSession session) {
-        String role = (String) session.getAttribute("role");
-        if (role == null || !"ROLE_CEO".equals(role)) {
-            return "redirect:/login";
-        }
-        return "user/uploadForm";
     }
 
     // 로그아웃
@@ -109,8 +103,22 @@ public class LoginController {
         return "redirect:/login";
     }
 
-    // 공통 권한 체크
+    // 단일 권한 체크
     private String checkAccess(HttpSession session, Model model, String viewName, String requiredRole) {
+        String username = (String) session.getAttribute("username");
+        String role = (String) session.getAttribute("role");
+
+        if (username == null || role == null || !role.equals(requiredRole)) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("username", username);
+        model.addAttribute("role", role);
+        return viewName;
+    }
+
+    // 다중 권한 체크 (ROLE_ADMIN, ROLE_SUP 모두 허용)
+    private String checkMultiRoleAccess(HttpSession session, Model model, String viewName, String... allowedRoles) {
         String username = (String) session.getAttribute("username");
         String role = (String) session.getAttribute("role");
 
@@ -118,10 +126,12 @@ public class LoginController {
             return "redirect:/login";
         }
 
-        if (role.equals(requiredRole)) {
-            model.addAttribute("username", username);
-            model.addAttribute("role", role);
-            return viewName;
+        for (String allowed : allowedRoles) {
+            if (role.equals(allowed)) {
+                model.addAttribute("username", username);
+                model.addAttribute("role", role);
+                return viewName;
+            }
         }
 
         return "redirect:/login";

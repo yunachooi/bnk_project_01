@@ -2,14 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>서식 업로드</title>
+  <title>수입서류 제출 페이지</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 30px;
       background-color: #f9f9f9;
     }
-
     .back-btn {
       position: absolute;
       top: 15px;
@@ -22,86 +21,133 @@
       border: none;
       cursor: pointer;
     }
-
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 60px;
     }
-
-    td {
+    th, td {
       padding: 10px;
+      border-bottom: 1px solid #ccc;
+      vertical-align: middle;
     }
-
-    input[type="file"] {
-      width: 100%;
-    }
-
-    .upload-status {
-      font-size: 20px;
-      display: inline-block;
-      width: 30px;
-      text-align: center;
-    }
-
     .button-group {
       margin-top: 40px;
       text-align: center;
     }
-
     button {
       padding: 10px 20px;
       font-size: 16px;
-      margin: 0 10px;
+      margin: 0 5px;
+    }
+    .message {
+      text-align: center;
+      margin-top: 20px;
+      color: green;
+      font-weight: bold;
+    }
+    .clear-btn {
+      background-color: #f0f0f0;
+      border: 1px solid #999;
+      margin-left: 10px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
   <button class="back-btn" onclick="location.href='/user/import'">◀</button>
-
+  <h2 th:text="${username + '님 서류 제출현황'}" style="text-align: center; margin-bottom: 20px;"></h2>
   <form method="post" enctype="multipart/form-data" action="/user/upload">
     <table>
-      <tr>
-        <td>Invoice</td>
-        <td><input type="file" name="invoice" id="invoice" onchange="checkFile('invoice')" /></td>
-        <td><span class="upload-status" id="status-invoice">⏳</span></td>
-      </tr>
-      <tr>
-        <td>Packing List (PL)</td>
-        <td><input type="file" name="pl" id="pl" onchange="checkFile('pl')" /></td>
-        <td><span class="upload-status" id="status-pl">⏳</span></td>
-      </tr>
-      <tr>
-        <td>Bill of Lading (BL)</td>
-        <td><input type="file" name="bl" id="bl" onchange="checkFile('bl')" /></td>
-        <td><span class="upload-status" id="status-bl">⏳</span></td>
-      </tr>
+      <thead>
+        <tr>
+          <th>문서 종류</th>
+          <th>파일 업로드</th>
+          <th>상태</th>
+          <th>파일명</th>
+          <th>제출일</th>
+          <th>DB 삭제</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Invoice -->
+        <tr>
+          <td>Invoice</td>
+          <td>
+            <input type="file" name="invoice" id="invoice" onchange="toggleClearBtn('invoice')" />
+            <button type="button" id="clear-invoice" class="clear-btn" style="display: none;" onclick="clearInput('invoice')">선택취소</button>
+          </td>
+          <td th:text="${hasInvoice} ? '✅' : '❌'"></td>
+          <td th:text="${invoiceImport != null} ? ${invoiceImport.iname} : '-'"></td>
+          <td th:text="${invoiceImport != null} ? ${#temporals.format(invoiceImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
+          <td>
+            <a th:if="${hasInvoice}" th:href="@{/user/deleteFileDb(code='INVOICE')}">
+              <button type="button">제출파일 삭제</button>
+            </a>
+          </td>
+        </tr>
+
+        <!-- PL -->
+        <tr>
+          <td>Packing List (PL)</td>
+          <td>
+            <input type="file" name="pl" id="pl" onchange="toggleClearBtn('pl')" />
+            <button type="button" id="clear-pl" class="clear-btn" style="display: none;" onclick="clearInput('pl')">선택취소</button>
+          </td>
+          <td th:text="${hasPL} ? '✅' : '❌'"></td>
+          <td th:text="${plImport != null} ? ${plImport.iname} : '-'"></td>
+          <td th:text="${plImport != null} ? ${#temporals.format(plImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
+          <td>
+            <a th:if="${hasPL}" th:href="@{/user/deleteFileDb(code='PL')}">
+              <button type="button">DB 삭제</button>
+            </a>
+          </td>
+        </tr>
+
+        <!-- BL -->
+        <tr>
+          <td>Bill of Lading (BL)</td>
+          <td>
+            <input type="file" name="bl" id="bl" onchange="toggleClearBtn('bl')" />
+            <button type="button" id="clear-bl" class="clear-btn" style="display: none;" onclick="clearInput('bl')">선택취소</button>
+          </td>
+          <td th:text="${hasBL} ? '✅' : '❌'"></td>
+          <td th:text="${blImport != null} ? ${blImport.iname} : '-'"></td>
+          <td th:text="${blImport != null} ? ${#temporals.format(blImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
+          <td>
+            <a th:if="${hasBL}" th:href="@{/user/deleteFileDb(code='BL')}">
+              <button type="button">DB 삭제</button>
+            </a>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
     <div class="button-group">
-      <button type="button" onclick="saveFiles()">저장</button>
       <button type="submit">제출하기</button>
     </div>
   </form>
 
-  <script>
-    function checkFile(id) {
-      const input = document.getElementById(id);
-      const status = document.getElementById('status-' + id);
+  <!-- 메시지 출력 -->
+  <div class="message" th:if="${message}" th:text="${message}"></div>
 
-      if (input.files.length > 0) {
-        status.textContent = '✅';
+  <script>
+    function toggleClearBtn(id) {
+      const fileInput = document.getElementById(id);
+      const clearBtn = document.getElementById('clear-' + id);
+      if (fileInput.files.length > 0) {
+        clearBtn.style.display = 'inline-block';
       } else {
-        status.textContent = '❌';
+        clearBtn.style.display = 'none';
       }
     }
 
-    function saveFiles() {
-      alert('파일이 임시로 저장되었습니다.');
-      // 추후: fetch() 또는 XMLHttpRequest 로 서버에 저장 요청
+    function clearInput(id) {
+      const fileInput = document.getElementById(id);
+      fileInput.value = '';
+      toggleClearBtn(id);
     }
   </script>
-
 </body>
 </html>
