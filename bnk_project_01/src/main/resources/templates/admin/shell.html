@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Console</title>
+
+  <link rel="stylesheet" href="/css/admin.css">
+  <script src="/js/shell.js" defer></script>
+</head>
+<body id="app-shell" th:attr="data-role=${role}">
+
+<header>🎛️ Admin Console</header>
+
+<div class="layout">
+  <aside>
+    <ul>
+      <li><button data-page="dashboard" class="active">대시보드</button></li>
+      <li><button data-page="Category">카테고리 관리</button></li>
+      <li><button data-page="approve">결재 관리</button></li>
+      <!-- 필요하면 추가 -->
+    </ul>
+  </aside>
+
+  <main id="main">
+    <!-- 최초에는 dashboard.html 내용을 여기 삽입 -->
+  </main>
+</div>
+
+</body>
+</html>
