@@ -51,4 +51,10 @@ public class ForexMainController {
 
         return "forexMainPage";
     }
+    
+    @GetMapping("/forexProduct")
+    public String forexProductPage() {
+
+        return "forexProductPage";
+    }
 }
