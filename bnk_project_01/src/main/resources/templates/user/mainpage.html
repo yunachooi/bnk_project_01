@@ -39,16 +39,34 @@
         }
 
         .rate-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .rate-track {
             display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 16px;
-            flex-wrap: wrap;
+            gap: 100px;
+            animation: scroll-slide 60s linear infinite;
+        }
+
+        .rate-container:hover .rate-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll-slide {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
         }
 
         .rate-box {
             display: flex;
             align-items: center;
+            justify-content: center;
             border: 1px solid var(--bnk-silver);
             padding: 12px 18px;
             border-radius: 8px;
@@ -56,17 +74,32 @@
             min-width: 160px;
             font-size: 18px;
             font-weight: bold;
+            margin-right: 16px;
+            white-space: nowrap;
+            line-height: 1;
         }
 
         .flag-icon {
             width: 26px;
             height: 18px;
             margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .rate-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            line-height: 1;
         }
 
         .rcode {
-            margin-right: 8px;
             color: var(--bnk-dark-red);
+            line-height: 1;
+        }
+        .rvalue {
+            color: #665c4d;
+            line-height: 1;
         }
 
         /* ===== 배너 ===== */
@@ -179,13 +212,16 @@
 <div class="rate-section">
     <h1>BNK 외환 페이지</h1>
     <hr>
+
     <div class="rate-container">
-        <div class="rate-box" th:each="rate : ${rates}">
-            <img th:src="@{'/img/flags/' + ${rate.rcode.toLowerCase()} + '.png'}"
-                 class="flag-icon" alt="flag"/>
-            <div>
-                <span class="rcode" th:text="${rate.rcode}"></span>
-                <span th:text="${rate.rvalue}"></span>
+        <div class="rate-track" id="rateTrack">
+            <div class="rate-box" th:each="rate : ${rates}">
+                <img th:src="@{'/img/flags/' + ${rate.rcode.toLowerCase()} + '.png'}"
+                     class="flag-icon" alt="flag"/>
+                <span class="rate-text">
+                    <span class="rcode" th:text="${rate.rcode}"></span> &nbsp;
+                    <span class="rvalue" th:text="${rate.rvalue}"></span>
+                </span>
             </div>
         </div>
     </div>
@@ -193,8 +229,9 @@
 
 <!-- 2. 상품 및 이벤트 배너 -->
 <div class="banner-section">
-    <div class="banner" style="background-image: url('/img/product.png');"></div>
-    <div class="banner" style="background-image: url('/img/event.png');"></div>
+    <div class="banner" style="background-image: url('/img/main/product.png');"></div>
+    <div class="banner" style="background-image: url('/img/main/event.png');"></div>
+</div>
 </div>
 
 <!-- 3. 메뉴 블록 -->
@@ -264,4 +301,21 @@
 </div>
 
 </body>
+
+	<script>
+	window.addEventListener('DOMContentLoaded', () => {
+        const track = document.querySelector('.rate-track');
+        const items = [...track.children];
+
+        // 필요한 만큼 복제 (한 화면에 6개 보이게 만들기 위해 전체 복제)
+        const cloneCount = Math.ceil(6 / items.length) + 1;
+        for (let i = 0; i < cloneCount; i++) {
+            items.forEach(item => {
+                const clone = item.cloneNode(true);
+                track.appendChild(clone);
+            });
+        }
+    });
+	
+	</script>
 </html>
