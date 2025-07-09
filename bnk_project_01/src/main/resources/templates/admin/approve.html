@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Approve Page</title>
+</head>
+<body>
+<h2>결재 관리</h2>
+<hr>
+<div id="approve-wrapper">
+<h2>✔ 게시된 상품</h2>
+<table>
+  <thead>
+    <tr>
+      <th>상품코드</th><th>상품명</th><th>상태</th><th>액션</th>
+    </tr>
+  </thead>
+  <tbody id="table-y"></tbody>
+</table>
+
+<h2>🛑 미게시 상품</h2>
+<table>
+  <thead>
+    <tr>
+      <th>상품코드</th><th>상품명</th><th>상태</th><th>액션</th>
+    </tr>
+  </thead>
+<tbody id="table-n"></tbody>
+</table>
+</div>
+
+<p id="empty-msg" style="display:none; padding:16px 0">
+  대기 중인 결재가 없습니다.
+</p>
+<!-- 속성 모달 -->
+<div id="attr-modal" class="hidden">
+  <div class="box">
+     <h3>
+      상품 속성값
+      <span id="modal-title" style="font-weight:normal; margin-left:8px;"></span>
+    </h3>
+    <table>
+      <thead><tr><th>속성</th><th>값</th></tr></thead>
+      <tbody id="attr-body"></tbody>
+    </table>
+    <div style="text-align:right;margin-top:12px">
+      <button id="attr-close">닫기</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

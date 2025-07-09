@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>카테고리 관리</title>
+
+  <!-- 공통 / 관리자 전용 스타일 -->
+  <link rel="stylesheet" href="/css/admin.css" />
+  <script src="/js/category-page.js" defer></script>
+</head>
+<body>
+  <main id="main">
+    <!-- ===== 카테고리 화면이 JS로 그려집니다 ===== -->
+    <h2>카테고리 관리</h2>
+    <button id="btnAdd">+ 등록</button>
+    <table>
+      <thead><tr>
+        <th>대분류</th><th>중분류</th><th>소분류</th><th>삭제</th>
+      </tr></thead>
+      <tbody id="tbody"><!-- JS 렌더링 --></tbody>
+    </table>
+  </main>
+</div>
+
+<!-- ───── 등록 모달 ───── -->
+<div id="modal" class="hidden">
+  <div class="box">
+    <h3>카테고리 등록</h3>
+    <form id="frmAdd">
+      <label>대분류 <input name="large" required /></label>
+      <label>중분류 <input name="medium" /></label>
+      <label>소분류 <input name="small" /></label>
+      <div class="btns">
+        <button type="submit">저장</button>
+        <button type="button" id="btnClose">취소</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

@@ -45,7 +45,9 @@ public class LoginController {
         session.setAttribute("username", user.getUsername());
         session.setAttribute("role", user.getRole());
 
+
         if ("ROLE_ADMIN".equals(user.getRole()) || "ROLE_SUP".equals(user.getRole())) {
+
             return "redirect:/admin";
         } else if ("ROLE_CEO".equals(user.getRole())) {
             return "redirect:/user/import";

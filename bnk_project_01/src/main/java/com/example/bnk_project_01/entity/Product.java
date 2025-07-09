@@ -1,8 +1,14 @@
 package com.example.bnk_project_01.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,4 +29,8 @@ public class Product {
 
     @Column(name = "pstatus")
     private String pstatus;
+    
+    @OneToMany(mappedBy = "product")
+    @JsonIgnore
+    private List<Attribute> attributes = new ArrayList<>();
 }
