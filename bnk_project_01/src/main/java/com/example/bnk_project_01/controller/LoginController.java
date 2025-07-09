@@ -47,7 +47,7 @@ public class LoginController {
         session.setAttribute("role", user.getRole());
 
         if ("ROLE_ADMIN".equals(user.getRole())) {
-            return "redirect:/admin/home";
+            return "redirect:/admin";
         } else if ("ROLE_CEO".equals(user.getRole())) {
             return "redirect:/user/import";
         } else {
@@ -56,9 +56,9 @@ public class LoginController {
     }
 
     // 관리자 홈
-    @GetMapping("/admin/home")
+    @GetMapping("/admin")
     public String adminHome(HttpSession session, Model model) {
-        return checkAccess(session, model, "admin/home", "ROLE_ADMIN");
+        return checkAccess(session, model, "admin/shell", "ROLE_ADMIN");
     }
 
     // 일반 사용자 홈

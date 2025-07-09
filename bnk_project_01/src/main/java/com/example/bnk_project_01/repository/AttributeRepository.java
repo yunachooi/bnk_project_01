@@ -17,3 +17,4 @@ public interface AttributeRepository extends JpaRepository<Attribute, String> {
     	       "WHERE a.product.pno = :pno")
     List<ProductAttrDto> findAttrsByProduct(@Param("pno") String pno); //용환꺼 mergy할때 지우지마세요 ㅠㅠ 
 }
+
