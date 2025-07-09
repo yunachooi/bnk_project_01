@@ -3,6 +3,8 @@ package com.example.bnk_project_01.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -29,5 +31,6 @@ public class Product {
     private String pstatus;
     
     @OneToMany(mappedBy = "product")
+    @JsonIgnore
     private List<Attribute> attributes = new ArrayList<>();
 }
