@@ -60,6 +60,7 @@ public class LoginController {
     @GetMapping("/admin")
     public String adminHome(HttpSession session, Model model) {
         return checkMultiRoleAccess(session, model, "admin/shell", "ROLE_ADMIN", "ROLE_SUP");
+
     }
 
     // 일반 사용자 홈
