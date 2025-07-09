@@ -72,7 +72,7 @@ public class ProductController {
 	
 	@PostMapping("/save/property")
 	@ResponseBody
-	public ResponseEntity<PropertyDto> saveProduct(@RequestBody PropertyDto propertyDto) {
+	public ResponseEntity<PropertyDto> saveProperty(@RequestBody PropertyDto propertyDto) {
 	    try {
 	        PropertyDto savedProperty = propertyService.save(propertyDto);
 	        return ResponseEntity.ok(savedProperty);
@@ -125,7 +125,7 @@ public class ProductController {
 	@ResponseBody
 	public ResponseEntity<AttributeDto> updateAttribute(@PathVariable("id") String id, @RequestBody AttributeDto attributeDto) {
 	    try {
-	    	attributeDto.setPrno(id);
+	    	attributeDto.setAno(id);
 	    	AttributeDto updatedAttribute = attributeService.update(attributeDto);
 	        return ResponseEntity.ok(updatedAttribute);
 	    } catch (Exception e) {
