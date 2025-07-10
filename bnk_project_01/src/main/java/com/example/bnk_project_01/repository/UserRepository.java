@@ -6,4 +6,6 @@ import com.example.bnk_project_01.entity.User;
 
 public interface UserRepository extends JpaRepository <User, String> {
 	 User findByUsername(String username);
+
+	int countByRole(String role);
 }
