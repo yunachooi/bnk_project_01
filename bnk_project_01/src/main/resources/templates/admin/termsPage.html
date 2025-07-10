@@ -1,10 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>관리자 > 약관 관리</title>
+<link rel="stylesheet" th:href="@{/css/terms.css}">
 </head>
 <body>
-
+	<!-- 관리자 헤더 포함 -->
+    <header th:replace="~{fragments/adminheader :: adminheader}"></header>
+    <!-- 관리자 사이드 포함 -->
+    <aside th:replace="~{fragments/aside :: aside}"></aside>
+    
+	<div class="container">
+        <h2>약관 관리 시스템</h2>
+        
+        <div class="search-box">
+        	<h3>조회 조건</h3>
+        	<div class="search-row">
+            	<label for="searchKeyword">검색어:</label>
+                <input type="text" id="searchKeyword" placeholder="검색할 키워드를 입력하세요">
+            </div><!-- search-row -->
+            <div class="search-row">
+                <button class="search-btn" onclick="searchData()">조회</button>
+            </div><!-- search-row -->
+        </div><!-- search-box -->
+        
+        <div class="result-box">
+        	<h3 id="resultTitle">조회 결과</h3>
+            <div class="table-container">
+                <table id="resultTable">
+                    <thead>
+                        <tr id="tableHeader">
+                        </tr>
+                    </thead>
+                    <tbody id="resultBody">
+                        <tr class="no-data">
+                            <td colspan="7">조회된 데이터가 없습니다.</td>
+                        </tr>
+                    </tbody>
+                </table>
+        	</div><!-- table-container -->
+        </div><!-- search-box -->
+	</div><!-- container -->
+	
+	<script th:src="@{/js/terms.js}"></script><!-- script -->
 </body>
 </html>

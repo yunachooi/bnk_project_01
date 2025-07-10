@@ -1,320 +1,323 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>BNK 외환 정보</title>
-    <style>
-        @font-face {
-            font-family: 'BNKFont';
-            src: url('/fonts/BNKGothic-Bold.ttf') format('truetype');
-        }
+  <meta charset="UTF-8">
+  <title>BNK 외환 정보</title>
 
-        :root {
-            --bnk-red: #D7191F;
-            --bnk-dark-red: #8B032E;
-            --bnk-dark-gray: #655C4F;
-            --bnk-light-gray: #B7A997;
-            --bnk-gold: #896E4A;
-            --bnk-silver: #909394;
-        }
+  <link rel="stylesheet" th:href="@{/css/header.css}" />
+  <script th:src="@{/js/header.js}" defer></script>
 
-        body {
-            font-family: 'BNKFont', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            color: var(--bnk-dark-gray);
-        }
+  <style>
+    @font-face {
+      font-family: 'BNKFont';
+      src: url('/fonts/BNKGothic-Bold.ttf') format('truetype');
+    }
 
-        /* ===== 환율 정보 ===== */
-        .rate-section {
-            padding: 20px;
-            background-color: #ffffff;
-            text-align: center;
-        }
+    :root {
+      --bnk-red: #D7191F;
+      --bnk-dark-red: #8B032E;
+      --bnk-dark-gray: #655C4F;
+      --bnk-light-gray: #B7A997;
+      --bnk-gold: #896E4A;
+      --bnk-silver: #909394;
+    }
 
-        .rate-section h1 {
-            color: var(--bnk-red);
-            font-size: 28px;
-        }
+    body {
+      font-family: 'BNKFont', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      color: var(--bnk-dark-gray);
+    }
 
-        .rate-container {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-        }
+    .rate-section {
+      padding: 20px 0;
+      background-color: #ffffff;
+      text-align: center;
+    }
 
-        .rate-track {
-            display: flex;
-            gap: 100px;
-            animation: scroll-slide 60s linear infinite;
-        }
+    .rate-section h1 {
+      color: var(--bnk-red);
+      font-size: 28px;
+    }
 
-        .rate-container:hover .rate-track {
-            animation-play-state: paused;
-        }
+    .rate-container {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
 
-        @keyframes scroll-slide {
-            0% {
-                transform: translateX(0%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
-        }
+    .rate-track {
+      display: flex;
+      gap: 100px;
+      animation: scroll-slide 60s linear infinite;
+    }
 
-        .rate-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--bnk-silver);
-            padding: 12px 18px;
-            border-radius: 8px;
-            background: white;
-            min-width: 160px;
-            font-size: 18px;
-            font-weight: bold;
-            margin-right: 16px;
-            white-space: nowrap;
-            line-height: 1;
-        }
+    .rate-container:hover .rate-track {
+      animation-play-state: paused;
+    }
 
-        .flag-icon {
-            width: 26px;
-            height: 18px;
-            margin-right: 10px;
-            flex-shrink: 0;
-        }
+    @keyframes scroll-slide {
+      0% {
+        transform: translateX(0%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
 
-        .rate-text {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            line-height: 1;
-        }
+    .rate-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--bnk-silver);
+      padding: 12px 18px;
+      border-radius: 8px;
+      background: white;
+      min-width: 160px;
+      font-size: 18px;
+      font-weight: bold;
+      margin-right: 16px;
+      white-space: nowrap;
+      line-height: 1;
+    }
 
-        .rcode {
-            color: var(--bnk-dark-red);
-            line-height: 1;
-        }
-        .rvalue {
-            color: #665c4d;
-            line-height: 1;
-        }
+    .flag-icon {
+      width: 26px;
+      height: 18px;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
 
-        /* ===== 배너 ===== */
-        .banner-section {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 30px 0;
-            background-color: #ffffff;
-            flex-wrap: wrap;
-        }
+    .rate-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      line-height: 1;
+    }
 
-        .banner {
-            width: 600px;
-            height: 270px;
-            background-size: cover;
-            background-position: center;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s;
-        }
+    .rcode {
+      color: var(--bnk-dark-red);
+      line-height: 1;
+    }
 
-        .banner:hover {
-            transform: scale(1.02);
-        }
+    .rvalue {
+      color: #665c4d;
+      line-height: 1;
+    }
 
-        /* ===== 메뉴 섹션 ===== */
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 24px;
-            padding: 40px 20px;
-            background-color: var(--bnk-light-gray);
-        }
+    .banner-section {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 30px 0;
+      background-color: #ffffff;
+      flex-wrap: wrap;
+    }
 
-        .menu-card {
-            background-color: #ffffff;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: transform 0.2s ease;
-        }
+    .banner {
+      width: 600px;
+      height: 270px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s;
+    }
 
-        .menu-card:hover {
-            transform: translateY(-4px);
-        }
+    .banner:hover {
+      transform: scale(1.02);
+    }
 
-        .menu-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      padding: 40px 0;
+      background-color: var(--bnk-light-gray);
+    }
 
-        .menu-header img {
-            width: 40px;
-            height: 40px;
-            margin-right: 14px;
-        }
+    .menu-card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+    }
 
-        .menu-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: var(--bnk-red);
-            margin-bottom: 4px;
-        }
+    .menu-card:hover {
+      transform: translateY(-4px);
+    }
 
-        .divider {
-            height: 2px;
-            width: 100%;
-            background-color: var(--bnk-silver);
-            margin-top: 6px;
-        }
+    .menu-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
 
-        .menu-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+    .menu-header img {
+      width: 40px;
+      height: 40px;
+      margin-right: 14px;
+    }
 
-        .menu-list li {
-            margin: 16px 0;
-            text-align: center;
-        }
+    .menu-title {
+      font-size: 22px;
+      font-weight: bold;
+      color: var(--bnk-red);
+      margin-bottom: 4px;
+    }
 
-        .menu-list a {
-            text-decoration: none;
-            font-size: 17px;
-            color: #003366;
-            font-weight: 500;
-        }
+    .divider {
+      height: 2px;
+      width: 100%;
+      background-color: var(--bnk-silver);
+      margin-top: 6px;
+    }
 
-        .menu-list a:hover {
-            text-decoration: underline;
-            color: var(--bnk-gold);
-        }
+    .menu-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
 
+    .menu-list li {
+      margin: 16px 0;
+      text-align: center;
+    }
 
-        /* ===== 푸터 ===== */
-        .footer {
-            text-align: center;
-            margin: 40px 0 20px;
-            font-size: 15px;
-            color: var(--bnk-silver);
-        }
-    </style>
+    .menu-list a {
+      text-decoration: none;
+      font-size: 17px;
+      color: #003366;
+      font-weight: 500;
+    }
+
+    .menu-list a:hover {
+      text-decoration: underline;
+      color: var(--bnk-gold);
+    }
+
+    .footer {
+      text-align: center;
+      margin: 40px 0 20px;
+      font-size: 15px;
+      color: var(--bnk-silver);
+    }
+  </style>
 </head>
 <body>
 
-<!-- 1. 환율 정보 -->
-<div class="rate-section">
-    <h1>BNK 외환 페이지</h1>
-    <hr>
+<!-- ✅ 헤더 fragment -->
+<div th:replace="fragments/header :: headerFragment"></div>
 
+<!-- ✅ 본문 전체를 container로 감싸기 -->
+<div class="container">
+
+  <!-- 1. 환율 정보 -->
+  <div class="rate-section">
     <div class="rate-container">
-        <div class="rate-track" id="rateTrack">
-            <div class="rate-box" th:each="rate : ${rates}">
-                <img th:src="@{'/img/flags/' + ${rate.rcode.toLowerCase()} + '.png'}"
-                     class="flag-icon" alt="flag"/>
-                <span class="rate-text">
-                    <span class="rcode" th:text="${rate.rcode}"></span> &nbsp;
-                    <span class="rvalue" th:text="${rate.rvalue}"></span>
-                </span>
-            </div>
+      <div class="rate-track" id="rateTrack">
+        <div class="rate-box" th:each="rate : ${rates}">
+          <img th:src="@{'/img/flags/' + ${rate.rcode.toLowerCase()} + '.png'}"
+               class="flag-icon" alt="flag"/>
+          <span class="rate-text">
+              <span class="rcode" th:text="${rate.rcode}"></span> &nbsp;
+              <span class="rvalue" th:text="${rate.rvalue}"></span>
+          </span>
         </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<!-- 2. 상품 및 이벤트 배너 -->
-<div class="banner-section">
+  <!-- 2. 배너 -->
+  <div class="banner-section">
     <div class="banner" style="background-image: url('/img/main/product.png');"></div>
     <div class="banner" style="background-image: url('/img/main/event.png');"></div>
-</div>
+  </div>
 
-<!-- 3. 메뉴 블록 -->
-<div class="menu-grid">
+  <!-- 3. 메뉴 -->
+  <div class="menu-grid">
     <div class="menu-card">
-        <div class="menu-header">
-            <img src="/img/icon/서비스.png" alt="서비스 아이콘">
-            <div>
-                <div class="menu-title">자주 찾는 서비스</div>
-                <div class="divider"></div>
-            </div>
+      <div class="menu-header">
+        <img src="/img/icon/서비스.png" alt="서비스 아이콘">
+        <div>
+          <div class="menu-title">자주 찾는 서비스</div>
+          <div class="divider"></div>
         </div>
-        <ul class="menu-list">
-            <li><a href="#">예금 상품</a></li>
-            <li><a href="#">환전 신청</a></li>
-            <li><a href="#">환전 가능 지점</a></li>
-        </ul>
+      </div>
+      <ul class="menu-list">
+        <li><a href="#">예금 상품</a></li>
+        <li><a href="#">환전 신청</a></li>
+        <li><a href="#">환전 가능 지점</a></li>
+      </ul>
     </div>
 
     <div class="menu-card">
-        <div class="menu-header">
-            <img src="/img/icon/예금 상품.png" alt="예금 아이콘">
-            <div>
-                <div class="menu-title">외환 예금</div>
-                <div class="divider"></div>
-            </div>
+      <div class="menu-header">
+        <img src="/img/icon/예금 상품.png" alt="예금 아이콘">
+        <div>
+          <div class="menu-title">외환 예금</div>
+          <div class="divider"></div>
         </div>
-        <ul class="menu-list">
-            <li><a href="#">예금 상품</a></li>
-            <li><a href="#">가입 안내</a></li>
-        </ul>
+      </div>
+      <ul class="menu-list">
+        <li><a href="#">예금 상품</a></li>
+        <li><a href="#">가입 안내</a></li>
+      </ul>
     </div>
 
     <div class="menu-card">
-        <div class="menu-header">
-            <img src="/img/icon/환전.png" alt="환전 아이콘">
-            <div>
-                <div class="menu-title">환율 · 환전</div>
-                <div class="divider"></div>
-            </div>
+      <div class="menu-header">
+        <img src="/img/icon/환전.png" alt="환전 아이콘">
+        <div>
+          <div class="menu-title">환율 · 환전</div>
+          <div class="divider"></div>
         </div>
-        <ul class="menu-list">
-            <li><a href="#">환전 안내</a></li>
-            <li><a href="/forexProduct">환전 상품</a></li>
-        </ul>
+      </div>
+      <ul class="menu-list">
+        <li><a href="#">환전 안내</a></li>
+        <li><a href="/forexProduct">환전 상품</a></li>
+      </ul>
     </div>
 
     <div class="menu-card">
-        <div class="menu-header">
-            <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
-            <div>
-                <div class="menu-title">외환 수출입</div>
-                <div class="divider"></div>
-            </div>
+      <div class="menu-header">
+        <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
+        <div>
+          <div class="menu-title">외환 수출입</div>
+          <div class="divider"></div>
         </div>
-        <ul class="menu-list">
-            <li><a href="#">무역 결제 안내</a></li>
-            <li><a href="#">신청 양식</a></li>
-        </ul>
+      </div>
+      <ul class="menu-list">
+        <li><a href="#">무역 결제 안내</a></li>
+        <li><a href="#">신청 양식</a></li>
+      </ul>
     </div>
-</div>
+  </div>
 
-
-<!-- 4. 푸터 -->
-<div class="footer">
+  <!-- 4. 푸터 -->
+  <div class="footer">
     © 2025 BNK Busan Bank. All rights reserved.
-</div>
+  </div>
+
+</div> <!-- /.container -->
+
+<!-- script -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const track = document.querySelector('.rate-track');
+    const items = [...track.children];
+    const cloneCount = Math.ceil(6 / items.length) + 1;
+
+    for (let i = 0; i < cloneCount; i++) {
+      items.forEach(item => {
+        const clone = item.cloneNode(true);
+        track.appendChild(clone);
+      });
+    }
+  });
+</script>
 
 </body>
-
-	<script>
-	window.addEventListener('DOMContentLoaded', () => {
-        const track = document.querySelector('.rate-track');
-        const items = [...track.children];
-
-        // 필요한 만큼 복제 (한 화면에 6개 보이게 만들기 위해 전체 복제)
-        const cloneCount = Math.ceil(6 / items.length) + 1;
-        for (let i = 0; i < cloneCount; i++) {
-            items.forEach(item => {
-                const clone = item.cloneNode(true);
-                track.appendChild(clone);
-            });
-        }
-    });
-	
-	</script>
 </html>
