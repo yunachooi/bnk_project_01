@@ -1,97 +1,127 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>기업 시스템</title>
-<style>
+  <meta charset="UTF-8">
+  <title>기업 시스템</title>
+  <style>
     body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        margin: 0;
-        padding: 30px;
-        background-color: #f9f9f9;
+      font-family: 'Noto Sans KR', sans-serif;
+      background-color: #fff;
+      color: #000;
+      margin: 0;
+      padding: 60px 0;
+    }
+
+    .container {
+      width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
     }
 
     .home-btn {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        background-color: #ddd;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-        border: none;
-        cursor: pointer;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #212d49;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
     }
 
-    .description {
-        max-width: 700px;
-        margin: 0 auto 30px;
-        font-size: 18px;
-        line-height: 1.6;
-        color: #333;
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    .home-btn:hover {
+      background-color: #e60012;
     }
 
-    .button-box {
-        background-color: #d3d3d3;
-        padding: 20px;
-        margin: 15px auto;
-        width: 80%;
-        max-width: 700px;
-        font-size: 20px;
-        font-weight: bold;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background-color 0.2s ease;
+    h2 {
+      font-size: 1.8rem;
+      color: #212d49;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #212d49;
+      padding-bottom: 10px;
+      font-weight: 700;
+      text-align: center;
     }
 
-    .button-box:hover {
-        background-color: #bcbcbc;
+    .description-box {
+      background-color: #fefefe;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+      margin-bottom: 40px;
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .description-box strong {
+      color: #e60012;
+    }
+
+    .system-button {
+      background-color: #212d49;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 700px;
+      margin: 12px auto;
+      cursor: pointer;
+      display: block;
+      box-shadow: 0 2px 8px rgba(33, 45, 73, 0.09);
+      transition: background-color 0.22s, transform 0.2s;
+    }
+
+    .system-button:hover {
+      background-color: #e60012;
+      transform: scale(1.03);
     }
 
     .divider {
-        width: 80%;
-        margin: 30px auto;
-        border-top: 1px solid #333;
+      margin: 40px auto;
+      width: 80%;
+      border-top: 1px solid #ccc;
     }
-</style>
+  </style>
 </head>
 <body>
+  <button class="home-btn" onclick="location.href='/'">⬆</button>
 
-    <button class="home-btn" onclick="location.href='/'">⬆</button>
+  <div class="container">
+    <h2>개인사업자 수입업무 서류제출 서비스</h2>
 
-	<div class="description">
-	    <h2>개인사업자 수입업무 서류제출 서비스</h2>
-	    <p>
-	        이 페이지는 <strong>개인사업자를 위한 수입서류 제출 서비스</strong>입니다.<br>
-	        해외에서 물품을 수입하는 경우, 관련 기관 및 금융기관에 필수 서류를 제출해야 합니다.<br><br>
-	
-	        본 서비스는 다음의 기능을 제공합니다:<br>
-	        - <strong>FIND 및 OneClick 시스템 연동</strong><br>
-	        - <strong>서류 업로드 및 제출 이력 확인</strong><br>
-	        - <strong>업로드한 서류의 삭제 및 재제출</strong><br><br>
-	
-	        <strong>제출 대상 서류:</strong><br>
-	        - <strong>인보이스 (Invoice)</strong>: 거래 금액 및 내역 명시<br>
-	        - <strong>포장명세서 (Packing List)</strong>: 포장 단위, 수량, 중량 등 명시<br>
-	        - <strong>선하증권 (BL: Bill of Lading)</strong>: 운송 정보와 수취인 확인<br><br>
-	
-	        각 서류를 사전에 준비한 후, 아래 버튼을 통해 파일을 선택하고 제출해 주세요.<br>
-	        모든 파일은 PDF 형식으로 제출하는 것을 권장합니다.
-	    </p>
-	</div>
+    <div class="description-box">
+      <p>
+        본 페이지는 <strong>개인사업자를 위한 수입서류 제출 시스템</strong>입니다.<br>
+        해외에서 물품을 수입하는 경우, 관련 기관 및 금융기관에 필수 서류를 제출해야 합니다.
+      </p>
+      <p>
+        <strong>제공 기능:</strong><br>
+        • FIND 및 OneClick 시스템 연동<br>
+        • 서류 업로드 및 제출 이력 확인<br>
+        • 업로드한 서류 삭제 및 재제출 기능
+      </p>
+      <p>
+        <strong>제출 대상 서류:</strong><br>
+        - <strong>인보이스 (Invoice)</strong>: 거래 금액 및 내역 명시<br>
+        - <strong>포장명세서 (Packing List)</strong>: 포장 단위, 수량, 중량 등 명시<br>
+        - <strong>선하증권 (BL: Bill of Lading)</strong>: 운송 정보와 수취인 확인
+      </p>
+      <p>각 서류를 <strong>PDF 형식</strong>으로 준비한 후, 아래 버튼을 통해 업로드해 주세요.</p>
+    </div>
 
-    <div class="button-box" onclick="location.href='/user/goFind'">FIND 시스템</div>
-    <div class="button-box" onclick="location.href='/user/goOneclick'">원클릭 시스템</div>
+    <button class="system-button" onclick="location.href='/user/goFind'">FIND 시스템 접속</button>
+    <button class="system-button" onclick="location.href='/user/goOneclick'">OneClick 시스템 접속</button>
 
     <div class="divider"></div>
 
-    <div class="button-box" onclick="location.href='/user/uploadForm'">기업 자체 서식 업로드</div>
-
+    <button class="system-button" onclick="location.href='/user/uploadForm'">기업 자체 서식 업로드</button>
+  </div>
 </body>
 </html>
