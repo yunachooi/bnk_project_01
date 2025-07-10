@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>관리자 > 약관 등록</title>
+<link rel="stylesheet" th:href="@{/css/submit.css}">
+</head>
+<body>
+	<!-- 관리자 헤더 포함 -->
+    <header th:replace="~{fragments/adminheader :: adminheader}"></header>
+    <!-- 관리자 사이드 포함 -->
+    <aside th:replace="~{fragments/aside :: aside}"></aside>
+    
+	<div class="container">
+	    <h2>약관 등록 시스템</h2>
+	    <div class="submit-box">
+	    	<h3>약관 등록</h3>
+	        <form id="termsForm" enctype="multipart/fosrm-data">
+	            <div class="form-group">
+	                <label for="tname">약관명: <span class="required">*</span></label>
+	                <input type="text" name="tname" id="tname" required>
+	                <small class="info-text">같은 약관명이 있으면 이전 버전은 자동으로 비활성화됩니다.</small>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label for="tinfo">약관 설명: <span class="required">*</span></label>
+	                <textarea name="tinfo" id="tinfo" rows="4" required></textarea>
+	            </div>
+	            
+	            <div class="form-group">
+	                <label for="fileUpload">약관 파일: <span class="required">*</span></label>
+	                <input type="file" id="fileUpload" name="file" accept=".pdf,.doc,.docx,.hwp" required>
+	                <small class="file-info">PDF, DOC, DOCX, HWP 파일만 업로드 가능합니다.</small>
+	                <small class="file-info">같은 파일명이 있으면 자동으로 버전이 생성됩니다. (예: 파일_v.1, 파일_v.2)</small>
+	            </div>
+	            
+	            <div class="button-group">
+	                <button type="button" id="submitBtn" class="btn btn-primary">등록</button>
+	                <button type="button" id="cancelBtn" class="btn btn-secondary">취소</button>
+	            </div>
+	        </form>
+	    </div><!-- submit-box -->
+	</div><!-- container -->
+
+	<script th:src="@{/js/submit.js}"></script>
+
+</body>
+</html>

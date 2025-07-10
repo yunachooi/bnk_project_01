@@ -6,6 +6,11 @@
 <link rel="stylesheet" th:href="@{/css/product.css}">
 </head>
 <body>
+	<!-- 관리자 헤더 포함 -->
+    <header th:replace="~{fragments/adminheader :: adminheader}"></header>
+    <!-- 관리자 사이드 포함 -->
+    <aside th:replace="~{fragments/aside :: aside}"></aside>
+    
 	<div class="container">
         <h2>외화 상품 관리 시스템</h2>
         
@@ -67,7 +72,6 @@
                 </table>
         	</div><!-- table-container -->
         </div><!-- result-box -->
-        
     </div> <!-- container -->
     
     <script th:src="@{/js/product.js}"></script><!-- script -->

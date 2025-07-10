@@ -5,7 +5,7 @@
     padding: 0;
     align-items: center;
     box-sizing: border-box;
-    font-family: 'Spoqa Han Sans Neo', 'noto', '돋움', Dotum, Helvetica, AppleGothic, Sans-serif !important;
+   	font-family: 'Spoqa', 'noto', '돋움', Dotum, Helvetica, AppleGothic, Sans-serif !important;
     text-decoration: none;
     color: inherit;
 }

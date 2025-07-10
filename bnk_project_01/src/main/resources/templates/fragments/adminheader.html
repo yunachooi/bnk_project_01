@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<header th:fragment="adminheader">
+    <style>
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            font-family: Arial, sans-serif !important;
+        }
+
+        header {
+            background-color: #2c3e50 !important;
+            color: white !important;
+            padding: 1rem 2rem !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+            font-size: 1.2rem !important;
+            font-weight: bold !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 1rem !important;
+            margin: 0 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            height: auto !important;
+            min-height: 60px !important;
+            position: relative !important;
+            z-index: 1000 !important;
+        }
+
+        .header-left {
+            display: flex !important;
+            align-items: center !important;
+            gap: 1rem !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .logo {
+            height: 80% !important;
+            width: 150px !important;
+            object-fit: contain !important;
+            max-height: 50px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+        }
+
+        .header-nav {
+            display: flex !important;
+            align-items: center !important;
+            gap: 2rem !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            list-style: none !important;
+        }
+
+        .header-nav a {
+            color: white !important;
+            text-decoration: none !important;
+            padding: 0.5rem 1rem !important;
+            border-radius: 4px !important;
+            transition: background-color 0.3s ease !important;
+            font-size: 1rem !important;
+            font-weight: normal !important;
+            margin: 0 !important;
+            border: none !important;
+            background: transparent !important;
+            cursor: pointer !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        .header-nav a:hover {
+            background-color: #34495e !important;
+            color: white !important;
+            text-decoration: none !important;
+        }
+
+        .header-nav a.active {
+            background-color: #3498db !important;
+            color: white !important;
+        }
+
+        .header-nav a:visited {
+            color: white !important;
+        }
+
+        .header-nav a:focus {
+            color: white !important;
+            background-color: #34495e !important;
+            outline: none !important;
+        }
+    </style>
+
+    <div class="header-left">
+        <img src="../images/logo.PNG" alt="Logo" class="logo">
+    </div>
+    <nav class="header-nav">
+        <a href="#" data-section="deposit">예/적금관리</a>
+        <a href="#" data-section="loan">대출관리</a>
+        <a href="#" data-section="card">카드관리</a>
+        <a href="/admin" data-section="foreign">외화관리</a>
+        <a href="#" data-section="pension">퇴직연금관리</a>
+        <a href="#" data-section="fund">펀드관리</a>
+        <a href="#" data-section="deduction">보험공제관리</a>
+        <a href="#" data-section="recommend">추천상품관리</a>
+    </nav>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.header-nav a');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                    }
+
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const section = this.getAttribute('data-section');
+                    console.log('선택된 섹션:', section);
+
+                    const href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        console.log('페이지 이동:', href);
+                    }
+                });
+            });
+        });
+    </script>
+</header>
+
+</body>
+</html>
