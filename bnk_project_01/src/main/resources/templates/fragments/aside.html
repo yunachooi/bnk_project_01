@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<!-- 사이드바 프래그먼트 -->
+<aside th:fragment="aside">
+    <style>
+        * {
+            box-sizing: border-box !important;
+        }
+
+        aside {
+            width: 220px !important;
+            background: #f4f5f7 !important;
+            border-right: 1px solid #dcdfe3 !important;
+            padding: 24px 0 !important;
+            height: 100vh !important;
+            margin: 0 !important;
+            font-family: system-ui, sans-serif !important;
+        }
+
+        aside ul {
+            list-style: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        aside li {
+            margin-bottom: 8px !important;
+            text-align: center !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            margin-top: 0 !important;
+        }
+
+        aside .menu-link {
+            width: 160px !important;
+            padding: 8px 0 !important;
+            border: 1px solid #999 !important;
+            background: #fff !important;
+            cursor: pointer !important;
+            font-family: system-ui, sans-serif !important;
+            font-size: 1rem !important;
+            color: #000 !important;
+            border-radius: 0 !important;
+            margin: 0 !important;
+            text-align: center !important;
+            box-shadow: none !important;
+            outline: none !important;
+            text-decoration: none !important;
+            display: inline-block !important;
+        }
+
+        aside .menu-link.active {
+            background: #dbe4ff !important;
+            border-color: #4c6ef5 !important;
+            color: #000 !important;
+        }
+
+        aside .menu-link:hover {
+            opacity: 0.8 !important;
+            background: #f8f9fa !important;
+            text-decoration: none !important;
+            color: #000 !important;
+        }
+
+        aside .menu-link.active:hover {
+            background: #dbe4ff !important;
+            opacity: 0.8 !important;
+            color: #000 !important;
+        }
+    </style>
+
+    <ul>
+        <li><a href="/admin" class="menu-link active">대시보드</a></li>
+        <li><a href="/admin/category" class="menu-link">카테고리 관리</a></li>
+        <li><a href="/admin/productPage" class="menu-link">상품 관리</a></li>
+        <li><a href="/admin/termsForm" class="menu-link">약관 등록</a></li>
+        <li><a href="/admin/termsPage" class="menu-link">약관 관리</a></li>
+        <li><a href="/admin/approve" class="menu-link">결재 관리</a></li>
+    </ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuLinks = document.querySelectorAll('aside .menu-link');
+            const currentPath = window.location.pathname;
+
+            // 현재 페이지에 맞는 메뉴 활성화
+            menuLinks.forEach(link => {
+                link.classList.remove('active');
+                
+                // 현재 URL과 링크 URL이 일치하면 active 클래스 추가
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('active');
+                }
+            });
+
+            // 클릭 이벤트 추가 (선택사항)
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    menuLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    console.log('이동할 페이지:', this.getAttribute('href'));
+                    // 페이지 이동은 자동으로 처리됨 (기본 링크 동작)
+                });
+            });
+        });
+    </script>
+</aside>
+
+</body>
+</html>
