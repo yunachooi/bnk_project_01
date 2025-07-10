@@ -48,6 +48,11 @@ async function loadPage(page, pushHistory) {
       m.init();
       break;
     }
+	case 'dashboard': {
+	  const m = await import('/js/dashboard.js');
+	  m.init();
+	  break;
+	}
   }
 
   /* 4) history 관리 */

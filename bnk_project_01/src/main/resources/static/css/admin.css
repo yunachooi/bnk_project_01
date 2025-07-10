@@ -1,42 +1,196 @@
 @charset "UTF-8";
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui,sans-serif;}
-header{height:56px;line-height:56px;padding:0 24px;background:#2b3440;color:#fff;font-size:1.2rem;}
-.layout{display:flex;height:calc(100vh - 56px);}
-aside{width:220px;background:#f4f5f7;border-right:1px solid #dcdfe3;padding:24px 0;}
-aside ul{list-style:none;padding:0;margin:0}
-aside li{margin-bottom:8px;text-align:center;}
-aside button{width:160px;padding:8px 0;border:1px solid #999;background:#fff;cursor:pointer;}
-aside button.active{background:#dbe4ff;border-color:#4c6ef5}
-main{flex:1;padding:32px;overflow:auto;}
 
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:12px;
-  table-layout:fixed;          /* 추가: 열 폭 고정 */
+/* 기본 세팅 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-th,td{
-  border:1px solid #d0d3d8;
-  padding:6px 10px;
-  white-space:nowrap;          /* 추가: 줄바꿈 방지 */
-  overflow:hidden;             /* 추가 */
-  text-overflow:ellipsis;      /* 추가 */
-  text-align:center;           /* 깔끔한 중앙 정렬 */
-  vertical-align:middle;
+
+body {
+  margin: 0;
+  font-family: 'Malgun Gothic', '맑은 고딕', Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  font-size: 14px;
+  line-height: 1.5;
 }
-th{background:#eef0f3}
-td[contenteditable]{background:#fffced}
 
-button.small{padding:2px 6px;font-size:.85rem}
+/* 헤더 */
+header {
+  height: 56px;
+  line-height: 56px;
+  padding: 0 24px;
+  background: #2b3440;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
 
-/* ── 모달 ── */
-#modal{position:fixed;inset:0;background:#0007;display:flex;
-       align-items:center;justify-content:center;z-index:100;
-       transition:.2s opacity}
-#modal.hidden{pointer-events:none;opacity:0;}
-#modal .box{background:#fff;padding:28px 40px;border-radius:8px;min-width:300px}
-#modal label{display:block;margin:10px 0}
-#modal .btns{margin-top:16px;text-align:right}
-/* 행 선택 효과 */
-tr.selected { background: #e7f1ff; }
+/* 레이아웃 */
+.layout {
+  display: flex;
+  height: calc(100vh - 56px);
+}
+
+/* 사이드바 */
+aside {
+  width: 220px;
+  background: #ffffff;
+  border-right: 1px solid #dee2e6;
+  padding: 24px 0;
+}
+
+aside ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+aside li {
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+aside button {
+  width: 160px;
+  padding: 8px 0;
+  border: 1px solid #6c757d;
+  background: #f8f9fa;
+  color: #495057;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+aside button.active {
+  background: #dbe4ff;
+  border-color: #4c6ef5;
+  color: #1c3faa;
+}
+
+/* 본문 */
+main {
+  flex: 1;
+  padding: 32px;
+  overflow: auto;
+  background-color: #ffffff;
+}
+h2 {
+    color: #2c2c2c;
+    text-align: left;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 15px 0;
+    border-bottom: 3px solid #dc3545;
+    background-color: #f8f9fa;
+}
+
+/* 테이블 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+  font-size: 13px;
+  table-layout: fixed;
+  background-color: #fff;
+  border: 2px solid #6c757d;
+}
+
+th, td {
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  color: #495057;
+}
+
+th {
+  background-color: #495057;
+  color: white;
+  font-weight: bold;
+}
+
+td[contenteditable] {
+  background-color: #fff3cd;
+}
+
+tr.selected {
+  background-color: #e7f1ff;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+/* 버튼 */
+button.small {
+  padding: 2px 6px;
+  font-size: .85rem;
+}
+
+button.save-btn {
+  background-color: #dc3545;
+  color: white;
+  border: 1px solid #dc3545;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+button.save-btn:hover {
+  background-color: #c82333;
+  border-color: #c82333;
+}
+
+button.save-btn:disabled {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  cursor: not-allowed;
+}
+
+/* 모달 */
+#modal {
+  position: fixed;
+  inset: 0;
+  background: #0007;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: .2s opacity;
+}
+
+#modal.hidden {
+  pointer-events: none;
+  opacity: 0;
+}
+
+#modal .box {
+  background: #fff;
+  padding: 28px 40px;
+  border-radius: 8px;
+  min-width: 300px;
+}
+
+#modal label {
+  display: block;
+  margin: 10px 0;
+  font-weight: bold;
+  color: #495057;
+}
+
+#modal .btns {
+  margin-top: 16px;
+  text-align: right;
+}
