@@ -8,71 +8,73 @@
 <body>
 	<!-- 관리자 헤더 포함 -->
     <header th:replace="~{fragments/adminheader :: adminheader}"></header>
-    <!-- 관리자 사이드 포함 -->
-    <aside th:replace="~{fragments/aside :: aside}"></aside>
-    
-	<div class="container">
-        <h2>외화 상품 관리 시스템</h2>
-        
-        <div class="search-box">
-        	<h3>조회 조건</h3>
-            
-            <div class="search-row">
-                <label for="searchType">조회 유형:</label>
-                <select id="searchType" onchange="changeSearchType()">
-                    <option value="product">외화 상품 조회</option>
-                    <option value="property">외화 상품 속성 조회</option>
-                    <option value="attribute">외화 상품 속성값 조회 (상품+속성+속성값)</option>
-                </select>
-            </div><!-- search-row -->
-            
-            <div class="search-row">
-                <label for="searchKeyword">검색어:</label>
-                <input type="text" id="searchKeyword" placeholder="검색할 키워드를 입력하세요">
-            </div><!-- search-row -->
-            
-            <div class="search-row" id="attributeFilters" style="display: none;">
-                <label for="productSelect">상품 선택:</label>
-				<select id="productSelect">
-					<option value="">전체</option>
-					<option th:each="product : ${products}"
-							th:value="${product.cno}"
-							th:text="${product.pname}">
-					</option>
-				</select><!-- productSelect -->
-					
-                <label for="propertySelect">속성 선택:</label>
-                <select id="propertySelect">
-                    <option value="">전체</option>
-                    <option th:each="property : ${properties}" 
-                            th:value="${property.prno}" 
-                            th:text="${property.prname}">
-                    </option>
-                </select><!-- propertySelect -->
-            </div><!-- search-row -->
-            
-            <div class="search-row">
-                <button class="search-btn" onclick="searchData()">조회</button>
-            </div><!-- search-row -->
-        </div><!-- search-box -->
-        
-        <div class="result-box">
-        	<h3 id="resultTitle">조회 결과</h3>
-            <div class="table-container">
-                <table id="resultTable">
-                    <thead>
-                        <tr id="tableHeader">
-                        </tr>
-                    </thead>
-                    <tbody id="resultBody">
-                        <tr class="no-data">
-                            <td colspan="6">조회된 데이터가 없습니다.</td>
-                        </tr>
-                    </tbody>
-                </table>
-        	</div><!-- table-container -->
-        </div><!-- result-box -->
-    </div> <!-- container -->
+    <div class="main-container">
+	    <!-- 관리자 사이드 포함 -->
+	    <aside th:replace="~{fragments/aside :: aside}"></aside>
+	    
+		<div class="container">
+	        <h2>외화 상품 관리 시스템</h2>
+	        
+	        <div class="search-box">
+	        	<h3>조회 조건</h3>
+	            
+	            <div class="search-row">
+	                <label for="searchType">조회 유형:</label>
+	                <select id="searchType" onchange="changeSearchType()">
+	                    <option value="product">외화 상품 조회</option>
+	                    <option value="property">외화 상품 속성 조회</option>
+	                    <option value="attribute">외화 상품 속성값 조회 (상품+속성+속성값)</option>
+	                </select>
+	            </div><!-- search-row -->
+	            
+	            <div class="search-row">
+	                <label for="searchKeyword">검색어:</label>
+	                <input type="text" id="searchKeyword" placeholder="검색할 키워드를 입력하세요">
+	            </div><!-- search-row -->
+	            
+	            <div class="search-row" id="attributeFilters" style="display: none;">
+	                <label for="productSelect">상품 선택:</label>
+					<select id="productSelect">
+						<option value="">전체</option>
+						<option th:each="product : ${products}"
+								th:value="${product.cno}"
+								th:text="${product.pname}">
+						</option>
+					</select><!-- productSelect -->
+						
+	                <label for="propertySelect">속성 선택:</label>
+	                <select id="propertySelect">
+	                    <option value="">전체</option>
+	                    <option th:each="property : ${properties}" 
+	                            th:value="${property.prno}" 
+	                            th:text="${property.prname}">
+	                    </option>
+	                </select><!-- propertySelect -->
+	            </div><!-- search-row -->
+	            
+	            <div class="search-row">
+	                <button class="search-btn" onclick="searchData()">조회</button>
+	            </div><!-- search-row -->
+	        </div><!-- search-box -->
+	        
+	        <div class="result-box">
+	        	<h3 id="resultTitle">조회 결과</h3>
+	            <div class="table-container">
+	                <table id="resultTable">
+	                    <thead>
+	                        <tr id="tableHeader">
+	                        </tr>
+	                    </thead>
+	                    <tbody id="resultBody">
+	                        <tr class="no-data">
+	                            <td colspan="6">조회된 데이터가 없습니다.</td>
+	                        </tr>
+	                    </tbody>
+	                </table>
+	        	</div><!-- table-container -->
+	        </div><!-- result-box -->
+	    </div> <!-- container -->
+    </div><!-- main-container -->
     
     <script th:src="@{/js/product.js}"></script><!-- script -->
 </body>
