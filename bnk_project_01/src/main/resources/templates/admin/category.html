@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>대시보드</title>
+  <meta charset="UTF-8" />
+  <title>카테고리 관리</title>
   <link rel="stylesheet" th:href="@{/css/admin.css}">
-  <script th:src="@{/js/echarts.min.js}"></script>
 </head>
 <body>
   <header th:replace="fragments/adminheader :: adminheader"></header>
   <div class="main-container">
     <aside th:replace="fragments/aside :: aside"></aside>
-    <main th:replace="admin/dashboard-body :: content"></main>
+    <main th:replace="admin/category-body :: content"></main>
   </div>
   <script type="module">
-    import { init } from '/js/dashboard.js';
+    import { init } from '/js/category-page.js';
     init();
   </script>
 </body>
