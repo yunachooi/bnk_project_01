@@ -5,7 +5,7 @@
 </head>
 <body>
 
-<header th:fragment="header">
+<header th:fragment="adminheader">
     <style>
         body {
             margin: 0 !important;
@@ -113,25 +113,32 @@
         <a href="#" data-section="deduction">보험공제관리</a>
         <a href="#" data-section="recommend">추천상품관리</a>
     </nav>
-</header>
 
-<script th:fragment="header-script">
-    document.addEventListener('DOMContentLoaded', function() {
-        const navLinks = document.querySelectorAll('.header-nav a');
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.header-nav a');
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (this.getAttribute('href') === '#') {
+                        e.preventDefault();
+                    }
 
-                navLinks.forEach(nav => nav.classList.remove('active'));
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
 
-                this.classList.add('active');
+                    const section = this.getAttribute('data-section');
+                    console.log('선택된 섹션:', section);
 
-                const section = this.getAttribute('data-section');
-                console.log('선택된 섹션:', section);
+                    const href = this.getAttribute('href');
+                    if (href && href !== '#') {
+                        console.log('페이지 이동:', href);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
+</header>
+
 </body>
 </html>
