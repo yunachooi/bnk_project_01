@@ -1,23 +1,121 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>ONE 환전 서비스</title>
+    <meta charset="UTF-8" />
+    <title>BNK ONE 환전</title>
     <style>
-        body {
+        * { box-sizing: border-box; }
+
+        :root {
+            --bnk-red: #D7191F;
+            --bnk-light-gray: #f7f7f7;
+            --bnk-border: #ddd;
+        }
+
+        html, body {
             margin: 0;
+            padding: 0;
             font-family: 'Noto Sans KR', sans-serif;
             background-color: #ffffff;
             color: #333;
-            line-height: 1.6;
+            scroll-behavior: smooth;
         }
 
+        /* ✅ 헤더 영역 */
+        .page-header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            background-color: #ffffff;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            color: #D7191F;
+            margin-bottom: 10px;
+        }
+
+        .page-header hr {
+            width: 80px;
+            height: 4px;
+            background-color: #D7191F;
+            border: none;
+            margin: 0 auto;
+        }
+
+        /* 🎥 영상 영역 */
+        .video-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .video-section video {
+            width: 55vw;
+            height: auto;
+            object-fit: contain;
+            z-index: 0;
+            border-radius: 12px;
+        }
+
+        .video-overlay {
+            position: absolute;
+            bottom: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            color: white;
+            padding: 12px 30px 24px 30px;
+            text-align: center;
+            border-radius: 14px;
+            max-width: 75%;
+        }
+
+        .video-overlay h1 {
+            font-size: 3.8rem;
+            font-weight: 700;
+            margin: 0 0 10px;
+            letter-spacing: -0.5px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .video-overlay p {
+            font-size: 1.6rem;
+            font-weight: 600;
+            line-height: 1.6;
+            margin: 0 0 16px;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+        }
+
+        .video-overlay .cta-button {
+            font-size: 1.4rem;
+            padding: 12px 24px;
+            background-color: #ffffff;
+            color: #D7191F;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .video-overlay .cta-button:hover {
+            background-color: #f5f5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 🔽 설명 섹션들 */
         .section {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 3rem;
-            padding: 60px 40px;
+            padding: 80px 40px;
         }
 
         .section:nth-child(even) {
@@ -26,7 +124,7 @@
         }
 
         .section img {
-            width: 220px;
+            width: 280px;
             height: auto;
             border-radius: 50%;
         }
@@ -36,16 +134,17 @@
         }
 
         .title {
-            font-size: 1.8rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: #D7191F;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.6rem;
         }
 
         .desc {
-            font-size: 1.1rem;
-            font-weight: 400;
+            font-size: 1.3rem;
+            font-weight: 600;
             color: #555;
+            line-height: 1.8;
         }
 
         .footer {
@@ -55,7 +154,30 @@
             color: #888;
         }
 
+        /* 📱 반응형 */
         @media (max-width: 768px) {
+            .video-section video {
+                width: 95vw;
+            }
+
+            .video-overlay {
+                padding: 16px 20px;
+                bottom: 3%;
+            }
+
+            .video-overlay h1 {
+                font-size: 2.4rem;
+            }
+
+            .video-overlay p {
+                font-size: 1.4rem;
+            }
+
+            .video-overlay .cta-button {
+                font-size: 1.2rem;
+                padding: 12px 24px;
+            }
+
             .section {
                 flex-direction: column !important;
                 text-align: center;
@@ -68,11 +190,109 @@
             .text-area {
                 max-width: 100%;
             }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
         }
+
+        /* 상품 상세 정보 */
+        .tab-type2 {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .js-tabA {
+            display: flex;
+            border-bottom: 2px solid var(--bnk-red);
+            margin-bottom: 20px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .js-tabA li {
+            margin-right: 10px;
+        }
+
+        .js-tabA a {
+            display: inline-block;
+            padding: 12px 20px;
+            border: 1px solid var(--bnk-red);
+            border-bottom: none;
+            background: white;
+            color: var(--bnk-red);
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .js-tabA a:hover {
+            background: var(--bnk-red);
+            color: white;
+        }
+
+        .con {
+            display: none;
+            background: #fff;
+            border: 1px solid var(--bnk-red);
+            border-radius: 0 0 10px 10px;
+            padding: 30px;
+            line-height: 1.8;
+        }
+
+        .con.active {
+            display: block;
+        }
+
+        h6.hd-t {
+            font-size: 1.5rem;
+            color: var(--bnk-red);
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            margin: 10px 0 20px;
+            padding-left: 20px;
+        }
+
+        ul li {
+            margin-bottom: 8px;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
     </style>
 </head>
 <body>
 
+<!-- ✅ 헤더 -->
+<div class="page-header">
+    <h1>BNK ONE 환전 서비스 Page</h1>
+    <hr>
+</div>
+
+<!-- 🎥 배경 영상 -->
+<section class="video-section">
+    <video src="/videos/ONE%20환전.mp4" autoplay muted loop playsinline></video>
+
+    <div class="video-overlay">
+        <h1>BNK One 환전</h1>
+        <p>최대 90% 우대 혜택</p>
+        <button class="cta-button" onclick="location.href='#'">지금 환전하기</button>
+    </div>
+</section>
+
+<!-- 🔽 콘텐츠 섹션 -->
 <div class="section">
     <img src="/img/service/ONE%20환전%201.png" alt="ONE 하는 날에">
     <div class="text-area">
@@ -85,7 +305,7 @@
     <img src="/img/service/ONE%20환전%202.png" alt="ONE 하는 분께">
     <div class="text-area">
         <div class="title">ONE 하는 분께</div>
-        <div class="desc">국내 거주 중인 개인 고객부터 기업 고객까지 누구나 이용 가능</div>
+        <div class="desc">국내 거주 중인 개인 고객부터 기업 고객까지 <br> 누구나 이용 가능</div>
     </div>
 </div>
 
@@ -93,7 +313,7 @@
     <img src="/img/service/ONE%20환전%203.png" alt="ONE 하는 곳에">
     <div class="text-area">
         <div class="title">ONE 하는 곳에</div>
-        <div class="desc">해외여행이든 출장지든, 언제 어디서나<br>외화를 손쉽게 신청하고 수령할 수 있어요</div>
+        <div class="desc">해외여행이든 출장지든, 언제 어디서나<br>외화를 손쉽게 신청하고 수령 가능</div>
     </div>
 </div>
 
@@ -101,13 +321,72 @@
     <img src="/img/service/ONE%20환전%204.png" alt="여행을 ONE할 때">
     <div class="text-area">
         <div class="title">여행을 ONE할 때</div>
-        <div class="desc">주요 통화: USD(달러), JPY(엔화), EUR(유로), CNY(위안) 등<br>원하는 통화로 간편하게 환전 가능</div>
+        <div class="desc">주 통화: USD(달러), JPY(엔화), EUR(유로), CNY(위안) <br>원하는 통화로 간편하게 환전 가능</div>
     </div>
 </div>
 
+<!-- 상세 정보 -->
+<div class="tab-type2">
+    <ul class="js-tabA" title="탭 항목">
+        <li><a href="#conA1" class="js-tab">이용안내</a></li>
+        <li><a href="#conB1" class="js-tab">우대내용</a></li>
+        <li class="last"><a href="#conC1" class="js-tab">유의사항</a></li>
+    </ul>
+
+    <div class="con" id="conA1">
+        <h6 class="hd-t">환전 가능 한도</h6>
+        <ul>
+            <li>로그인 환전 : USD 100 ~ USD 10,000 이하</li>
+            <li>비로그인 환전 : 원화 1백만원 이하</li>
+            <li>환전 수령 방법 (환전 수령, 현찰 배달, 금고 보관)</li>
+        </ul>
+
+        <h6 class="hd-t">개인</h6>
+        <img src="/img/OneForex/개인.png" alt="개인 안내 이미지">
+
+        <h6 class="hd-t">기업</h6>
+        <img src="/img/OneForex/기업.png" alt="기업 안내 이미지">
+    </div>
+
+    <div class="con" id="conB1">
+        <h6 class="hd-t">우대내용</h6>
+        <img src="/img/OneForex/우대내용.png" alt="우대내용 안내 이미지">
+    </div>
+
+    <div class="con" id="conC1">
+        <h6 class="hd-t">유의 사항</h6>
+        <img src="/img/OneForex/유의%20사항.png" alt="유의사항 안내 이미지">
+    </div>
+</div>
+
+<!-- 👣 푸터 -->
 <div class="footer">
     ⓒ 2025 BNK 부산은행. All rights reserved.
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tabs = document.querySelectorAll(".js-tab");
+        const contents = document.querySelectorAll(".con");
+
+        tabs.forEach(tab => {
+            tab.addEventListener("click", function (e) {
+                e.preventDefault();
+                tabs.forEach(t => t.classList.remove("active")); //.active 클래스를 제거 즉, 탭 선택 초기화
+                contents.forEach(c => c.classList.remove("active")); //이전에 열려있던 콘텐츠도 닫기
+
+                tab.classList.add("active");
+                const target = document.querySelector(tab.getAttribute("href"));
+                if (target) target.classList.add("active");
+            });
+        });
+
+        if (tabs.length) {
+            tabs[0].classList.add("active"); //초기된 상태에서 탭 열기 (첫번째 탭)
+            contents[0].classList.add("active");
+        }
+    });
+</script>
 
 </body>
 </html>
