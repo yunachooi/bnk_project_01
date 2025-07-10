@@ -13,9 +13,12 @@ body {
     font-size: 14px;
 }
 
+.main-container{
+	display: flex;
+}
+
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    min-width: 1200px;
     padding: 20px;
     background-color: #ffffff;
     min-height: 100vh;
