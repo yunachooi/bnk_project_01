@@ -1,12 +1,142 @@
 package com.example.bnk_project_01.service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.bnk_project_01.dto.TermsDto;
+import com.example.bnk_project_01.entity.Terms;
 import com.example.bnk_project_01.repository.TermsRepository;
+import com.example.bnk_project_01.util.TermsConverter;
 
 @Service
+@Transactional
 public class TermsService {
-	@Autowired
-	TermsRepository termsRepository;
+    @Autowired
+    TermsRepository termsRepository;
+    
+    private final String UPLOAD_PATH = "src/main/resources/static/termspdf/";
+
+    public List<TermsDto> getAll() {
+        return termsRepository.findAll()
+                .stream()
+                .map(TermsConverter::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public TermsDto save(TermsDto termsDto) {
+        Terms terms = TermsConverter.toEntity(termsDto);
+        
+        if (terms.getTno() == null || terms.getTno().isEmpty()) {
+            terms.setTno(generateNextTno());
+            terms.setTcreatedate(LocalDate.now());
+        }
+        
+        terms.setTmodifydate(LocalDate.now());
+        
+        Terms savedTerms = termsRepository.save(terms);
+        return TermsConverter.toDto(savedTerms);
+    }
+    
+    public TermsDto saveWithFile(TermsDto termsDto, MultipartFile file) throws IOException {
+        List<Terms> existingTerms = termsRepository.findByTnameOrderByTcreatedateDesc(termsDto.getTname());
+        
+        if (!existingTerms.isEmpty()) {
+            existingTerms.forEach(term -> {
+                term.setTstate("N");
+                termsRepository.save(term);
+            });
+        }
+        
+        String savedFileName = saveFileWithVersion(file, termsDto.getTname());
+        
+        Terms terms = TermsConverter.toEntity(termsDto);
+        terms.setTno(generateNextTno());
+        terms.setTpath("/termspdf/" + savedFileName);
+        terms.setTfilename(savedFileName);
+        terms.setTstate("Y");
+        terms.setTcreatedate(LocalDate.now());
+        terms.setTmodifydate(LocalDate.now());
+        
+        Terms savedTerms = termsRepository.save(terms);
+        return TermsConverter.toDto(savedTerms);
+    }
+    
+    private String saveFileWithVersion(MultipartFile file, String termsName) throws IOException {
+        String originalFileName = file.getOriginalFilename();
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        
+        String baseFileName = termsName + "_" + originalFileName.substring(0, originalFileName.lastIndexOf("."));
+        
+        Path uploadPath = Paths.get(UPLOAD_PATH);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
+        
+        String finalFileName = baseFileName + fileExtension;
+        Path filePath = uploadPath.resolve(finalFileName);
+        
+        if (!Files.exists(filePath)) {
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            return finalFileName;
+        }
+        
+        int version = 2;
+        do {
+            finalFileName = baseFileName + "_v." + version + fileExtension;
+            filePath = uploadPath.resolve(finalFileName);
+            version++;
+        } while (Files.exists(filePath));
+        
+        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        
+        return finalFileName;
+    }
+
+    public void delete(String id) {
+        termsRepository.deleteById(id);
+    }
+    
+    private String generateNextTno() {
+        String maxTno = termsRepository.findMaxTno();
+        
+        if (maxTno == null) {
+            return "T001";
+        }
+        
+        String numberPart = maxTno.substring(1);
+        int nextNumber = Integer.parseInt(numberPart) + 1;
+        
+        return String.format("T%03d", nextNumber);
+    }
+    
+    public TermsDto findById(String tno) {
+        return termsRepository.findById(tno)
+                .map(TermsConverter::toDto)
+                .orElse(null);
+    }
+    
+    public TermsDto update(String tno, TermsDto termsDto) {
+        return termsRepository.findById(tno)
+                .map(existingTerms -> {
+                    Terms updatedTerms = TermsConverter.toEntity(termsDto);
+                    updatedTerms.setTno(tno);
+                    updatedTerms.setTcreatedate(existingTerms.getTcreatedate());
+                    updatedTerms.setTmodifydate(LocalDate.now());
+                    
+                    Terms savedTerms = termsRepository.save(updatedTerms);
+                    return TermsConverter.toDto(savedTerms);
+                })
+                .orElse(null);
+    }
 }

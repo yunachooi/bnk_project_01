@@ -1,4 +1,10 @@
-// product.js - 외화 상품 관리
+// product.js - 외화 상품 관리 (페이지네이션 및 총건수 표시 포함)
+
+// 페이지네이션 관련 변수
+let currentPage = 1;
+const itemsPerPage = 10;
+let allData = []; // 전체 데이터 저장
+let filteredData = []; // 필터링된 데이터 저장
 
 // 페이지 로드 시 초기화
 document.addEventListener('DOMContentLoaded', function() {
@@ -84,6 +90,9 @@ function changeSearchType() {
     // 테이블 헤더 업데이트
     updateTableHeader(searchType);
     
+    // 페이지 초기화
+    currentPage = 1;
+    
     // 조회 유형 변경 시 자동 조회
     searchData();
 }
@@ -117,7 +126,7 @@ function updateTableHeader(searchType) {
     }
 }
 
-// 조회 함수
+// 조회 함수 (페이지네이션 적용)
 async function searchData() {
     const searchType = document.getElementById('searchType').value;
     const keyword = document.getElementById('searchKeyword').value.trim();
@@ -155,11 +164,18 @@ async function searchData() {
             throw new Error('잘못된 데이터 형식입니다.');
         }
         
+        // 전체 데이터 저장
+        allData = data;
+        
         // 검색어 필터링
-        const filteredData = keyword ? filterData(data, keyword, searchType) : data;
+        filteredData = keyword ? filterData(data, keyword, searchType) : data;
         console.log('필터링된 데이터:', filteredData);
         
-        displayResults(filteredData, searchType);
+        // 페이지 초기화
+        currentPage = 1;
+        
+        // 페이지네이션과 함께 결과 표시
+        displayResultsWithPagination(filteredData, searchType);
         
     } catch (error) {
         console.error('조회 오류:', error);
@@ -190,7 +206,14 @@ function filterData(data, keyword, searchType) {
     return data.filter(filterRules[searchType] || (() => true));
 }
 
-// 결과 표시
+// 페이지네이션과 함께 결과 표시
+async function displayResultsWithPagination(data, searchType) {
+    await displayResults(data, searchType);
+    createPagination(data, searchType);
+    updateResultTitle(searchType);
+}
+
+// 결과 표시 (페이지네이션 적용)
 async function displayResults(data, searchType) {
     const tbody = document.getElementById('resultBody');
     
@@ -214,9 +237,16 @@ async function displayResults(data, searchType) {
             data = await enrichAttributeData(data);
         }
         
-        const rowsHTML = data.map((item, index) => {
-            const rowHTML = createRowHTML(item, index + 1, searchType);
-            console.log(`행 ${index + 1} HTML 생성:`, rowHTML);
+        // 현재 페이지에 표시할 데이터 계산
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const pageData = data.slice(startIndex, endIndex);
+        
+        const rowsHTML = pageData.map((item, index) => {
+            // 전체 순번 계산 (페이지별로 연속적인 번호)
+            const globalIndex = startIndex + index + 1;
+            const rowHTML = createRowHTML(item, globalIndex, searchType);
+            console.log(`행 ${globalIndex} HTML 생성:`, rowHTML);
             return rowHTML;
         }).join('');
         
@@ -230,6 +260,162 @@ async function displayResults(data, searchType) {
     } catch (error) {
         console.error('테이블 렌더링 오류:', error);
         showMessage('데이터 표시 중 오류가 발생했습니다.');
+    }
+}
+
+// 조회 결과 제목 업데이트 (총건수 포함)
+function updateResultTitle(searchType) {
+    const searchTypeNames = {
+        product: '외화 상품',
+        property: '외화 상품 속성',
+        attribute: '외화 상품 속성값'
+    };
+    
+    const resultTitle = document.getElementById('resultTitle');
+    const keyword = document.getElementById('searchKeyword').value.trim();
+    const totalCount = filteredData.length;
+    const totalPages = Math.ceil(totalCount / itemsPerPage);
+    
+    let titleText = searchTypeNames[searchType] + ' 조회 결과';
+    
+    if (totalCount === 0) {
+        resultTitle.textContent = `${titleText} (0건)`;
+        return;
+    }
+    
+    if (totalPages <= 1) {
+        // 페이지네이션이 없을 때
+        if (keyword) {
+            titleText = `${searchTypeNames[searchType]} '${keyword}' 검색 결과`;
+        }
+        resultTitle.textContent = `${titleText} (총 ${totalCount}건)`;
+    } else {
+        // 페이지네이션이 있을 때
+        const startItem = (currentPage - 1) * itemsPerPage + 1;
+        const endItem = Math.min(currentPage * itemsPerPage, totalCount);
+        
+        if (keyword) {
+            titleText = `${searchTypeNames[searchType]} '${keyword}' 검색 결과`;
+        }
+        resultTitle.textContent = `${titleText} (총 ${totalCount}건, ${startItem}-${endItem}건 표시)`;
+    }
+}
+
+// 페이지네이션 생성
+function createPagination(data, searchType) {
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    
+    // 기존 페이지네이션 제거
+    const existingPagination = document.querySelector('.pagination-container');
+    if (existingPagination) {
+        existingPagination.remove();
+    }
+    
+    // 페이지가 1개 이하면 페이지네이션 숨기기
+    if (totalPages <= 1) {
+        return;
+    }
+    
+    // 페이지네이션 컨테이너 생성
+    const paginationContainer = document.createElement('div');
+    paginationContainer.className = 'pagination-container';
+    
+    const pagination = document.createElement('div');
+    pagination.className = 'pagination';
+    
+    // 이전 페이지 버튼
+    const prevButton = document.createElement('button');
+    prevButton.className = 'page-btn';
+    prevButton.textContent = '‹';
+    prevButton.disabled = currentPage === 1;
+    prevButton.onclick = () => goToPage(currentPage - 1, searchType);
+    pagination.appendChild(prevButton);
+    
+    // 페이지 번호 버튼들
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+    
+    // 첫 페이지
+    if (startPage > 1) {
+        const firstButton = createPageButton(1, searchType);
+        pagination.appendChild(firstButton);
+        
+        if (startPage > 2) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'page-ellipsis';
+            ellipsis.textContent = '...';
+            pagination.appendChild(ellipsis);
+        }
+    }
+    
+    // 중간 페이지들
+    for (let i = startPage; i <= endPage; i++) {
+        const pageButton = createPageButton(i, searchType);
+        pagination.appendChild(pageButton);
+    }
+    
+    // 마지막 페이지
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'page-ellipsis';
+            ellipsis.textContent = '...';
+            pagination.appendChild(ellipsis);
+        }
+        
+        const lastButton = createPageButton(totalPages, searchType);
+        pagination.appendChild(lastButton);
+    }
+    
+    // 다음 페이지 버튼
+    const nextButton = document.createElement('button');
+    nextButton.className = 'page-btn';
+    nextButton.textContent = '›';
+    nextButton.disabled = currentPage === totalPages;
+    nextButton.onclick = () => goToPage(currentPage + 1, searchType);
+    pagination.appendChild(nextButton);
+    
+    paginationContainer.appendChild(pagination);
+    
+    // 테이블 컨테이너 다음에 페이지네이션 추가
+    const tableContainer = document.querySelector('.table-container');
+    tableContainer.parentNode.insertBefore(paginationContainer, tableContainer.nextSibling);
+}
+
+// 페이지 버튼 생성
+function createPageButton(pageNumber, searchType) {
+    const button = document.createElement('button');
+    button.className = 'page-btn';
+    button.textContent = pageNumber;
+    
+    if (pageNumber === currentPage) {
+        button.classList.add('active');
+    }
+    
+    button.onclick = () => goToPage(pageNumber, searchType);
+    return button;
+}
+
+// 특정 페이지로 이동
+function goToPage(pageNumber, searchType) {
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+    
+    if (pageNumber < 1 || pageNumber > totalPages) {
+        return;
+    }
+    
+    currentPage = pageNumber;
+    displayResultsWithPagination(filteredData, searchType);
+    refreshPaginationState(); // 페이지 변경 시 체크박스 상태 초기화
+}
+
+// 페이지네이션 새로고침 (페이지 변경 시 체크박스 상태 초기화)
+function refreshPaginationState() {
+    // 전체 선택 체크박스 해제
+    const selectAll = document.getElementById('selectAll');
+    if (selectAll) {
+        selectAll.checked = false;
+        selectAll.indeterminate = false;
     }
 }
 
@@ -598,15 +784,16 @@ function addNewRow(searchType) {
     const newRow = document.createElement('tr');
     newRow.className = 'new-row';
     
-    // 현재 행 개수 + 1로 순번 설정
+    // 현재 페이지의 마지막 순번 + 1로 설정
     const currentRows = tbody.querySelectorAll('tr:not(.no-data):not(.loading)').length;
+    const nextIndex = ((currentPage - 1) * itemsPerPage) + currentRows + 1;
     
     let inputFields = '';
     switch(searchType) {
         case 'product':
             inputFields = `
                 <td></td>
-                <td>${currentRows + 1}</td>
+                <td>${nextIndex}</td>
                 <td><input type="text" name="pno" placeholder="상품코드"></td>
                 <td><input type="text" name="pname" placeholder="상품명"></td>
                 <td>보류 (기본값)</td>
@@ -616,7 +803,7 @@ function addNewRow(searchType) {
         case 'property':
             inputFields = `
                 <td></td>
-                <td>${currentRows + 1}</td>
+                <td>${nextIndex}</td>
                 <td><input type="text" name="prno" placeholder="속성코드"></td>
                 <td><input type="text" name="prname" placeholder="속성명"></td>
                 <td><button class="save-btn" onclick="saveRow(this, '${searchType}')">저장</button></td>
@@ -625,7 +812,7 @@ function addNewRow(searchType) {
         case 'attribute':
             inputFields = `
                 <td></td>
-                <td>${currentRows + 1}</td>
+                <td>${nextIndex}</td>
                 <td><input type="text" name="ano" placeholder="속성값코드"></td>
                 <td><select name="pno" onchange="updateProductName(this)"><option value="">상품 선택</option></select></td>
                 <td class="product-name-display">자동 표시</td>
@@ -780,10 +967,10 @@ async function saveRow(button, searchType) {
         const savedData = await response.json();
         console.log('저장 성공:', savedData);
         
-        // 성공 시 읽기 전용으로 변경
-        updateRowToReadOnly(row, savedData, currentIndex, searchType);
-        
         alert('등록되었습니다.');
+        
+        // 전체 데이터 새로고침
+        searchData();
         
     } catch (error) {
         console.error('저장 오류:', error);
@@ -810,7 +997,7 @@ function validateData(data, searchType) {
     }
 }
 
-// 행을 읽기 전용으로 변경
+// 행을 읽기 전용으로 변경 (사용하지 않음 - searchData()로 새로고침)
 async function updateRowToReadOnly(row, savedData, currentIndex, searchType) {
     let savedContent = '';
     
@@ -927,13 +1114,6 @@ async function deleteSelected() {
                 throw new Error(`삭제 실패: ${response.status}`);
             }
             
-            // 성공 시 해당 체크박스의 행 제거
-            const checkbox = document.querySelector(`.row-checkbox[value="${id}"]`);
-            if (checkbox) {
-                const row = checkbox.closest('tr');
-                row.remove();
-            }
-            
             successCount++;
             
         } catch (error) {
@@ -947,9 +1127,6 @@ async function deleteSelected() {
         }
     }
     
-    // 순번 재정렬
-    reorderTableRows();
-    
     // 전체 선택 체크박스 해제
     const selectAllCheckbox = document.getElementById('selectAll');
     if (selectAllCheckbox) {
@@ -962,19 +1139,9 @@ async function deleteSelected() {
         message += `\n${failCount}개 항목 삭제에 실패했습니다.`;
     }
     alert(message);
-}
-
-// 순번 재정렬
-function reorderTableRows() {
-    const tbody = document.getElementById('resultBody');
-    const rows = tbody.querySelectorAll('tr:not(.no-data):not(.loading)');
     
-    rows.forEach((row, index) => {
-        const numberCell = row.querySelector('td:nth-child(2)');
-        if (numberCell) {
-            numberCell.textContent = index + 1;
-        }
-    });
+    // 데이터 새로고침
+    searchData();
 }
 
 // 사용자 친화적인 삭제 오류 메시지 생성
