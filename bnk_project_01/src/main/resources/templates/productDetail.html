@@ -1,153 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>부산은행 외화예금 상품페이지</title>
- <style>
-    .container {
-      width: 1000px;
-      margin: 0 auto;
+  <meta charset="UTF-8" />
+  <title>동화마을 BNK 꿈이룸</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,700&display=swap" rel="stylesheet">
+  <style>
+    html, body { height:100%; margin:0; padding:0; }
+    body { font-family:'Noto Sans KR',sans-serif; min-height:350vh; background: linear-gradient(to bottom, #cbe7ff 0%, #e0f6d6 70%, #ffe0b2 100%);}
+    .main-scene { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; }
+    .info-card {
+      position:fixed; left:50%; transform:translateX(-50%);
+      min-width:270px; max-width:410px;
+      background:rgba(255,255,255,0.95); border-radius:22px;
+      box-shadow:0 8px 38px 0 rgba(33,45,73,0.10);
+      border:1.2px solid #e6e7fa; text-align:center;
+      padding:28px 28px 16px 28px; font-size:1.08rem; font-weight:500;
+      transition:all .3s; opacity:0; pointer-events:none;
     }
-
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 18px;          
-      line-height: 1.6;
-      padding: 20px;
+    .info-card.active { opacity:1; pointer-events:auto;}
+    .info-card .title { font-size:1.2rem; font-weight:900; color:#e54235; margin-bottom:9px;}
+    .info-card .desc { color:#29496d; margin-bottom:6px;}
+    .info-card .cta-btn {
+      display:inline-block; padding:10px 32px; border-radius:13px;
+      background:#e54235; color:#fff; font-weight:700; font-size:1.01rem;
+      border:none; margin-top:7px; box-shadow:0 2px 13px rgba(229,66,53,0.09);
+      text-decoration:none;
     }
-
-    .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      flex-wrap: wrap;
-    }
-
-    .breadcrumb a,
-    .breadcrumb span {
-      color: black;
-      text-decoration: none;    
-      font-weight: bold;       
-      font-size: 20px;          
-    }
-
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .dropdown-toggle {
-      cursor: pointer;
-      color: blue;
-      text-decoration: none;
-      user-select: none;
-      font-weight: bold;
-      font-size: 20px;       
-    }
-
-    .dropdown-toggle#red {
-      color: red;  
-    }
-
-    .dropdown-toggle#red .arrow {
-      color: red; 
-    }
-
-    .arrow {
-      margin-left: 5px;
-      font-size: 14px;
-    }
-
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      background-color: white;
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin-top: 5px;
-      z-index: 1;
-      width: 150px;
-    }
-
-    .dropdown-menu a {
-      display: block;
-      color: black;
-      text-decoration: none;
-      margin: 5px 0;
-      font-size: 18px;
-    }
-
-    .dropdown-menu a:hover {
-      background-color: #f0f0f0;
-    }
+    @media (max-width:600px) { .info-card {padding:12px 2vw 8px 2vw; min-width:0; max-width:94vw;} }
   </style>
 </head>
 <body>
+  <svg class="main-scene" id="scene" viewBox="0 0 1200 900" preserveAspectRatio="none"></svg>
 
-<div class="container">
-    <div class="breadcrumb">
-      <a href="#">외화</a>
-      <span>&gt;</span>
-
-      <div class="dropdown">
-        <span class="dropdown-toggle" onclick="toggleMenu(this)">
-          외화예금<span class="arrow">▼</span>
-        </span>
-        <div class="dropdown-menu">
-          <a href="#">환전</a>
-          <a href="#">수입</a>
-        </div>
-      </div>
-
-      <span>&gt;</span>
-
-      <div class="dropdown">
-        <span class="dropdown-toggle" id="red" onclick="toggleMenu(this)">
-          외화예금상품<span class="arrow">▼</span>
-        </span>
-        <div class="dropdown-menu">
-          <a href="#">예금</a>
-          <a href="#">적금</a>
-        </div>
-      </div>
-    </div>
-    <hr>
-    
-<div>
-	<div>
-	
-	</div>
-</div>
-    
+  <!-- 카드(구간별 노출) -->
+  <div class="info-card" id="card1" style="top:11vh;">
+    <div class="title">따뜻한 마을에서 시작하는 금융</div>
+    <div class="desc">BNK 마스코트와 친구들이<br>하늘 아래 첫걸음을 내딛어요.</div>
+  </div>
+  <div class="info-card" id="card2" style="top:37vh;">
+    <div class="title">함께 걷는 금융 여정</div>
+    <div class="desc">집과 나무, 친구들이<br>도란도란 어울리는 따뜻한 동화마을.</div>
+  </div>
+  <div class="info-card" id="card3" style="top:70vh;">
+    <div class="title">꿈을 향한 도착</div>
+    <div class="desc">행복한 금융, 든든하게 골인!<br>지금 BNK와 시작해 보세요.</div>
+    <a class="cta-btn" href="#">가입상담 신청</a>
   </div>
 
   <script>
-    function toggleMenu(element) {
-      const dropdown = element.parentElement;
-      const menu = dropdown.querySelector('.dropdown-menu');
-      const arrow = dropdown.querySelector('.arrow');
+    // SVG 동화마을 씬 생성
+    const svg = document.getElementById('scene');
+    const w = 1200, h = 900;
+    svg.setAttribute('width', w);
+    svg.setAttribute('height', h);
 
-      const isVisible = menu.style.display === 'block';
+    // 하늘/구름
+    function cloud(cx,cy,s) {
+      let c = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+      c.setAttribute("cx",cx); c.setAttribute("cy",cy);
+      c.setAttribute("rx",70*s); c.setAttribute("ry",30*s);
+      c.setAttribute("fill","#fff"); c.setAttribute("opacity","0.88");
+      svg.appendChild(c);
+    }
+    cloud(220,110,1.1); cloud(800,100,0.85); cloud(540,75,1.15); cloud(420,170,0.65); cloud(1000,145,0.65);
 
-      // 모든 메뉴 닫기
-      document.querySelectorAll('.dropdown-menu').forEach(m => m.style.display = 'none');
-      document.querySelectorAll('.arrow').forEach(a => a.textContent = '▼');
+    // 마을 땅
+    let ground = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+    ground.setAttribute("cx",w/2); ground.setAttribute("cy",h-110);
+    ground.setAttribute("rx",430); ground.setAttribute("ry",95);
+    ground.setAttribute("fill","#d1f4b2");
+    svg.appendChild(ground);
 
-      // 현재 메뉴 열기
-      if (!isVisible) {
-        menu.style.display = 'block';
-        arrow.textContent = '▲';
-      }
+    // 울타리
+    for(let i=0;i<16;i++){
+      let fence = document.createElementNS("http://www.w3.org/2000/svg","rect");
+      fence.setAttribute("x",250+i*32); fence.setAttribute("y",h-210);
+      fence.setAttribute("width",16); fence.setAttribute("height",38);
+      fence.setAttribute("fill","#ffe079"); fence.setAttribute("rx","6");
+      svg.appendChild(fence);
     }
 
-    // 외부 클릭 시 모든 드롭다운 닫기
-    document.addEventListener('click', function (event) {
-      if (!event.target.closest('.dropdown')) {
-        document.querySelectorAll('.dropdown-menu').forEach(menu => menu.style.display = 'none');
-        document.querySelectorAll('.arrow').forEach(arrow => arrow.textContent = '▼');
+    // 집/나무/동화 오브젝트
+    function house(x,y) {
+      let g = document.createElementNS("http://www.w3.org/2000/svg","g");
+      let base = document.createElementNS("http://www.w3.org/2000/svg","rect");
+      base.setAttribute("x",x); base.setAttribute("y",y); base.setAttribute("width",90); base.setAttribute("height",60); base.setAttribute("fill","#fff2da"); base.setAttribute("rx","14");
+      g.appendChild(base);
+      let roof = document.createElementNS("http://www.w3.org/2000/svg","polygon");
+      roof.setAttribute("points",`${x-10},${y+10} ${x+45},${y-35} ${x+100},${y+10}`);
+      roof.setAttribute("fill","#f9c978");
+      g.appendChild(roof);
+      svg.appendChild(g);
+    }
+    function tree(x,y,clr){
+      let trunk = document.createElementNS("http://www.w3.org/2000/svg","rect");
+      trunk.setAttribute("x",x+18); trunk.setAttribute("y",y+40);
+      trunk.setAttribute("width",13); trunk.setAttribute("height",27);
+      trunk.setAttribute("fill","#cda872");
+      svg.appendChild(trunk);
+      let leaf = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+      leaf.setAttribute("cx",x+25); leaf.setAttribute("cy",y+32); leaf.setAttribute("rx",32); leaf.setAttribute("ry",28);
+      leaf.setAttribute("fill",clr||"#b6e39f");
+      svg.appendChild(leaf);
+    }
+    house(380,630); tree(300,690); tree(900,720,"#e3d18e"); tree(690,645,"#aee9e9");
+    house(750,760);
+
+    // BNK 마스코트(동글이): 동물의 숲/캐릭터 느낌
+    function mascot(x,y,faceColor){
+      let g = document.createElementNS("http://www.w3.org/2000/svg","g");
+      // 몸통
+      let body = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+      body.setAttribute("cx",x); body.setAttribute("cy",y+34); body.setAttribute("rx",28); body.setAttribute("ry",35); body.setAttribute("fill",faceColor||"#ffbaba");
+      g.appendChild(body);
+      // 머리
+      let head = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+      head.setAttribute("cx",x); head.setAttribute("cy",y); head.setAttribute("rx",30); head.setAttribute("ry",30); head.setAttribute("fill",faceColor||"#e54235");
+      g.appendChild(head);
+      // 얼굴
+      let eyeL = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+      eyeL.setAttribute("cx",x-9); eyeL.setAttribute("cy",y-4); eyeL.setAttribute("rx",4.5); eyeL.setAttribute("ry",6.2); eyeL.setAttribute("fill","#fff");
+      g.appendChild(eyeL);
+      let eyeR = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+      eyeR.setAttribute("cx",x+10); eyeR.setAttribute("cy",y-4); eyeR.setAttribute("rx",4.5); eyeR.setAttribute("ry",6.2); eyeR.setAttribute("fill","#fff");
+      g.appendChild(eyeR);
+      let pupilL = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+      pupilL.setAttribute("cx",x-8); pupilL.setAttribute("cy",y-2); pupilL.setAttribute("rx",2); pupilL.setAttribute("ry",3); pupilL.setAttribute("fill","#333");
+      g.appendChild(pupilL);
+      let pupilR = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+      pupilR.setAttribute("cx",x+9); pupilR.setAttribute("cy",y-2); pupilR.setAttribute("rx",2); pupilR.setAttribute("ry",3); pupilR.setAttribute("fill","#333");
+      g.appendChild(pupilR);
+      let smile = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
+      smile.setAttribute("cx",x); smile.setAttribute("cy",y+8); smile.setAttribute("rx",8); smile.setAttribute("ry",3.2); smile.setAttribute("fill","#fff7f7");
+      g.appendChild(smile);
+      svg.appendChild(g);
+      return g;
+    }
+    // 캐릭터 여러명 배치
+    mascot(360,640,"#e54235");
+    mascot(805,790,"#ffd1a8");
+    mascot(670,790,"#e2b8ff");
+    mascot(520,720,"#7ed7ff");
+
+    // --- 캐릭터 이동 (좌우로 지그재그 산책) ---
+    let mascotWalker = mascot(540,150,"#e54235");
+    function moveMascot(scrollT){
+      // y는 150~800까지, x는 지그재그 350~850
+      let y = 150 + (scrollT*660);
+      let x = 540 + Math.sin(scrollT*3.2*Math.PI) * 210;
+      mascotWalker.setAttribute("transform",`translate(${x-540},${y-150})`);
+    }
+
+    // --- 카드 노출 ---
+    const cards = [document.getElementById('card1'), document.getElementById('card2'), document.getElementById('card3')];
+
+    window.addEventListener("scroll",function(){
+      let scrollY = window.scrollY || window.pageYOffset;
+      let docH = document.body.scrollHeight - window.innerHeight;
+      let t = Math.min(Math.max(scrollY/docH,0),1);
+      moveMascot(t);
+
+      // 카드 노출
+      if (t < 0.28) {
+        cards[0].classList.add('active');
+        cards[1].classList.remove('active');
+        cards[2].classList.remove('active');
+      } else if (t < 0.63) {
+        cards[0].classList.remove('active');
+        cards[1].classList.add('active');
+        cards[2].classList.remove('active');
+      } else {
+        cards[0].classList.remove('active');
+        cards[1].classList.remove('active');
+        cards[2].classList.add('active');
       }
     });
-  </script>
 
+    // 첫 진입시 캐릭터 위치 초기화
+    moveMascot(0);
+  </script>
 </body>
 </html>
