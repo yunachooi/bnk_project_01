@@ -1,27 +1,25 @@
+// submit.js - 외화 약관 등록
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('termsForm');
     const fileInput = document.getElementById('fileUpload');
     const submitBtn = document.getElementById('submitBtn');
     const cancelBtn = document.getElementById('cancelBtn');
     
-    // 미리보기 버튼을 동적으로 생성
     let previewBtn = null;
     
-    // 등록 버튼 클릭
     submitBtn.addEventListener('click', function() {
         if (validateForm()) {
             submitForm();
         }
     });
     
-    // 취소 버튼 클릭
     cancelBtn.addEventListener('click', function() {
         if (confirm('작성 중인 내용이 있습니다. 취소하시겠습니까?')) {
             window.location.href = '/admin/termsPage';
         }
     });
     
-    // 파일 선택 시 유효성 검사 및 미리보기 버튼 제어
     fileInput.addEventListener('change', function() {
         const file = this.files[0];
         
@@ -40,7 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // 파일 크기 제한 (10MB)
             if (file.size > 10 * 1024 * 1024) {
                 alert('파일 크기는 10MB 이하만 업로드 가능합니다.');
                 this.value = '';
@@ -48,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // 미리보기 버튼 표시/숨김 제어
             if (fileExtension === '.pdf') {
                 createPreviewButton(file);
                 showFileInfo(file, '선택된 PDF 파일을 미리보기할 수 있습니다.');
@@ -62,12 +58,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // 미리보기 버튼 동적 생성
     function createPreviewButton(file) {
-        // 기존 버튼이 있다면 제거
         removePreviewButton();
         
-        // 미리보기 버튼 생성
         previewBtn = document.createElement('button');
         previewBtn.type = 'button';
         previewBtn.className = 'btn btn-secondary';
@@ -78,24 +71,20 @@ document.addEventListener('DOMContentLoaded', function() {
             openPDFPreview(file);
         };
         
-        // 파일 입력창 옆에 버튼 추가
         const container = createFileContainer();
         container.appendChild(previewBtn);
     }
     
-    // 파일 입력 컨테이너 생성/조정
     function createFileContainer() {
         let container = fileInput.parentNode.querySelector('.file-input-wrapper');
         
         if (!container) {
-            // 컨테이너가 없으면 새로 생성
             container = document.createElement('div');
             container.className = 'file-input-wrapper';
             container.style.display = 'flex';
             container.style.alignItems = 'center';
             container.style.gap = '10px';
             
-            // 파일 입력창을 컨테이너로 감싸기
             fileInput.parentNode.insertBefore(container, fileInput);
             container.appendChild(fileInput);
         }
@@ -103,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return container;
     }
     
-    // 미리보기 버튼 제거
     function removePreviewButton() {
         if (previewBtn) {
             previewBtn.remove();
@@ -111,7 +99,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // PDF 미리보기 열기
     function openPDFPreview(file) {
         try {
             const url = URL.createObjectURL(file);
@@ -205,7 +192,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 URL.revokeObjectURL('${url}');
                             });
                             
-                            // PDF 로딩 확인
                             const iframe = document.getElementById('pdfFrame');
                             iframe.onload = function() {
                                 console.log('PDF 로딩 완료');
@@ -220,10 +206,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 `);
                 previewWindow.document.close();
                 
-                // 미리보기 창이 열렸음을 알림
                 showToast('PDF 미리보기가 새 창에서 열렸습니다.', 'success');
             } else {
-                // 팝업이 차단된 경우
                 alert('팝업이 차단되었습니다.\n브라우저의 팝업 차단 설정을 해제하고 다시 시도해주세요.');
             }
         } catch (error) {
@@ -232,9 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 파일 정보 표시
     function showFileInfo(file, message) {
-        // 기존 정보 제거
         hideFileInfo();
         
         const fileInfo = document.createElement('div');
@@ -257,7 +239,6 @@ document.addEventListener('DOMContentLoaded', function() {
         fileInput.parentNode.appendChild(fileInfo);
     }
     
-    // 파일 정보 숨김
     function hideFileInfo() {
         const existingInfo = document.querySelector('.file-preview-info');
         if (existingInfo) {
@@ -265,11 +246,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 토스트 메시지 표시
     function showToast(message, type) {
         type = type || 'info';
         
-        // 기존 토스트 제거
         const existingToast = document.querySelector('.toast-message');
         if (existingToast) {
             existingToast.remove();
@@ -297,7 +276,6 @@ document.addEventListener('DOMContentLoaded', function() {
         toast.textContent = message;
         document.body.appendChild(toast);
         
-        // 3초 후 자동 제거
         setTimeout(function() {
             if (toast && toast.parentNode) {
                 toast.style.animation = 'slideOut 0.3s ease-in';
@@ -309,7 +287,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 3000);
         
-        // 애니메이션 CSS 추가
         if (!document.querySelector('#toast-animations')) {
             const style = document.createElement('style');
             style.id = 'toast-animations';
@@ -327,7 +304,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // 폼 유효성 검사
     function validateForm() {
         const tname = document.getElementById('tname').value.trim();
         const tinfo = document.getElementById('tinfo').value.trim();
@@ -366,7 +342,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
     
-    // 폼 제출
     function submitForm() {
         const formData = new FormData();
         
@@ -374,7 +349,6 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('tinfo', document.getElementById('tinfo').value.trim());
         formData.append('file', fileInput.files[0]);
         
-        // 로딩 상태 표시
         submitBtn.disabled = true;
         submitBtn.textContent = '등록 중...';
         
@@ -389,7 +363,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(function(data) {
-            // 등록 성공 후 처리
             handleRegistrationSuccess(data);
         })
         .catch(function(error) {
@@ -398,18 +371,14 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('등록 중 오류가 발생했습니다.', 'error');
         })
         .finally(function() {
-            // 로딩 상태 해제
             submitBtn.disabled = false;
             submitBtn.textContent = '등록';
         });
     }
     
-    // 등록 성공 후 처리 (약관 등록 폼으로 이동)
     function handleRegistrationSuccess(data) {
-        // 성공 토스트 메시지
         showToast('✅ 약관이 성공적으로 등록되었습니다!', 'success');
         
-        // 성공 메시지와 함께 확인
         const message = '✅ 약관이 성공적으로 등록되었습니다!\n\n' +
                        '약관명: ' + data.tname + '\n' +
                        '파일명: ' + data.tfilename + '\n' +
@@ -418,26 +387,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         setTimeout(function() {
             if (confirm(message)) {
-                // 약관 등록 폼으로 이동 (새로운 등록을 위해)
                 window.location.href = '/admin/termsForm?success=true';
             } else {
-                // 약관 목록 페이지로 이동
                 window.location.href = '/admin/termsPage';
             }
         }, 1000);
     }
     
-    // 폼 초기화
     function resetForm() {
         document.getElementById('termsForm').reset();
         removePreviewButton();
         hideFileInfo();
-        // 테두리 색상 초기화
         document.getElementById('tname').style.borderColor = '';
         document.getElementById('tinfo').style.borderColor = '';
     }
     
-    // 입력 필드 실시간 유효성 검사
     document.getElementById('tname').addEventListener('input', function() {
         const value = this.value.trim();
         if (value.length > 0 && value.length < 2) {
@@ -456,13 +420,11 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // URL 파라미터에서 성공 메시지 확인 (페이지 로드 시)
     const urlParams = new URLSearchParams(window.location.search);
     const success = urlParams.get('success');
     
     if (success === 'true') {
         showToast('새로운 약관을 등록할 수 있습니다.', 'info');
-        // URL에서 파라미터 제거
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 });

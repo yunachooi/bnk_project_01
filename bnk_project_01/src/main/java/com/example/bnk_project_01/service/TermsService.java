@@ -42,8 +42,6 @@ public class TermsService {
             terms.setTcreatedate(LocalDate.now());
         }
         
-        terms.setTmodifydate(LocalDate.now());
-        
         Terms savedTerms = termsRepository.save(terms);
         return TermsConverter.toDto(savedTerms);
     }
@@ -62,11 +60,10 @@ public class TermsService {
         
         Terms terms = TermsConverter.toEntity(termsDto);
         terms.setTno(generateNextTno());
-        terms.setTpath("/termspdf/" + savedFileName);
+        terms.setTpath("/static/termspdf/" + savedFileName);
         terms.setTfilename(savedFileName);
         terms.setTstate("Y");
         terms.setTcreatedate(LocalDate.now());
-        terms.setTmodifydate(LocalDate.now());
         
         Terms savedTerms = termsRepository.save(terms);
         return TermsConverter.toDto(savedTerms);
@@ -103,19 +100,14 @@ public class TermsService {
         return finalFileName;
     }
 
-    // 파일 삭제를 포함한 삭제 메서드
     public void delete(String id) {
-        // 먼저 약관 정보를 조회하여 파일 경로 확인
         termsRepository.findById(id).ifPresent(terms -> {
-            // 데이터베이스에서 삭제
             termsRepository.deleteById(id);
             
-            // 파일 삭제
             deleteFile(terms.getTfilename());
         });
     }
     
-    // 파일 삭제 메서드
     private void deleteFile(String fileName) {
         if (fileName == null || fileName.isEmpty()) {
             return;
@@ -189,7 +181,6 @@ public class TermsService {
                     Terms updatedTerms = TermsConverter.toEntity(termsDto);
                     updatedTerms.setTno(tno);
                     updatedTerms.setTcreatedate(existingTerms.getTcreatedate());
-                    updatedTerms.setTmodifydate(LocalDate.now());
                     
                     Terms savedTerms = termsRepository.save(updatedTerms);
                     return TermsConverter.toDto(savedTerms);
