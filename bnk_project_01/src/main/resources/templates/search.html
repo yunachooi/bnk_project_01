@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>AI 외환 용어 사전</title>
+    <link rel="stylesheet" href="/css/dictionary-button.css">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f5f7fa;
+            color: #212d49;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .search-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .search-section h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: inline-block;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        button[type="submit"] {
+            padding: 10px 16px;
+            background-color: #003366;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 8px;
+        }
+
+        .result-box {
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(33, 45, 73, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .result-box h2 {
+            font-size: 28px;
+            color: #212d49;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .result-line {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .result-line strong {
+            width: 80px;
+            min-width: 80px;
+            color: #003366;
+            font-weight: 600;
+        }
+
+        .result-line span {
+            flex: 1;
+            line-height: 1.6;
+            word-break: keep-all;
+            white-space: pre-line;
+        }
+
+        .error-message {
+            color: red;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-section">
+        <h1>외환 용어 검색</h1>
+
+        <form method="post" th:action="@{/api/dic/search}">
+            <input type="text" name="word" placeholder="단어 입력" required>
+            <button type="submit">검색</button>
+        </form>
+    </div>
+
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${dic}" class="result-box">
+        <h2 th:text="${dic.word}">단어</h2>
+
+        <div class="result-line">
+            <strong>뜻:</strong>
+            <span th:utext="${dic.meaning}"></span>
+        </div>
+        <div class="result-line">
+            <strong>설명:</strong>
+            <span th:utext="${dic.explanation}"></span>
+        </div>
+        <div class="result-line">
+            <strong>조회수:</strong>
+            <span th:text="${dic.count}"></span>
+        </div>
+    </div>
+</body>
+</html>

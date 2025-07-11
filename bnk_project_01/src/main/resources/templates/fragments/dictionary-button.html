@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="dictionary-button">
+  <!-- 버튼 -->
+  <a href="javascript:void(0)" id="dictionaryBtn" title="외환 용어 사전">
+    <img src="/images/dictionary-icon.png" alt="사전">
+  </a>
+
+  <!-- 모달 -->
+  <div id="dictionaryModal">
+    <div id="dictionaryModalContent">
+      <div class="modal-header">
+        <span class="modal-title">📘 외환 용어 사전</span>
+        <span id="closeModal" class="modal-close">&times;</span>
+      </div>
+
+      <div class="modal-body">
+        <iframe src="/api/dic/search"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const modal = document.getElementById("dictionaryModal");
+      const btn = document.getElementById("dictionaryBtn");
+      const close = document.getElementById("closeModal");
+
+      btn.onclick = () => modal.style.display = "block";
+      close.onclick = () => modal.style.display = "none";
+      window.onclick = (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      };
+    });
+  </script>
+</div>
+</body>
+</html>

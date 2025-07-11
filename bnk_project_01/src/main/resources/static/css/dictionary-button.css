@@ -1,0 +1,103 @@
+/* 📘 사전 버튼 애니메이션 */
+@keyframes glowScale {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(0, 128, 255, 0.8);
+    transform: scale(1.08);
+  }
+}
+
+/* 📘 사전 버튼 스타일 */
+#dictionaryBtn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  background-color: #003366;
+  border-radius: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: glowScale 3s infinite;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  overflow: hidden;
+}
+
+#dictionaryBtn:hover {
+  background-color: #0051cc;
+}
+
+#dictionaryBtn img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: transparent;
+}
+
+/* 📘 모달 기본 */
+#dictionaryModal {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+/* ✅ 내용 박스 */
+#dictionaryModalContent {
+  background-color: #fff;
+  margin: 5% auto;
+  width: 90%;
+  max-width: 640px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  overflow: hidden;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ✅ 헤더 */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #003366;
+  color: #fff;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* ✅ 닫기 버튼 */
+.modal-close {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* ✅ 내용 */
+.modal-body {
+  background: #f8f9fc;
+  padding: 0;
+  height: 500px;
+}
+
+.modal-body iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ✨ fade-in 애니메이션 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
