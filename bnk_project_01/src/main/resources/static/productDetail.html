@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>꿈이룸 외화자유적금 – 센터 슬라이드 UI</title>
+  <meta name="viewport" content="width=1200, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans+KR:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bnk-red: #ed1c24;
+      --bnk-navy: #212d49;
+      --bnk-dark-gray: #394256;
+      --border-radius: 2.2rem;
+      --main-width: 1000px;
+      --slider-transition: 0.45s cubic-bezier(.7,1.65,.27,1);
+    }
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Noto Sans KR', 'Montserrat', sans-serif;
+      background: #fff; color: var(--bnk-navy);
+      width: 100vw; min-height: 100vh; overflow-x: hidden;
+    }
+    * { box-sizing: border-box; }
+    .main-wrap {
+      width: var(--main-width);
+      margin: 0 auto;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+    .main-title {
+      font-size: 2.08rem; font-weight: 900;
+      margin: 44px 0 10px 0;
+      color: var(--bnk-navy);
+      letter-spacing: -1px;
+      border-bottom: 3px solid var(--bnk-navy);
+      padding-bottom: 9px; display: inline-block;
+    }
+    /* 슬라이더 */
+    .slider-wrap {
+      width: 100%; max-width: 1000px; margin: 34px auto 24px auto;
+      display: flex; flex-direction: row; align-items: center; justify-content: center;
+      position: relative;
+      min-height: 340px;
+      user-select: none;
+    }
+    .slider-arrow {
+      background: #f6f8fc;
+      border: none;
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      box-shadow: 0 2px 10px #212d4912;
+      color: var(--bnk-navy);
+      font-size: 2.6rem;
+      font-weight: 900;
+      margin: 0 8px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2;
+      transition: background .18s, box-shadow .18s;
+      font-family: inherit;
+    }
+    .slider-arrow:active {
+      background: #eee8e8; box-shadow: 0 0 10px #ed1c2417;
+    }
+    .slider-arrow[disabled] {
+      opacity: .24; pointer-events: none;
+    }
+    .slider-list {
+      display: flex; flex-direction: row;
+      width: 700px;
+      justify-content: center; align-items: center;
+      overflow: visible;
+      position: relative;
+      min-height: 340px;
+    }
+    .slide-card {
+      flex: 0 0 390px;
+      min-width: 390px; max-width: 390px;
+      min-height: 310px;
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: 0 9px 28px 0 #212d4924;
+      margin: 0 0px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-start;
+      padding: 33px 32px 26px 32px;
+      opacity: 0.42; 
+      filter: blur(1.5px) grayscale(13%);
+      transform: scale(.85) translateX(-50%);
+      transition:
+        opacity var(--slider-transition),
+        filter var(--slider-transition),
+        transform var(--slider-transition);
+      z-index: 1;
+      position: absolute;
+      left: 50%; top: 0;
+      pointer-events: none;
+    }
+    .slide-card.center {
+      opacity: 1;
+      filter: none;
+      transform: scale(1.08) translateY(-15px) translateX(-50%);
+      z-index: 3;
+      box-shadow: 0 16px 56px #ed1c241a, 0 1px 14px #212d4924;
+      pointer-events: auto;
+    }
+    .slide-card.left, .slide-card.right {
+      opacity: .62;
+      filter: blur(0.5px) grayscale(8%);
+      transform: scale(0.93) translateY(14px) translateX(-50%);
+      z-index: 2;
+    }
+    .slide-card.left { transform: scale(0.93) translateY(14px) translateX(-240px); }
+    .slide-card.right { transform: scale(0.93) translateY(14px) translateX(140px); }
+    .slide-card .card-label {
+      background: #fff6f7;
+      color: var(--bnk-red); font-weight: 900; font-size: 1.04em;
+      border-radius: 1.1em; padding: 8px 18px;
+      margin-bottom: 12px; display: inline-block;
+    }
+    .slide-card .card-title {
+      font-size: 1.42rem; font-weight: 900;
+      margin: 0 0 10px 0;
+      color: var(--bnk-navy);
+      letter-spacing: -0.5px;
+      text-align: center;
+    }
+    .slide-card .card-desc {
+      font-size: 1.01rem; color: var(--bnk-dark-gray);
+      font-weight: 700;
+      line-height: 1.68; margin-bottom: 0; margin-top: 2px;
+      word-break: keep-all; text-align: center;
+    }
+    .slide-card:not(.center) {
+      pointer-events: none;
+    }
+    .slider-list {
+      position: relative; min-height: 330px;
+    }
+    /* 슬라이드 dot */
+    .slider-dots {
+      display: flex; gap: 11px; justify-content: center; margin: 10px 0 0 0;
+    }
+    .slider-dot {
+      width: 15px; height: 15px; border-radius: 50%;
+      background: #ebebee; border: 2.5px solid #ed1c24;
+      opacity: 0.32; transition: background .13s, opacity .12s;
+      cursor: pointer; display: inline-block;
+    }
+    .slider-dot.active {
+      background: var(--bnk-red); opacity: 1;
+      border-color: #ed1c24;
+    }
+
+    /* 표/추천/아코디언 */
+    .product-table-area, .recommend-box, .accordion-wrap { width: var(--main-width); margin-left: auto; margin-right: auto; }
+    @media (max-width:1100px){
+      .main-wrap, .product-table-area, .recommend-box, .accordion-wrap { width: 98vw; }
+    }
+    .product-table-area {
+      margin: 48px 0 30px 0;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .product-table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 1.03em;
+      background: #f8fafc;
+      border-radius: 1.1rem;
+      overflow: hidden;
+      box-shadow: 0 4px 18px #e7e7ec1a;
+    }
+    .product-table th, .product-table td {
+      border: 1px solid #e4e6ee;
+      padding: 13px 16px;
+      text-align: left;
+    }
+    .product-table th {
+      background: #f1f2f6;
+      color: var(--bnk-navy);
+      font-weight: 900;
+    }
+    .product-table td {
+      color: var(--bnk-dark-gray);
+      font-weight: 700;
+    }
+    .recommend-box {
+      background: #f8f2f3; border-radius: 1.2rem;
+      margin: 22px 0 24px 0; padding: 24px 38px;
+      box-shadow: 0 3px 15px #ed1c2412;
+      color: var(--bnk-navy); font-size: 1.05em;
+      font-weight: 700; line-height: 1.7;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .recommend-box .reco-title {
+      font-weight: 900; color: var(--bnk-red);
+      font-size: 1.07em; margin-bottom: 7px;
+      letter-spacing: -0.5px;
+    }
+    /* 아코디언 */
+    .bottom-accordion-area { width: 100%; display: flex; flex-direction: column; align-items: center; margin: 40px 0 0 0;}
+    .accordion-wrap {
+      width: 100%;
+      background: #fff;
+      border-radius: 1.4rem;
+      box-shadow: 0 0 12px 2px #e7e7ec22;
+      padding: 12px 30px 16px 30px;
+      margin-bottom: 32px;
+      max-width: var(--main-width);
+    }
+    .accordion-item {
+      border-radius: 1.1em; margin-bottom: 14px; background: #f8fafc;
+    }
+    .accordion-header {
+      font-weight: 900; font-size: 1.05em; cursor: pointer; padding: 14px 13px 14px 8px;
+      color: var(--bnk-navy); display: flex; align-items: center; justify-content: space-between;
+      border: none; background: none; outline: none; border-radius: inherit; transition: background .13s;
+      letter-spacing: .01em; font-family: 'Noto Sans KR',sans-serif; width: 100%;
+    }
+    .accordion-header:hover, .accordion-header:focus { background: #fff1f1; }
+    .accordion-body {
+      padding: 10px 10px 12px 8px; color: #36384c; font-weight: 700; font-size: 1em;
+      display: none; background: #f8fafc; border-radius: .7em; line-height: 1.58;
+      white-space: pre-line;
+    }
+    .accordion-item.active .accordion-body { display: block;}
+    .accordion-arrow {
+      margin-left: 10px; display: inline-block; transition: transform .16s; font-size: 1.09em;
+    }
+    .accordion-item.active .accordion-arrow {transform: rotate(180deg);}
+    @media (max-width:900px){
+      .main-title{font-size:1.2rem;}
+      .slide-card,.slider-list{min-width:87vw;max-width:96vw;width:92vw;padding:10px 4vw;}
+      .slide-card .card-title{font-size:1.08rem;}
+      .product-table th,.product-table td{padding:8px 4vw;}
+      .recommend-box{padding:13px 3vw;}
+      .accordion-wrap{padding:13px 3vw;}
+    }
+    @media (max-width:700px){
+      .main-wrap,.product-table-area,.recommend-box,.accordion-wrap{width:99vw;}
+      .slider-list{width:99vw;}
+      .slide-card{min-width:96vw;max-width:99vw;}
+    }
+  </style>
+</head>
+<body>
+  <div class="main-wrap">
+    <div class="main-title">꿈이룸 외화자유적금</div>
+    <!-- 센터 카드 슬라이드 -->
+    <div class="slider-wrap">
+      <button class="slider-arrow" id="slidePrev" aria-label="이전"><span style="font-size:2.2rem;">&#x2039;</span></button>
+      <div class="slider-list" id="sliderList"></div>
+      <button class="slider-arrow" id="slideNext" aria-label="다음"><span style="font-size:2.2rem;">&#x203A;</span></button>
+    </div>
+    <div class="slider-dots" id="sliderDots"></div>
+    <!-- 상품 요약 표 -->
+    <div class="product-table-area">
+      <table class="product-table">
+        <tr><th>구분</th><th>내용</th></tr>
+        <tr><td>상품명</td><td>BNK 꿈이룸 외화자유적금</td></tr>
+        <tr><td>상품유형</td><td>자유적립식 외화 적금 (USD 전용)</td></tr>
+        <tr><td>가입대상</td><td>만 18세 이하 실명 개인 (1인 1계좌)</td></tr>
+        <tr><td>가입방법</td><td>영업점 방문</td></tr>
+        <tr><td>가입금액</td><td>미화 1달러 이상 ~ 최대 1만 달러</td></tr>
+        <tr><td>만기</td><td>12개월(1년), 자동 재예치 가능</td></tr>
+        <tr><td>우대혜택</td><td>환율 70% 우대, 최대 0.3% 우대금리, 수수료 감면</td></tr>
+        <tr><td>이자지급</td><td>만기일시지급식</td></tr>
+        <tr><td>예금자보호</td><td>1인당 5천만원까지(원금+이자, 타 예금 포함)</td></tr>
+      </table>
+    </div>
+    <!-- 추천대상 -->
+    <div class="recommend-box">
+      <div class="reco-title">이런 분께 추천합니다!</div>
+      - 만 18세 이하 자녀(학생)의 외화(달러) 자산을 모으고 싶은 분<br>
+      - 환율 우대와 다양한 우대금리 혜택까지 누리고 싶은 가정<br>
+      - 미국 유학, 여행, 장기환전 등 외화 활용이 예상되는 가족<br>
+      - 어린이·청소년의 달러 자산을 체계적으로 모으고 싶은 부모님<br>
+      - 환테크(환율차익)에 관심 있는 미성년 자녀를 둔 분
+    </div>
+    <!-- 아코디언 -->
+    <div class="bottom-accordion-area">
+      <div class="accordion-wrap" aria-label="상품 정보 아코디언">
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)" tabindex="0">
+            상품안내<span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            BNK 꿈이룸 외화적금은 만 18세 이하 실명 개인만 가입 가능하며, USD로 자유적립이 가능합니다.
+            자동이체 등록 시 환율 및 우대금리 혜택, 수수료 감면 등 다양한 혜택이 있습니다.
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)" tabindex="0">
+            우대조건 및 금리<span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            자동이체 등록 시 환율 70% 우대, 최대 0.3% 우대금리 제공(신규·재예치·자동이체 조건 충족 시).
+            중도해지/특별중도해지 시 우대금리는 미적용, 중도해지이율 적용.
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)" tabindex="0">
+            유의사항<span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            환율 변동으로 원화 인출 시 이익 또는 손실이 발생할 수 있습니다.
+            예금자보호법에 따라 5천만원까지 보호, 법적 제한 발생시 지급 불가 등.
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)" tabindex="0">
+            상품설명서 및 약관<span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            자세한 내용은 BNK 부산은행 홈페이지에서 상품설명서 및 약관을 확인하세요.
+          </div>
+        </div>
+      </div>
+      <div style="color:#7b8495;font-size:1em;margin:22px 0 36px 0;text-align:center;">
+        준법감시인 심의필 제250930호 (2025.05.14. ~ 2026.05.13.)
+      </div>
+    </div>
+  </div>
+  <script>
+    // --- 센터 슬라이드 카드 데이터 ---
+    const slideData = [
+      {
+        label: "상품개요",
+        title: "자유적립식 외화 적금",
+        desc: "USD(미국달러) 자유적립, 자동이체금액은 '외화 입금액' 또는 '원화 지급액' 기준 중 선택.\n1년 단위 자동 재예치, 환테크·장기 저축에 적합."
+      },
+      {
+        label: "가입조건",
+        title: "만 18세 이하 1인 1계좌",
+        desc: "만 18세 이하 국내 거주 실명 개인만 가입 가능, 1인 1계좌, 영업점 방문 필요.\n가입금액 1불 이상~1만불까지, 12개월(1년) 만기."
+      },
+      {
+        label: "우대혜택",
+        title: "환율 70% 우대, 금리 최대 0.3%",
+        desc: "자동이체 및 조건 충족 시 환율 70% 우대 + 우대금리(신규·재예치·자동이체 별도),\n수수료 면제, 해외송금 환율우대 등 다양한 혜택 제공."
+      },
+      {
+        label: "중도해지/만기",
+        title: "중도해지/특별해지 이율",
+        desc: "중도해지 시 우대이율 미적용(기간별 차등), 특별해지 시 약정기본이율 적용.\n만기 후 1년 내 : 기본이율의 30% / 1년 초과 : 10% 적용."
+      },
+      {
+        label: "이자/세금",
+        title: "만기일시지급, 비과세 불가",
+        desc: "만기 일시 지급식. 비과세종합저축 가입 불가, 원금/이자 지급 제한 가능성 유의(압류 등).\n예금자보호법에 따라 1인 5천만원까지 보호."
+      },
+      {
+        label: "적립/해지방법",
+        title: "자동재예치, SMS 안내",
+        desc: "만기 전 재예치 신청 가능, 재예치 시 SMS 안내, 일부 계좌(저액·자격제한)는 재예치 불가.\n원화/외화 계좌 및 현금 적립 가능, 출금 시 수수료/환율변동 유의."
+      }
+    ];
+    let curIdx = 0, prevIdx = 0;
+    const sliderList = document.getElementById('sliderList');
+    const sliderDots = document.getElementById('sliderDots');
+
+    function renderSlides(idx, direction = 0){
+      sliderList.innerHTML = '';
+      // [왼쪽] [가운데] [오른쪽] => 3칸을 무조건 보여줌
+      for(let i=-1; i<=1; i++){
+        let pos = idx+i;
+        let card = document.createElement('div');
+        if(pos<0||pos>=slideData.length) {
+          // 빈 카드 (시작, 끝에서)
+          card.className = 'slide-card';
+          card.style.opacity = 0;
+          card.style.pointerEvents = 'none';
+        } else {
+          card.className = 'slide-card';
+          if(i===0) card.classList.add('center');
+          else if(i===-1) card.classList.add('left');
+          else if(i===1) card.classList.add('right');
+          card.tabIndex = i===0?0:-1;
+          card.innerHTML = `
+            <div class="card-label">${slideData[pos].label}</div>
+            <div class="card-title">${slideData[pos].title}</div>
+            <div class="card-desc">${slideData[pos].desc.replace(/\n/g,'<br>')}</div>
+          `;
+        }
+        // 초기 위치 (이후에 애니메이션)
+        card.style.transition = "none";
+        if(direction!==0){
+          card.style.opacity = 0.05;
+          card.style.transform += ` translateX(${direction*120}px)`;
+        }
+        sliderList.appendChild(card);
+      }
+      // absolute 중앙 배치
+      sliderList.querySelectorAll('.slide-card').forEach(card=>{
+        card.style.left='50%';card.style.transform+=' translateX(-50%)';
+      });
+      // 슬라이드 애니메이션
+      setTimeout(()=>{
+        sliderList.querySelectorAll('.slide-card').forEach((card, i)=>{
+          if(card.innerHTML.trim()==='') {
+            // 빈칸
+            card.style.opacity=0;
+            card.style.pointerEvents='none';
+            return;
+          }
+          card.style.transition = "opacity var(--slider-transition), filter var(--slider-transition), transform var(--slider-transition)";
+          card.style.opacity = "";
+          card.style.pointerEvents = i===1?'auto':'none'; // 가운데만
+          if(i===1)      card.style.transform = "scale(1.08) translateY(-15px) translateX(-50%)";
+          else if(i===0) card.style.transform = "scale(0.93) translateY(14px) translateX(-240px)";
+          else           card.style.transform = "scale(0.93) translateY(14px) translateX(140px)";
+        });
+      }, 10);
+      updateDots();
+      updateArrow();
+    }
+    function updateDots(){
+      sliderDots.innerHTML = '';
+      for(let i=0;i<slideData.length;i++){
+        const dot = document.createElement('div');
+        dot.className = 'slider-dot'+(i===curIdx?' active':'');
+        dot.onclick = ()=>{if(i!==curIdx){prevIdx=curIdx;curIdx=i;renderSlides(curIdx, i>prevIdx?1:-1);}};
+        sliderDots.appendChild(dot);
+      }
+    }
+    function updateArrow(){
+      document.getElementById('slidePrev').disabled = curIdx===0;
+      document.getElementById('slideNext').disabled = curIdx===slideData.length-1;
+    }
+    document.getElementById('slidePrev').onclick = ()=>{
+      if(curIdx>0){ prevIdx=curIdx; curIdx--; renderSlides(curIdx, -1);}
+    };
+    document.getElementById('slideNext').onclick = ()=>{
+      if(curIdx<slideData.length-1){ prevIdx=curIdx; curIdx++; renderSlides(curIdx, 1);}
+    };
+    // 키보드 ←→ 이동 지원
+    document.addEventListener('keydown',e=>{
+      if(document.activeElement.classList.contains('slide-card')||document.activeElement.classList.contains('slider-arrow')){
+        if(e.key==='ArrowLeft'&&curIdx>0){ prevIdx=curIdx; curIdx--; renderSlides(curIdx, -1);}
+        if(e.key==='ArrowRight'&&curIdx<slideData.length-1){ prevIdx=curIdx; curIdx++; renderSlides(curIdx, 1);}
+      }
+    });
+    // 첫 렌더
+    renderSlides(curIdx, 0);
+
+    // 아코디언
+    function toggleAccordion(btn) {
+      const item = btn.parentNode;
+      item.classList.toggle('active');
+      const arrow = btn.querySelector('.accordion-arrow');
+      if (arrow) arrow.textContent = item.classList.contains('active') ? '▲' : '▼';
+    }
+  </script>
+</body>
+</html>
