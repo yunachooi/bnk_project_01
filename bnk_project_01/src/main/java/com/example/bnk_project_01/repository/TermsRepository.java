@@ -14,4 +14,6 @@ public interface TermsRepository extends JpaRepository<Terms, String> {
 
 	@Query("SELECT t FROM Terms t WHERE t.tname = :tname ORDER BY t.tcreatedate DESC")
 	List<Terms> findByTnameOrderByTcreatedateDesc(@Param("tname") String tname);
+	
+	List<Terms> findByTfilename(String tfilename);
 }
