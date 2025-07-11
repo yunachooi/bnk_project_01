@@ -153,7 +153,9 @@ aside .menu-link.active:hover {
     <li><a href="/admin/productPage" class="menu-link">상품 관리</a></li>
     <li><a href="/admin/termsForm" class="menu-link">약관 등록</a></li>
     <li><a href="/admin/termsPage" class="menu-link">약관 관리</a></li>
-    <li><a href="/admin/approve" class="menu-link">결재 관리</a></li>
+    <li th:if="${session.role == 'ROLE_SUP'}">
+    <a href="/admin/approve" class="menu-link">결재 관리</a>
+	</li>
 </ul>
 
 <script>

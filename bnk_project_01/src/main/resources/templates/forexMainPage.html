@@ -5,8 +5,7 @@
   <title>BNK 외환 정보</title>
 
   <link rel="stylesheet" th:href="@{/css/header.css}" />
-  <script th:src="@{/js/header.js}" defer></script>
-
+  
   <style>
     @font-face {
       font-family: 'BNKFont';
@@ -247,9 +246,9 @@
         </div>
       </div>
       <ul class="menu-list">
-        <li><a href="#">예금 상품</a></li>
-        <li><a href="#">환전 신청</a></li>
-        <li><a href="#">환전 가능 지점</a></li>
+        <li><a href="#" th:text="${cMap['FX071'].medium}"></a></li>
+        <li><a href="#" th:text="${cMap['FX074'].medium}"></a></li>
+        <li><a href="#" th:text="${cMap['FX076'].medium}"></a></li>
       </ul>
     </div>
 
@@ -257,13 +256,14 @@
       <div class="menu-header">
         <img src="/img/icon/예금 상품.png" alt="예금 아이콘">
         <div>
-          <div class="menu-title">외환 예금</div>
+          <div class="menu-title" th:text="${cMap['FX001'].large}"></div>
           <div class="divider"></div>
         </div>
       </div>
       <ul class="menu-list">
-        <li><a href="#">예금 상품</a></li>
-        <li><a href="#">가입 안내</a></li>
+        <li><a href="#" th:text="${cMap['FX001'].medium}"></a></li>
+        <li><a href="#" th:text="${cMap['FX002'].small}"></a></li>
+        <li><a href="#" th:text="${cMap['FX005'].medium}"></a></li>
       </ul>
     </div>
 
@@ -271,13 +271,14 @@
       <div class="menu-header">
         <img src="/img/icon/환전.png" alt="환전 아이콘">
         <div>
-          <div class="menu-title">환율 · 환전</div>
+          <div class="menu-title" th:text="${cMap['FX091'].large}"></div>
           <div class="divider"></div>
         </div>
       </div>
       <ul class="menu-list">
-        <li><a href="#">환전 안내</a></li>
-        <li><a href="/forexProduct">환전 상품</a></li>
+        <li><a href="#" th:text="${cMap['FX091'].medium}">환전 안내</a></li>
+        <li><a href="/forexProduct" th:text="${cMap['FX092'].medium}">환전 상품</a></li>
+        <li><a href="/forexProduct" th:text="${cMap['FX093'].medium}">환전 상품</a></li>
       </ul>
     </div>
 
@@ -285,13 +286,13 @@
       <div class="menu-header">
         <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
         <div>
-          <div class="menu-title">외환 수출입</div>
+          <div class="menu-title" th:text="${cMap['FX090'].large}"></div> <!-- 외환쪽 카테고리 데이터 연결함 -->
           <div class="divider"></div>
         </div>
       </div>
       <ul class="menu-list">
-        <li><a href="#">무역 결제 안내</a></li>
-        <li><a href="#">신청 양식</a></li>
+        <li><a href="#" th:text="${cMap['FX089'].small}"></a></li>
+        <li><a href="#" th:text="${cMap['FX090'].small}"></a></li>
       </ul>
     </div>
   </div>
