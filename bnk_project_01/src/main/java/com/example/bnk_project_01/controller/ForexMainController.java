@@ -1,5 +1,6 @@
 package com.example.bnk_project_01.controller;
 
+import com.example.bnk_project_01.dto.ForexCompareDto;
 import com.example.bnk_project_01.entity.Rate;
 import com.example.bnk_project_01.repository.ForexMainRepository;
 import com.example.bnk_project_01.service.ForexMainService;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -21,8 +24,23 @@ public class ForexMainController {
     @Autowired
     private ForexMainService forexMainService;
 
+    @GetMapping("/api/compareRate")
+    @ResponseBody
+    public List<ForexCompareDto> getCompareRate(@RequestParam("rcode") String rcode) {
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = today.minusDays(1);
+        LocalDate twoDaysAgo = today.minusDays(2);
+
+        List<Rate> rates = forexMainRepository.findByRcodeAndRdateIn(rcode, List.of(today, yesterday, twoDaysAgo));
+
+        return rates.stream()
+                .map(rate -> new ForexCompareDto(rate.getRdate(), rate.getRvalue()))
+                .toList();
+    }
+
+
     @GetMapping("/forex")
-    public String forexMainPage(Model model) {
+    public String root(Model model) {
         LocalDate today = LocalDate.now();
 
         List<Rate> rates = forexMainRepository.findByRdate(today);
@@ -51,7 +69,7 @@ public class ForexMainController {
 
         return "forexMainPage";
     }
-    
+
     @GetMapping("/forexProduct")
     public String forexProductPage() {
 
