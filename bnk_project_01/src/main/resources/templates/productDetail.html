@@ -1,291 +1,479 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <title>꿈이룸 외화적금 | Turbulent Scroll</title>
-  <meta name="viewport" content="width=1200">
+  <meta charset="UTF-8" />
+  <title>꿈이룸 외화자유적금</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans+KR:wght@700;900&display=swap" rel="stylesheet" />
   <style>
-    html,body {margin:0; padding:0; width:100vw; min-height:100vh; background:#211a43;}
-    body {font-family:'Montserrat','Noto Sans KR',sans-serif; color:#fff; overflow-x:hidden;}
-    #bg-canvas {
-      position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0;
-      filter: blur(2.7px) brightness(1.13) contrast(1.09);
-      pointer-events:none;
-      background:linear-gradient(110deg,#2f2662 40%,#f9b6e0 100%);
-      transition:background 1.6s;
+    /* 기본 리셋 */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 18px; }
+    body {
+      font-family: 'Noto Sans KR','Montserrat',sans-serif;
+      background: #fafafb;
+      color: #212d49;
+      line-height: 1.6;
     }
-    .main {
-      position:relative; z-index:2; width:100vw;
-      display:flex; flex-direction:column; align-items:center;
-      scroll-snap-type: y mandatory;
+
+    /* 컨테이너 */
+    .main-wrap {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
     }
-    .section {
-      min-height:100vh; width:100vw; display:flex;
-      align-items:center; justify-content:center;
-      scroll-snap-align:start; position:relative;
+    .main-title {
+      font-size: 2.4rem; font-weight: 900;
+      border-bottom: 4px solid #212d49;
+      padding-bottom: 8px; margin-bottom: 40px;
     }
-    .glass-card {
-      background:rgba(255,255,255,0.13);
-      border-radius:40px; box-shadow:0 10px 55px #8367f349, 0 1.5px 5px #fff8;
-      padding:70px 54px 74px 88px; backdrop-filter:blur(21px) saturate(1.19);
-      font-size:2.4rem; font-weight:600;
-      max-width:950px; width:90vw; text-align:left; color:#fffbe7;
-      opacity:0.09; transform:scale(0.97);
-      transition:all 1s cubic-bezier(.72,.2,.18,1);
-      box-sizing:border-box;
-      display:flex; flex-direction:column; gap:20px 0;
-      border:1.7px solid #fff2;
+
+    /* 슬라이더 */
+    .slide-section {
+      position: relative;
+      background: #fff; border-radius: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      overflow: hidden;
+      margin-bottom: 48px;
     }
-    .section.active .glass-card {
-      opacity:1; transform:scale(1.03);
-      box-shadow:0 22px 52px #a389f266, 0 2px 12px #fff9;
+    .slide-counter {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(33,45,73,0.1);
+      color: #212d49;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      z-index: 2;
     }
+    .slider-outer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      height: 360px;
+    }
+    .slider-inner {
+      display: flex; transition: transform .5s ease;
+      height: 100%;
+    }
+    .slide-card {
+      flex: 0 0 100%;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      background: #ffffff;
+      border-right: 1px solid #f0f0f5;
+      padding: 0 40px;
+      min-height: 300px;
+    }
+    .slide-card:last-child { border-right: none; }
+
+    /* 그라데이션 애니메이션 텍스트 */
     .card-title {
-      font-size:2.3rem; color:#b393fd; font-weight:800;
-      letter-spacing:-1.2px; margin-bottom:14px;
-      text-shadow:0 5px 22px #7e51c899, 0 1px 2px #fff8;
+      font-size: 2.4rem;
+      font-weight: 900;
+      margin-bottom: 16px;
+      background: linear-gradient(90deg, #3752a4, #ed1c24, #3752a4);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientText 4s ease infinite;
+    }
+    @keyframes gradientText {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .card-label {
+      display: inline-block;
+      background: #fff5f6; color: #ed1c24;
+      padding: 6px 16px; border-radius: 1rem;
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin-bottom: 16px;
     }
     .card-desc {
-      font-size:1.15rem; color:#fffde9; opacity:0.98;
-      line-height:1.66; text-shadow:0 1px 10px #a389f244;
+      font-size: 1.2rem;
+      color: #394256;
+      line-height: 1.6; margin-bottom: 32px;
+      white-space: pre-line;
+      max-width: 800px;
     }
+
+    /* CTA 카드 추가 강조: 그라데이션 → 더 밝게 빛나는 레드 톤 */
+    .slide-card.cta .cta-text {
+      font-size: 2.6rem;
+      font-weight: 900;
+      margin-bottom: 32px;
+      background: linear-gradient(90deg, #ff4d4d, #ffb3b3, #ff4d4d);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientTextBright 4s ease infinite, shadowPulse 2s ease-in-out infinite;
+    }
+    @keyframes gradientTextBright {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes shadowPulse {
+      0%,100% { text-shadow: none; }
+      50% { text-shadow: 0 0 15px rgba(255,77,77,0.7); }
+    }
+
+    .cta-controls {
+      display: inline-flex; gap: 12px;
+    }
+    .cta-button {
+      background: #ed1c24; color: #fff;
+      padding: 14px 40px; font-size: 1.2rem;
+      font-weight: 900;
+      border: none; border-radius: 1rem;
+      cursor: pointer; transition: background .2s;
+    }
+    .cta-button:hover {
+      background: #c6171f;
+    }
+
+    /* 하단 컨트롤 */
+    .slider-controls {
+      display: flex; align-items: center; justify-content: center; gap: 24px;
+      padding: 16px 0 32px; background: #fff;
+    }
+    .slider-arrow {
+      width: 48px; height: 48px;
+      font-size: 1.8rem;
+      background: #fff;
+      border: 1px solid #e4e6ee;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      cursor: pointer; transition: background .2s;
+    }
+    .slider-arrow:disabled {
+      opacity: .3; cursor: default;
+    }
+    .slider-arrow:hover:not(:disabled) {
+      background: #f8f8fa;
+    }
+    .play-pause-btn {
+      width: 48px; height: 48px;
+      font-size: 1.6rem;
+      background: #ed1c24; color: #fff;
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .2s;
+    }
+    .play-pause-btn:hover {
+      background: #c6171f;
+    }
+
+    /* 추천박스 (파스텔 블루) */
+    .recommend-box {
+      background: #e3f2fd;
+      border-radius: 1.2rem;
+      padding: 24px 32px;
+      margin: 48px 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+    .reco-title {
+      font-size: 1.3rem; font-weight: 900;
+      color: #1976d2;
+      margin-bottom: 12px;
+    }
+    .reco-list { list-style: none; padding-left: 0; }
+    .reco-list li {
+      margin-bottom: 8px; font-size: 1.1rem; color: #394256;
+      position: relative; padding-left: 24px;
+    }
+    .reco-list li::before {
+      content: '✔︎'; position: absolute; left: 0; color: #1976d2;
+    }
+
     /* 아코디언 */
-    .accordion-section {
-      background: #fff; color: #23234a;
-      max-width: 750px; margin: 80px auto 160px auto;
-      border-radius: 32px; box-shadow: 0 6px 38px #32227216;
-      padding: 38px 24px; font-size:1.08rem;
+    .accordion-area-wrap { margin-bottom: 60px; }
+    .accordion-wrap {
+      background: #fff; border-radius: 1.4rem;
+      box-shadow: 0 0 12px rgba(0,0,0,0.08);
+      overflow: hidden;
     }
-    .accordion-item { border-bottom: 1px solid #ece5f7;}
-    .accordion-title {
-      cursor:pointer; padding:19px 0; font-size:1.18rem; font-weight:800; position:relative;
+    .accordion-item + .accordion-item {
+      border-top: 1px solid #e4e6ee;
     }
-    .accordion-title:after {
-      content:'+'; position:absolute; right:20px; top:17px;
-      font-size:1.3rem; color:#a389f2; transition:0.22s;
+    .accordion-header {
+      width: 100%; padding: 16px 24px;
+      font-size: 1.15rem; font-weight: 900;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; background: #f8f8fa; border: none;
     }
-    .accordion-item.active .accordion-title:after {
-      content:'–'; color:#e54235;
+    .accordion-header:hover { background: #eef7fe; }
+    .accordion-body {
+      display: none; padding: 16px 24px; background: #fff;
+      font-size: 1.05rem; color: #394256; line-height: 1.6;
     }
-    .accordion-content {
-      max-height:0; overflow:hidden;
-      transition:max-height 0.6s cubic-bezier(.6,0,.19,1);
-      color:#3a3651; background:#f7f6ff;
-      padding:0 0; border-radius:0 0 22px 22px;
+    .accordion-item.active .accordion-body {
+      display: block;
     }
-    .accordion-item.active .accordion-content {
-      max-height:700px; padding:12px 0 18px 0;
+    .accordion-arrow {
+      font-size: 1.4rem; transition: transform .2s;
     }
-    @media (max-width:900px){
-      .glass-card{padding:32px 5vw;}
-      .accordion-section{padding:16px 2vw;}
+    .accordion-item.active .accordion-arrow {
+      transform: rotate(180deg);
     }
-    @media (max-width:700px){
-      .glass-card{padding:18px 5vw; font-size:1.1rem;}
-      .section{min-height:80vh;}
-      .card-title{font-size:1.1rem;}
+    .detail-table {
+      width: 100%; border-collapse: collapse; margin-top: 12px;
+    }
+    .detail-table th, .detail-table td {
+      border: 1px solid #e4e6ee; padding: 10px 14px;
+      text-align: left; vertical-align: top;
+    }
+    .detail-table th {
+      width: 160px; background: #f1f2f6; font-weight: 700;
+    }
+
+    @media (max-width: 1100px) {
+      html { font-size: 17px; }
+    }
+    @media (max-width: 700px) {
+      html { font-size: 16px; }
+      .slide-card { padding: 20px; }
+      .slider-arrow, .play-pause-btn {
+        width: 40px; height: 40px; font-size: 1.4rem;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Three.js blob, turbulent 스타일 배경 -->
-  <canvas id="bg-canvas"></canvas>
-  <div class="main">
-    <div class="section" id="sec1">
-      <div class="glass-card">
-        <div class="card-title">자동이체 적립</div>
-        <div class="card-desc">
-          <span style="color:#e54235;font-weight:bold;">원화/외화 중 선택</span>으로 자동 저축!<br>
-          부산은행 원화계좌 자동이체 시 <b style="color:#a389f2;">환율 70% 우대</b>
-        </div>
+  <div class="main-wrap">
+    <div class="main-title">꿈이룸 외화자유적금</div>
+
+    <!-- 슬라이더 -->
+    <div class="slide-section" id="slideSection">
+      <div class="slide-counter" id="slideCounter">1 / 6</div>
+      <div class="slider-outer">
+        <div class="slider-inner" id="sliderInner"></div>
+      </div>
+      <div class="slider-controls">
+        <button class="slider-arrow" id="slidePrev">&#x2039;</button>
+        <button class="play-pause-btn" id="playPauseBtn" title="재생/정지">❚❚</button>
+        <button class="slider-arrow" id="slideNext">&#x203A;</button>
       </div>
     </div>
-    <div class="section" id="sec2">
-      <div class="glass-card">
-        <div class="card-title">우대금리 혜택</div>
-        <div class="card-desc">
-          꿈이룸 신규·재예치, 자동이체 등록 등<br>
-          <b style="color:#ffac4b;">최대 0.3% 우대금리</b> 제공
-        </div>
-      </div>
+
+    <!-- 추천박스 -->
+    <div class="recommend-box">
+      <div class="reco-title">이런 분께 추천합니다!</div>
+      <ul class="reco-list">
+        <li>만 <span style="color:#1976d2;">18세 이하</span> 자녀(학생)의 외화 달러 자산을 모으고 싶은 분</li>
+        <li><span style="color:#1976d2;">환율 우대</span>와 다양한 우대금리 혜택을 누리고 싶은 가정</li>
+        <li>미국 <span style="color:#1976d2;">유학·여행·장기환전</span> 등 외화 활용이 예상되는 가족</li>
+        <li>어린이·청소년의 달러 자산을 체계적으로 모으고 싶은 <span style="color:#1976d2;">부모님</span></li>
+        <li><span style="color:#1976d2;">환테크</span>(환율차익)에 관심 있는 미성년 자녀를 둔 분</li>
+      </ul>
     </div>
-    <div class="section" id="sec3">
-      <div class="glass-card">
-        <div class="card-title">가입 조건</div>
-        <div class="card-desc">
-          <b style="color:#7ca6ff;">18세 이하, 실명 개인, 1인 1계좌</b><br>
-          미국달러(USD)로 1불 이상, 최대 1만불까지!
+
+    <!-- 아코디언 -->
+    <div class="accordion-area-wrap">
+      <div class="accordion-wrap">
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            상품개요 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr>
+                <th>설명</th>
+                <td>
+                  자동이체금액을 “외화 입금액” 또는 “원화 지급액” 기준 중 선택 가능하며,<br>
+                  1년 단위 자동 재예치를 통해 장기적인 목돈 마련이 가능합니다.
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="section" id="sec4">
-      <div class="glass-card">
-        <div class="card-title">만기·해지</div>
-        <div class="card-desc">
-          1년 단위 자동 재예치<br>
-          <b style="color:#c24bff;">만기 후 이율/중도해지 이율 차등</b><br>
-          (특별/중도해지 시 우대금리 제외)
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            가입조건 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>가입대상</th><td>만 18세 이하 실명 개인(1인 1계좌)</td></tr>
+              <tr><th>가입금액</th><td>미화 1불 상당액 이상</td></tr>
+              <tr><th>가입기간</th><td>12개월</td></tr>
+              <tr><th>납입한도</th><td>최대 미화 1만불 적립(잔액 초과 시 재예치만 가능)</td></tr>
+            </table>
+          </div>
         </div>
-      </div>
-    </div>
-    <!-- 마지막 아코디언 -->
-    <div class="accordion-section">
-      <div class="accordion-item">
-        <div class="accordion-title">예금자보호 안내</div>
-        <div class="accordion-content">
-          이 예금은 예금자보호법에 따라 1인당 <b>5천만원</b>까지 보호됩니다.<br>
-          (본 은행 여타 보호상품과 합산)
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            자동이체 적립서비스 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>선택기준</th><td>‘외화 입금액’ 또는 ‘원화 지급액’ 중 선택</td></tr>
+              <tr><th>환율 우대</th><td>부산은행 원화출금계좌 자동이체 시 전신환매도율 적용 후 70% 우대</td></tr>
+            </table>
+          </div>
         </div>
-      </div>
-      <div class="accordion-item">
-        <div class="accordion-title">수수료 우대</div>
-        <div class="accordion-content">
-          외화 현찰 출금·해외송금 시 <b>수수료 감면/우대</b>가 제공됩니다.<br>
-          (자세한 우대 조건은 상세 상품설명서 참고)
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            금리정보 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>기본금리</th><td>신규가입 시점 고시 외화 적금 이율 적용</td></tr>
+              <tr><th>우대금리</th><td>
+                꿈이룸 가입 0.10%<br>
+                재예치 고객 0.10%<br>
+                자동이체 등록 0.20%<br>
+                (최대 0.3%, 중도해지·특별해지 시 미적용)
+              </td></tr>
+            </table>
+          </div>
         </div>
-      </div>
-      <div class="accordion-item">
-        <div class="accordion-title">유의사항/주의점</div>
-        <div class="accordion-content">
-          <ul style="margin:0 0 0 20px;">
-            <li>환율 변동에 따라 원화 환산 시 손실 또는 이익이 발생할 수 있음</li>
-            <li>압류/사고/피해거래 계좌 등은 거래 제한</li>
-            <li>비과세종합저축 가입 불가</li>
-          </ul>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            수수료 우대 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>6개월 후 인출</th><td>외화 현찰 수수료 면제, 해외송금 수수료 1회 면제 (웨스턴유니온 제외)</td></tr>
+              <tr><th>환율 우대</th><td>미화 외 통화 송금 시 90% 우대</td></tr>
+            </table>
+          </div>
         </div>
-      </div>
-      <div class="accordion-item">
-        <div class="accordion-title">기타 정보</div>
-        <div class="accordion-content">
-          <b>문의</b> : 부산은행 고객센터(1544-6200/1588-6200), 또는 가까운 영업점<br>
-          약관/상품설명서 필수 확인!
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            만기·중도해지 이율 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>만기 후</th><td>1년 이내 30%, 1년 초과 10%</td></tr>
+              <tr><th>중도해지</th><td>
+                7일 미만: 보통예금 이율<br>
+                7일~1개월: 10%<br>
+                1~3개월: 30%<br>
+                3~6개월: 40%<br>
+                6~9개월: 50%<br>
+                9~12개월: 80%
+              </td></tr>
+              <tr><th>특별중도해지</th><td>지정 외국환은행 거래고객: 약정 기본이율 적용</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            기타 정보 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>이자지급</th><td>만기일시지급식</td></tr>
+              <tr><th>적립방법</th><td>자유적립식 (원화 계좌 및 현금 적립)</td></tr>
+              <tr><th>예금자보호</th><td>원금+이자 합산 1인당 5천만원 보호</td></tr>
+              <tr><th>공시승인번호</th><td>2025-1233 (2025.06.10)</td></tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- Three.js 라이브러리 -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/build/three.min.js"></script>
+
   <script>
-    // 섹션 FadeIn(스크롤)
-    const secs = document.querySelectorAll('.section');
-    function activateSections() {
-      secs.forEach(sec => {
-        const rect = sec.getBoundingClientRect();
-        if(rect.top < window.innerHeight*0.55 && rect.bottom > window.innerHeight*0.30){
-          sec.classList.add('active');
+    const slideData = [
+      { first: true, title: "BNK 꿈이룸 외화자유적금" },
+      { label: "상품개요", title: "상품개요", desc: "자동이체금액을 “외화 입금액” 또는 “원화 지급액” 기준 중 선택 가능하며,\n1년 단위 자동 재예치를 통해 장기적인 목돈 마련이 가능합니다." },
+      { label: "가입조건", title: "가입조건 안내", desc: "만 18세 이하 실명 개인(1인 1계좌),\n최소 미화 1불부터 최대 미화 1만불까지 적립 가능." },
+      { label: "우대혜택", title: "혜택 안내", desc: "자동이체 등록 시 환율 70% 우대,\n최대 0.3% 우대금리 제공,\n수수료 감면 혜택까지." },
+      { label: "중도해지/만기", title: "이율 안내", desc: "만기 후 1년 이내 30%, 1년 초과 10%,\n중도해지 시 기간별 차등 이율 적용." },
+      { cta: true }
+    ];
+    let curIdx = 0, autoInt, autoPlay = true;
+    const inner    = document.getElementById("sliderInner"),
+          counter  = document.getElementById("slideCounter"),
+          prev     = document.getElementById("slidePrev"),
+          next     = document.getElementById("slideNext"),
+          playBtn  = document.getElementById("playPauseBtn");
+
+    function render(i) {
+      inner.innerHTML = "";
+      slideData.forEach((d, idx) => {
+        const card = document.createElement("div");
+        card.className = "slide-card" + (idx === i ? " current" : "") + (d.cta ? " cta" : "");
+        if (d.first) {
+          card.innerHTML = `<div class="card-title">${d.title}</div>`;
+        } else if (d.cta) {
+          card.innerHTML = `
+            <div class="cta-text">당신의 첫걸음을 내딛어 보세요</div>
+            <div class="cta-controls">
+              <button class="cta-button">지금 가입하기</button>
+            </div>`;
         } else {
-          sec.classList.remove('active');
+          card.innerHTML = `
+            <div class="card-label">${d.label}</div>
+            <div class="card-title">${d.title}</div>
+            <div class="card-desc">${d.desc.replace(/\n/g,"<br>")}</div>`;
         }
+        inner.appendChild(card);
       });
+      const w = inner.clientWidth;
+      inner.style.transform = `translateX(-${curIdx * w}px)`;
+      updateControls();
     }
-    window.addEventListener('scroll', activateSections);
-    window.addEventListener('DOMContentLoaded', activateSections);
+
+    function updateControls() {
+      counter.textContent = `${curIdx + 1} / ${slideData.length}`;
+      prev.disabled = curIdx === 0;
+      next.disabled = curIdx === slideData.length - 1;
+    }
+
+    prev.onclick = () => { if (curIdx>0) { reset(); curIdx--; render(curIdx); } };
+    next.onclick = () => { if (curIdx<slideData.length-1) { reset(); curIdx++; render(curIdx); } };
+
+    function startAuto() {
+      autoInt = setInterval(() => {
+        curIdx = (curIdx + 1) % slideData.length;
+        render(curIdx);
+      }, 5000);
+    }
+    function stopAuto() { clearInterval(autoInt); }
+    function reset() { stopAuto(); if (autoPlay) startAuto(); }
+    function togglePlay() {
+      autoPlay = !autoPlay;
+      if (autoPlay) { startAuto(); playBtn.textContent="❚❚"; }
+      else { stopAuto(); playBtn.textContent="▶"; }
+    }
+    playBtn.onclick = togglePlay;
+
+    window.addEventListener("DOMContentLoaded", () => {
+      render(0);
+      startAuto();
+    });
+
+    // 휠 훅
+    const outer   = document.querySelector(".slider-outer"),
+          section = document.getElementById("slideSection");
+    function onWheel(e) {
+      e.preventDefault();
+      if (e.deltaY>0 && curIdx<slideData.length-1) { reset(); curIdx++; render(curIdx); }
+      if (e.deltaY<0 && curIdx>0) { reset(); curIdx--; render(curIdx); }
+    }
+    new IntersectionObserver(entries=> {
+      entries.forEach(ent=>{
+        if (ent.isIntersecting)
+          outer.addEventListener("wheel", onWheel, { passive:false });
+        else
+          outer.removeEventListener("wheel", onWheel);
+      });
+    },{threshold:0.6}).observe(section);
 
     // 아코디언
-    document.querySelectorAll('.accordion-title').forEach(title => {
-      title.addEventListener('click', function(){
-        const item = this.parentElement;
-        item.classList.toggle('active');
-      });
-    });
-
-    // Three.js로 blob(물방울/빛 효과) 배경 + 스크롤에 따라 변화
-    let renderer, scene, camera, mesh, light;
-    let bgColors = [
-      [0x2f2662,0xf9b6e0], // 첫번째
-      [0xbce7ff,0xe8a3ef],
-      [0xfed5a7,0xb493e6],
-      [0xd9f3fe,0xa7baff]
-    ];
-    function lerp(a,b,t){return a+(b-a)*t;}
-    function hexToRgbArr(hex){
-      return [(hex>>16)&255,(hex>>8)&255,hex&255];
+    function toggleAccordion(btn) {
+      const item = btn.parentNode;
+      item.classList.toggle("active");
+      btn.querySelector(".accordion-arrow")
+         .textContent = item.classList.contains("active")?"▲":"▼";
     }
-    function rgbArrToCss(rgb){
-      return `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-    }
-    function updateBgColorByScroll() {
-      // 섹션별 배경색 부드럽게 전환
-      let y = window.scrollY;
-      let h = window.innerHeight;
-      let idx = Math.floor(y/h);
-      let t = (y%h)/h;
-      let from = bgColors[Math.min(idx,bgColors.length-1)];
-      let to = bgColors[Math.min(idx+1,bgColors.length-1)];
-      let c1 = [Math.round(lerp(hexToRgbArr(from[0])[0], hexToRgbArr(to[0])[0], t)),
-                Math.round(lerp(hexToRgbArr(from[0])[1], hexToRgbArr(to[0])[1], t)),
-                Math.round(lerp(hexToRgbArr(from[0])[2], hexToRgbArr(to[0])[2], t))];
-      let c2 = [Math.round(lerp(hexToRgbArr(from[1])[0], hexToRgbArr(to[1])[0], t)),
-                Math.round(lerp(hexToRgbArr(from[1])[1], hexToRgbArr(to[1])[1], t)),
-                Math.round(lerp(hexToRgbArr(from[1])[2], hexToRgbArr(to[1])[2], t))];
-      document.getElementById("bg-canvas").style.background =
-        `linear-gradient(110deg,${rgbArrToCss(c1)} 40%,${rgbArrToCss(c2)} 100%)`;
-    }
-    window.addEventListener('scroll', updateBgColorByScroll);
-
-    function initThree() {
-      const canvas = document.getElementById('bg-canvas');
-      renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
-      renderer.setClearColor(0x000000, 0);
-      renderer.setSize(window.innerWidth, window.innerHeight, false);
-      scene = new THREE.Scene();
-      camera = new THREE.PerspectiveCamera(72, window.innerWidth/window.innerHeight, 0.1, 100);
-      camera.position.z = 2.25;
-
-      const geometry = new THREE.IcosahedronGeometry(1, 7);
-      const material = new THREE.MeshPhysicalMaterial({
-        color: 0xa389f2,
-        roughness: 0.38,
-        metalness: 0.85,
-        transmission: 0.92,
-        thickness: 1.36,
-        clearcoat: 1,
-        clearcoatRoughness: 0.12,
-        ior: 1.16,
-        transparent: true,
-        opacity: 0.93
-      });
-      mesh = new THREE.Mesh(geometry, material);
-      scene.add(mesh);
-
-      light = new THREE.PointLight(0xfff0eb, 1.15, 10);
-      light.position.set(3,2,3);
-      scene.add(light);
-      const amb = new THREE.AmbientLight(0xffffff, 0.64); scene.add(amb);
-    }
-    function animateThree() {
-      // 섹션 위치에 따라 blob(공) 움직임, 크기, 색상 변화
-      let y = window.scrollY, h = window.innerHeight;
-      let idx = Math.floor(y/h);
-      let t = (y%h)/h;
-      // x/y/z/scale 변화를 섹션별 부드럽게 지정
-      let posList = [
-        {x:0,y:0,sz:1.15,cl:0xa389f2},
-        {x:-0.4,y:0.22,sz:1.2,cl:0xfeb49c},
-        {x:0.34,y:-0.28,sz:1.19,cl:0x93d8fd},
-        {x:0.06,y:0.18,sz:1.11,cl:0xb393fd}
-      ];
-      let p0 = posList[Math.min(idx,posList.length-1)];
-      let p1 = posList[Math.min(idx+1,posList.length-1)];
-      mesh.position.x = lerp(p0.x,p1.x,t);
-      mesh.position.y = lerp(p0.y,p1.y,t);
-      mesh.scale.setScalar(lerp(p0.sz,p1.sz,t));
-      mesh.material.color.setHex(lerp(p0.cl,p1.cl,t));
-      mesh.rotation.x += 0.0035;
-      mesh.rotation.y += 0.0022;
-      renderer.setSize(window.innerWidth, window.innerHeight, false);
-      renderer.render(scene, camera);
-      requestAnimationFrame(animateThree);
-    }
-    window.addEventListener('DOMContentLoaded', ()=>{
-      initThree(); animateThree(); updateBgColorByScroll();
-      window.addEventListener('resize', ()=>{
-        camera.aspect = window.innerWidth/window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight, false);
-      });
-    });
   </script>
-
 </body>
 </html>
