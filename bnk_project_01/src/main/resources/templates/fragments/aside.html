@@ -1,115 +1,190 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 </head>
 <body>
 
-<!-- 사이드바 프래그먼트 -->
 <aside th:fragment="aside">
-    <style>
-        * {
-            box-sizing: border-box !important;
+<style>
+* {
+    box-sizing: border-box !important;
+}
+
+aside {
+    width: 220px !important;
+    background: #f4f5f7 !important;
+    border-right: 1px solid #dcdfe3 !important;
+    padding: 24px 0 !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    font-family: system-ui, sans-serif !important;
+}
+
+.profile-card {
+    background: #fff !important;
+    border: 1px solid #999 !important;
+    border-radius: 0 !important;
+    padding: 16px !important;
+    margin: 0 auto 20px auto !important;
+    text-align: center !important;
+    width: 180px !important;
+}
+
+.profile-image {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    background: #f8f9fa !important;
+    margin: 0 auto 12px auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+    border: 2px solid #dee2e6 !important;
+}
+
+.profile-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+.profile-name {
+    font-size: 16px !important;
+    font-weight: bold !important;
+    color: #333 !important;
+    margin-bottom: 12px !important;
+}
+
+.profile-actions {
+    display: flex !important;
+    gap: 8px !important;
+}
+
+.action-btn {
+    flex: 1 !important;
+    padding: 6px 8px !important;
+    border: 1px solid #999 !important;
+    background: #fff !important;
+    color: #000 !important;
+    border-radius: 0 !important;
+    font-size: 12px !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    display: block !important;
+    font-family: system-ui, sans-serif !important;
+}
+
+.action-btn:hover {
+    background: #f8f9fa !important;
+    text-decoration: none !important;
+    color: #000 !important;
+}
+
+aside ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+aside li {
+    margin-bottom: 8px !important;
+    text-align: center !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-top: 0 !important;
+}
+
+aside .menu-link {
+    width: 180px !important;
+    padding: 8px 0 !important;
+    border: 1px solid #999 !important;
+    background: #fff !important;
+    cursor: pointer !important;
+    font-family: system-ui, sans-serif !important;
+    font-size: 1rem !important;
+    color: #000 !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    text-align: center !important;
+    box-shadow: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+
+aside .menu-link.active {
+    background: #dbe4ff !important;
+    border-color: #4c6ef5 !important;
+    color: #000 !important;
+}
+
+aside .menu-link:hover {
+    opacity: 0.8 !important;
+    background: #f8f9fa !important;
+    text-decoration: none !important;
+    color: #000 !important;
+}
+
+aside .menu-link.active:hover {
+    background: #dbe4ff !important;
+    opacity: 0.8 !important;
+    color: #000 !important;
+}
+</style>
+
+<!-- 프로필 카드 -->
+<div class="profile-card">
+    <div class="profile-image">
+        <img src="/static/user/images/admin01.jpg" alt="프로필 이미지" onerror="this.style.display='none'; this.parentNode.innerHTML='👤';">
+    </div>
+    <div class="profile-name">홍길동</div>
+    <div class="profile-actions">
+        <a href="/settings" class="action-btn">환경설정</a>
+        <a href="/logout" class="action-btn">로그아웃</a>
+    </div>
+</div>
+
+<ul>
+    <li><a href="/admin" class="menu-link active">대시보드</a></li>
+    <li><a href="/admin/category" class="menu-link">카테고리 관리</a></li>
+    <li><a href="/admin/productPage" class="menu-link">상품 관리</a></li>
+    <li><a href="/admin/termsForm" class="menu-link">약관 등록</a></li>
+    <li><a href="/admin/termsPage" class="menu-link">약관 관리</a></li>
+    <li><a href="/admin/approve" class="menu-link">결재 관리</a></li>
+</ul>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuLinks = document.querySelectorAll('aside .menu-link');
+    const currentPath = window.location.pathname;
+
+    menuLinks.forEach(link => {
+        link.classList.remove('active');
+
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
         }
+    });
 
-        aside {
-            width: 220px !important;
-            background: #f4f5f7 !important;
-            border-right: 1px solid #dcdfe3 !important;
-            padding: 24px 0 !important;
-            height: 100vh !important;
-            margin: 0 !important;
-            font-family: system-ui, sans-serif !important;
-        }
+    menuLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            menuLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
 
-        aside ul {
-            list-style: none !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-
-        aside li {
-            margin-bottom: 8px !important;
-            text-align: center !important;
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-            margin-top: 0 !important;
-        }
-
-        aside .menu-link {
-            width: 160px !important;
-            padding: 8px 0 !important;
-            border: 1px solid #999 !important;
-            background: #fff !important;
-            cursor: pointer !important;
-            font-family: system-ui, sans-serif !important;
-            font-size: 1rem !important;
-            color: #000 !important;
-            border-radius: 0 !important;
-            margin: 0 !important;
-            text-align: center !important;
-            box-shadow: none !important;
-            outline: none !important;
-            text-decoration: none !important;
-            display: inline-block !important;
-        }
-
-        aside .menu-link.active {
-            background: #dbe4ff !important;
-            border-color: #4c6ef5 !important;
-            color: #000 !important;
-        }
-
-        aside .menu-link:hover {
-            opacity: 0.8 !important;
-            background: #f8f9fa !important;
-            text-decoration: none !important;
-            color: #000 !important;
-        }
-
-        aside .menu-link.active:hover {
-            background: #dbe4ff !important;
-            opacity: 0.8 !important;
-            color: #000 !important;
-        }
-    </style>
-
-    <ul>
-        <li><a href="/admin" class="menu-link active">대시보드</a></li>
-        <li><a href="/admin/category" class="menu-link">카테고리 관리</a></li>
-        <li><a href="/admin/productPage" class="menu-link">상품 관리</a></li>
-        <li><a href="/admin/termsForm" class="menu-link">약관 등록</a></li>
-        <li><a href="/admin/termsPage" class="menu-link">약관 관리</a></li>
-        <li><a href="/admin/approve" class="menu-link">결재 관리</a></li>
-    </ul>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const menuLinks = document.querySelectorAll('aside .menu-link');
-            const currentPath = window.location.pathname;
-
-            // 현재 페이지에 맞는 메뉴 활성화
-            menuLinks.forEach(link => {
-                link.classList.remove('active');
-                
-                // 현재 URL과 링크 URL이 일치하면 active 클래스 추가
-                if (link.getAttribute('href') === currentPath) {
-                    link.classList.add('active');
-                }
-            });
-
-            // 클릭 이벤트 추가 (선택사항)
-            menuLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    menuLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    console.log('이동할 페이지:', this.getAttribute('href'));
-                    // 페이지 이동은 자동으로 처리됨 (기본 링크 동작)
-                });
-            });
+            console.log('이동할 페이지:', this.getAttribute('href'));
         });
-    </script>
+    });
+
+    document.querySelector('.logout-btn') && document.querySelector('.logout-btn').addEventListener('click', function(e) {
+        if (!confirm('정말 로그아웃 하시겠습니까?')) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
 </aside>
 
 </body>

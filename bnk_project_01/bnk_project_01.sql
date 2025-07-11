@@ -6,6 +6,9 @@ CREATE TABLE bnk_access_log (
   device_type VARCHAR(100)
 ); 
 
+INSERT INTO BNK_USER VALUES ('supervisor', 1234, 'ROLE_SUP');
+INSERT INTO BNK_USER VALUES ('admin', 1234, 'ROLE_ADMIN');
+
 
 -- 조회
 SELECT * FROM BNK_PRODUCT;
