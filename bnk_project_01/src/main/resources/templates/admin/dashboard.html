@@ -1,70 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>ECharts 대시보드</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 20px;
-      background: #f8f9fa;
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .dashboard {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: 20px;
-    }
-    .chart-card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    }
-    .chart-box {
-      height: 300px;
-    }
-
-    @media (max-width: 500px) {
-      .chart-box {
-        height: 250px;
-      }
-    }
-  </style>
+  <title>대시보드</title>
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <script th:src="@{/js/echarts.min.js}"></script>
 </head>
 <body>
-
-  <h2>📊 외환 통계 자료</h2>
-
-  <div class="dashboard">
-    <div class="chart-card">
-      <h4>로그인 유형 비율</h4>
-      <div id="loginChart" class="chart-box"></div>
-    </div>
-
-    <div class="chart-card">
-      <h4>최근 환율</h4>
-      <div id="exchangeChart" class="chart-box"></div>
-    </div>
-
-    <div class="chart-card">
-      <h4>USD 환율 예측</h4>
-      <div id="predictChart" class="chart-box"></div>
-    </div>
-
-    <div class="chart-card">
-      <h4>기기 비율</h4>
-      <div id="deviceChart" class="chart-box"></div>
-    </div>
-
-    <div class="chart-card">
-      <h4>브라우저 점유율</h4>
-      <div id="browserChart" class="chart-box"></div>
-    </div>
+  <header th:replace="fragments/adminheader :: adminheader"></header>
+  <div class="main-container">
+    <aside th:replace="fragments/aside :: aside"></aside>
+    <main th:replace="admin/dashboard-body :: content"></main>
   </div>
-
+  <script type="module">
+    import { init } from '/js/dashboard.js';
+    init();
+  </script>
 </body>
 </html>
