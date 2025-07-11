@@ -4,28 +4,23 @@
   <meta charset="UTF-8">
   <title>Admin Console</title>
 
-  <link rel="stylesheet" href="/css/admin.css">
-  <script src="/js/shell.js" defer></script>
+  <!-- 정적 자원은 @{} 로 처리하면 context-path 가 달라도 안전합니다 -->
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <script th:src="@{/js/shell.js}" defer></script>
   <script th:src="@{/js/echarts.min.js}"></script>
 </head>
 <body id="app-shell" th:attr="data-role=${role}">
 
-<header>🎛️ Admin Console</header>
+  <!-- 🧩 관리자 헤더 프래그먼트 -->
+  <header th:replace="~{fragments/adminheader :: adminheader}"></header>
 
-<div class="layout">
-  <aside>
-    <ul>
-      <li><button data-page="dashboard" class="active">대시보드</button></li>
-      <li><button data-page="Category">카테고리 관리</button></li>
-      <li><button data-page="approve">결재 관리</button></li>
-      <!-- 필요하면 추가 -->
-    </ul>
-  </aside>
+  <div class="layout">
+    <!-- 🧩 관리자 사이드바 프래그먼트 -->
+    <aside th:replace="~{fragments/aside :: aside}"></aside>
 
-  <main id="main">
-    <!-- 최초에는 dashboard.html 내용을 여기 삽입 -->
-  </main>
-</div>
+    <!-- 최초 화면에 대시보드 템플릿 삽입 (원하면 삭제) -->
+    <main id="main" th:insert="~{admin/dashboard}"></main>
+  </div>
 
 </body>
 </html>
