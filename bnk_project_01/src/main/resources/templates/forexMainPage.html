@@ -458,29 +458,8 @@
             <div class="banner">
                 <img src="/img/main/event.png" alt="이벤트 배너">
             </div>
-
         </div>
-        <ul class="menu-list">
-            <li><a href="#" th:text="${cMap['FX071'].medium}"></a></li>
-            <li><a href="#" th:text="${cMap['FX074'].medium}"></a></li>
-            <li><a href="#" th:text="${cMap['FX076'].medium}"></a></li>
-        </ul>
-    </div>
-
-    <div class="menu-card">
-        <div class="menu-header">
-            <img src="/img/icon/예금 상품.png" alt="예금 아이콘">
-            <div>
-                <div class="menu-title" th:text="${cMap['FX001'].large}"></div>
-                <div class="divider"></div>
-            </div>
-        </div>
-        <ul class="menu-list">
-            <li><a href="#" th:text="${cMap['FX001'].medium}"></a></li>
-            <li><a href="#" th:text="${cMap['FX002'].small}"></a></li>
-            <li><a href="#" th:text="${cMap['FX005'].medium}"></a></li>
-        </ul>
-    </div>
+        
     </div>
 
     <!-- ✅ 메뉴 -->
@@ -496,10 +475,10 @@
                         </div>
                     </div>
                     <ul class="menu-list">
-                        <li><a href="#">예금 상품</a></li>
-                        <li><a href="#">환전 신청</a></li>
-                        <li><a href="#">환전 가능 지점</a></li>
-                    </ul>
+			            <li><a href="#" th:text="${cMap['FX071'].medium}"></a></li>
+			            <li><a href="#" th:text="${cMap['FX074'].medium}"></a></li>
+			            <li><a href="#" th:text="${cMap['FX076'].medium}"></a></li>
+			        </ul>
                 </div>
 
                 <div class="menu-card">
@@ -511,40 +490,13 @@
                         </div>
                     </div>
                     <ul class="menu-list">
-                        <li><a href="#">예금 상품</a></li>
-                        <li><a href="#">가입 안내</a></li>
-                    </ul>
+			            <li><a href="#" th:text="${cMap['FX001'].medium}"></a></li>
+			            <li><a href="#" th:text="${cMap['FX002'].small}"></a></li>
+			            <li><a href="#" th:text="${cMap['FX005'].medium}"></a></li>
+			        </ul>
                 </div>
 
                 <div class="menu-card">
-                    <div class="menu-header">
-                        <img src="/img/icon/환전.png" alt="환전 아이콘">
-                        <div>
-                            <div class="menu-title">환율 · 환전</div>
-                            <div class="divider"></div>
-                        </div>
-                    </div>
-                    <ul class="menu-list">
-                        <li><a href="#">환전 안내</a></li>
-                        <li><a href="/forexProduct">환전 상품</a></li>
-                    </ul>
-                </div>
-
-                <div class="menu-card">
-                    <div class="menu-header">
-                        <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
-                        <div>
-                            <div class="menu-title">외환 수출입</div>
-                            <div class="divider"></div>
-                        </div>
-                    </div>
-                    <ul class="menu-list">
-                        <li><a href="#">무역 결제 안내</a></li>
-                        <li><a href="#">신청 양식</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="menu-card">
                 <div class="menu-header">
                     <img src="/img/icon/환전.png" alt="환전 아이콘">
                     <div>
@@ -557,19 +509,8 @@
                     <li><a href="/forexProduct" th:text="${cMap['FX092'].medium}">환전 상품</a></li>
                     <li><a href="/forexProduct" th:text="${cMap['FX093'].medium}">환전 상품</a></li>
                 </ul>
-            </div>
-        </div>
-
-        <!-- ✅ 스마트 계좌개설 안내 (좌우 배치) -->
-        <div class="account-section">
-            <div class="container account-flex">
-
-                <!-- ✅ 왼쪽: QR 코드 -->
-                <div class="account-left">
-                    <img src="/img/qr/app.png" alt="BNK 스마트 계좌개설 QR" class="account-qr-img">
-                    <p class="account-subtitle">BNK 앱 설치 및 계좌 개설</p>
-                </div>
-
+       		    </div>
+	
                 <div class="menu-card">
                     <div class="menu-header">
                         <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
@@ -583,6 +524,19 @@
                         <li><a href="#" th:text="${cMap['FX089'].small}"></a></li>
                         <li><a href="#" th:text="${cMap['FX090'].small}"></a></li>
                     </ul>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- ✅ 스마트 계좌개설 안내 (좌우 배치) -->
+        <div class="account-section">
+            <div class="container account-flex">
+
+                <!-- ✅ 왼쪽: QR 코드 -->
+                <div class="account-left">
+                    <img src="/img/qr/app.png" alt="BNK 스마트 계좌개설 QR" class="account-qr-img">
+                    <p class="account-subtitle">BNK 앱 설치 및 계좌 개설</p>
                 </div>
             </div>
 
