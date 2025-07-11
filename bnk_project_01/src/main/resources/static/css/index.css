@@ -68,7 +68,7 @@ header {
     border: 1px solid rgb(224, 224, 225);
     height: 32px;
     width: 90px;
-    background: url(../images/search.png) no-repeat left;
+    background: url(../img/main/search.png) no-repeat left;
     background-size: 15px;
     background-position: 10px;
     padding-left: 18px;
@@ -80,7 +80,7 @@ header {
     border: 1px solid rgb(224, 224, 225);
     height: 32px;
     width: 90px;
-    background: url(../images/menu.png) no-repeat left;
+    background: url(../img/main/menu.png) no-repeat left;
     background-size: 15px;
     background-position: 10px;
     padding-left: 18px;
@@ -119,7 +119,7 @@ main {
     color: #ffffff;
     text-align: right;
     background-color: #cb2b11;
-    background-image: url(../images/quick.png);
+    background-image: url(../img/main/quick.png);
     background-repeat: no-repeat;
     background-position: 25px 25px;
     
@@ -135,7 +135,7 @@ main {
     color: #ffffff;
     text-align: right;
     background-color: #28282b;
-    background-image: url(../images/report.png);
+    background-image: url(../img/main/report.png);
     background-repeat: no-repeat;
     background-position: 25px 25px;
 }
