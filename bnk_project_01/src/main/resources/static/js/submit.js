@@ -389,8 +389,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(function(data) {
-            // 등록 성공 후 선택 옵션 제공
-            showSuccessOptions(data);
+            // 등록 성공 후 처리
+            handleRegistrationSuccess(data);
         })
         .catch(function(error) {
             console.error('Error:', error);
@@ -404,39 +404,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 등록 성공 후 옵션 제공
-    function showSuccessOptions(data) {
+    // 등록 성공 후 처리 (약관 등록 폼으로 이동)
+    function handleRegistrationSuccess(data) {
         // 성공 토스트 메시지
         showToast('✅ 약관이 성공적으로 등록되었습니다!', 'success');
         
-        // 상세 성공 메시지와 함께 선택 옵션 제공
+        // 성공 메시지와 함께 확인
         const message = '✅ 약관이 성공적으로 등록되었습니다!\n\n' +
                        '약관명: ' + data.tname + '\n' +
                        '파일명: ' + data.tfilename + '\n' +
                        '등록일: ' + data.tcreatedate + '\n\n' +
-                       '등록된 파일을 바로 확인하시겠습니까?';
+                       '새로운 약관을 계속 등록하시겠습니까?';
         
         setTimeout(function() {
             if (confirm(message)) {
-                // PDF 파일 새 창에서 열기
-                if (data.tpath) {
-                    window.open(data.tpath, '_blank');
-                } else {
-                    alert('파일 경로를 찾을 수 없습니다.');
-                }
+                // 약관 등록 폼으로 이동 (새로운 등록을 위해)
+                window.location.href = '/admin/termsForm?success=true';
+            } else {
+                // 약관 목록 페이지로 이동
+                window.location.href = '/admin/termsPage';
             }
-            
-            // 추가 옵션 제공
-            setTimeout(function() {
-                if (confirm('약관 목록 페이지로 이동하시겠습니까?')) {
-                    window.location.href = '/admin/termsPage';
-                } else {
-                    // 폼 초기화
-                    resetForm();
-                    showToast('새로운 약관을 등록할 수 있습니다.', 'info');
-                }
-            }, 1000);
-        }, 500);
+        }, 1000);
     }
     
     // 폼 초기화
@@ -467,4 +455,14 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.borderColor = '';
         }
     });
+    
+    // URL 파라미터에서 성공 메시지 확인 (페이지 로드 시)
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+    
+    if (success === 'true') {
+        showToast('새로운 약관을 등록할 수 있습니다.', 'info');
+        // URL에서 파라미터 제거
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
 });

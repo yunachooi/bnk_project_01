@@ -103,8 +103,65 @@ public class TermsService {
         return finalFileName;
     }
 
+    // 파일 삭제를 포함한 삭제 메서드
     public void delete(String id) {
-        termsRepository.deleteById(id);
+        // 먼저 약관 정보를 조회하여 파일 경로 확인
+        termsRepository.findById(id).ifPresent(terms -> {
+            // 데이터베이스에서 삭제
+            termsRepository.deleteById(id);
+            
+            // 파일 삭제
+            deleteFile(terms.getTfilename());
+        });
+    }
+    
+    // 파일 삭제 메서드
+    private void deleteFile(String fileName) {
+        if (fileName == null || fileName.isEmpty()) {
+            return;
+        }
+        
+        try {
+            Path filePath = Paths.get(UPLOAD_PATH + fileName);
+            
+            if (Files.exists(filePath)) {
+                Files.delete(filePath);
+                System.out.println("파일 삭제 완료: " + fileName);
+            } else {
+                System.out.println("파일이 존재하지 않음: " + fileName);
+            }
+        } catch (IOException e) {
+            System.err.println("파일 삭제 실패: " + fileName);
+            e.printStackTrace();
+        }
+    }
+    
+    public boolean deleteWithFileCheck(String id) {
+        try {
+            Terms terms = termsRepository.findById(id).orElse(null);
+            if (terms == null) {
+                return false;
+            }
+            
+            termsRepository.deleteById(id);
+            
+            if (terms.getTfilename() != null && !terms.getTfilename().isEmpty()) {
+
+                List<Terms> otherTermsWithSameFile = termsRepository.findByTfilename(terms.getTfilename());
+                
+                if (otherTermsWithSameFile.isEmpty()) {
+ 
+                    deleteFile(terms.getTfilename());
+                } else {
+                    System.out.println("다른 약관에서 사용 중인 파일이므로 삭제하지 않음: " + terms.getTfilename());
+                }
+            }
+            
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
     
     private String generateNextTno() {

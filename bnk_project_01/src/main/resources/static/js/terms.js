@@ -1,4 +1,212 @@
-// 전체 데이터를 저장할 변수
+// 페이지네이션 생성
+function createPagination(data) {
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    
+    // 기존 페이지네이션 제거
+    const existingPagination = document.querySelector('.pagination-container');
+    if (existingPagination) {
+        existingPagination.remove();
+    }
+    
+    // 페이지가 1개 이하면 페이지네이션 숨기기
+    if (totalPages <= 1) {
+        return;
+    }
+    
+    // 페이지네이션 컨테이너 생성
+    const paginationContainer = document.createElement('div');
+    paginationContainer.className = 'pagination-container';
+    
+    const pagination = document.createElement('div');
+    pagination.className = 'pagination';
+    
+    // 이전 페이지 버튼
+    const prevButton = document.createElement('button');
+    prevButton.className = 'page-btn';
+    prevButton.textContent = '‹';
+    prevButton.disabled = currentPage === 1;
+    prevButton.onclick = () => goToPage(currentPage - 1);
+    pagination.appendChild(prevButton);
+    
+    // 페이지 번호 버튼들
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
+    
+    // 첫 페이지
+    if (startPage > 1) {
+        const firstButton = createPageButton(1);
+        pagination.appendChild(firstButton);
+        
+        if (startPage > 2) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'page-ellipsis';
+            ellipsis.textContent = '...';
+            pagination.appendChild(ellipsis);
+        }
+    }
+    
+    // 중간 페이지들
+    for (let i = startPage; i <= endPage; i++) {
+        const pageButton = createPageButton(i);
+        pagination.appendChild(pageButton);
+    }
+    
+    // 마지막 페이지
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'page-ellipsis';
+            ellipsis.textContent = '...';
+            pagination.appendChild(ellipsis);
+        }
+        
+        const lastButton = createPageButton(totalPages);
+        pagination.appendChild(lastButton);
+    }
+    
+    // 다음 페이지 버튼
+    const nextButton = document.createElement('button');
+    nextButton.className = 'page-btn';
+    nextButton.textContent = '›';
+    nextButton.disabled = currentPage === totalPages;
+    nextButton.onclick = () => goToPage(currentPage + 1);
+    pagination.appendChild(nextButton);
+    
+    paginationContainer.appendChild(pagination);
+    
+    // 테이블 컨테이너 다음에 페이지네이션 추가
+    const tableContainer = document.querySelector('.table-container');
+    tableContainer.parentNode.insertBefore(paginationContainer, tableContainer.nextSibling);
+}// 선택된 항목들 삭제 함수
+function deleteSelectedTerms() {
+    const selectedCheckboxes = document.querySelectorAll('.item-checkbox:checked');
+    
+    if (selectedCheckboxes.length === 0) {
+        alert('삭제할 항목을 선택해주세요.');
+        return;
+    }
+    
+    // 선택된 항목들의 tno 수집
+    const selectedIds = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+    
+    // 선택된 항목들 중 tstate가 'Y'인 것과 'N'인 것 분리
+    const selectedTerms = allTermsData.filter(term => selectedIds.includes(term.tno));
+    const deletableTerms = selectedTerms.filter(term => term.tstate === 'Y');
+    const undeletableTerms = selectedTerms.filter(term => term.tstate === 'N');
+    
+    // 삭제 불가능한 항목이 있는 경우 알림
+    if (undeletableTerms.length > 0) {
+        const undeletableNames = undeletableTerms.map(term => term.tname).join(', ');
+        alert(`다음 약관은 최신버전만 삭제할 수 있습니다:\n${undeletableNames}`);
+        
+        // 삭제 가능한 항목이 없으면 종료
+        if (deletableTerms.length === 0) {
+            return;
+        }
+    }
+    
+    // 삭제 가능한 항목이 있는 경우 확인 메시지
+    if (deletableTerms.length > 0) {
+        const deletableNames = deletableTerms.map(term => term.tname).join(', ');
+        const confirmMessage = `다음 ${deletableTerms.length}개의 약관을 삭제하시겠습니까?\n${deletableNames}`;
+        
+        if (confirm(confirmMessage)) {
+            // 실제 삭제 처리 (서버 요청)
+            performDelete(deletableTerms.map(term => term.tno));
+        }
+    }
+}
+
+// 실제 삭제 처리 함수 (DELETE 방식으로 개별 삭제)
+async function performDelete(deleteIds) {
+    try {
+        // 삭제될 약관들의 정보 수집 (이전 버전 활성화를 위해)
+        const deletedTerms = allTermsData.filter(term => deleteIds.includes(term.tno));
+        
+        // 각 항목을 개별적으로 삭제 (DELETE API 사용)
+        const deletePromises = deleteIds.map(async (id) => {
+            const response = await fetch(`/admin/delete/terms?id=${id}`, {
+                method: 'DELETE'
+            });
+            
+            if (!response.ok) {
+                throw new Error(`삭제 실패: ${id}`);
+            }
+            return id;
+        });
+        
+        // 모든 삭제 완료 대기
+        await Promise.all(deletePromises);
+        
+        // 삭제 성공 시 이전 버전 활성화 처리
+        await activatePreviousVersions(deletedTerms);
+        
+        alert('선택한 약관이 삭제되었습니다.');
+        // 데이터 새로고침
+        loadTermsData();
+        
+    } catch (error) {
+        console.error('삭제 중 오류:', error);
+        alert('삭제 중 오류가 발생했습니다.');
+    }
+}
+
+// 이전 버전 활성화 함수 (개선된 버전)
+async function activatePreviousVersions(deletedTerms) {
+    try {
+        const activationPromises = deletedTerms.map(async (deletedTerm) => {
+            // 같은 약관명의 이전 버전 찾기 (tstate가 'N'인 것들)
+            const previousVersions = allTermsData.filter(term => 
+                term.tname === deletedTerm.tname && 
+                term.tstate === 'N' &&
+                term.tno !== deletedTerm.tno
+            );
+            
+            if (previousVersions.length > 0) {
+                // 수정일 기준으로 먼저 정렬하고, 같은 날이면 tno 내림차순으로 정렬
+                const latestPrevious = previousVersions.sort((a, b) => {
+                    const dateA = new Date(a.tmodifydate || a.tcreatedate);
+                    const dateB = new Date(b.tmodifydate || b.tcreatedate);
+                    
+                    // 날짜가 다르면 최신 날짜 우선
+                    if (dateA.getTime() !== dateB.getTime()) {
+                        return dateB - dateA;
+                    }
+                    
+                    // 같은 날이면 tno 내림차순 (숫자 부분 비교)
+                    const tnoA = parseInt(a.tno.substring(1)); // T001 -> 1
+                    const tnoB = parseInt(b.tno.substring(1)); // T002 -> 2
+                    return tnoB - tnoA; // 큰 번호가 먼저 오도록
+                })[0];
+                
+                // 이전 버전을 Y로 활성화
+                const activateResponse = await fetch('/admin/activate/terms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        tno: latestPrevious.tno,
+                        tname: latestPrevious.tname 
+                    })
+                });
+                
+                if (activateResponse.ok) {
+                    console.log(`이전 버전 활성화 완료: ${latestPrevious.tname} (${latestPrevious.tno})`);
+                } else {
+                    console.error(`이전 버전 활성화 실패: ${latestPrevious.tname} (${latestPrevious.tno})`);
+                }
+            }
+        });
+        
+        // 모든 활성화 작업 완료 대기
+        await Promise.all(activationPromises);
+        
+    } catch (error) {
+        console.error('이전 버전 활성화 중 오류:', error);
+    }
+}
+    // 전체 데이터를 저장할 변수
 let allTermsData = [];
 // 페이지네이션 관련 변수
 let currentPage = 1;
@@ -77,6 +285,48 @@ function updateResultTitle(searchInfo) {
         resultTitle.textContent = `조회 결과 (총 ${totalCount}건)`;
     } else {
         resultTitle.textContent = `${searchInfo} (${totalCount}건)`;
+    }
+    
+    // 삭제 버튼 추가
+    addDeleteButton();
+}
+
+// 삭제 버튼 추가 함수 (h3 제목 바로 다음에 오른쪽 정렬로 표시)
+function addDeleteButton() {
+    // 이미 버튼이 있으면 제거
+    const existingContainer = document.querySelector('.delete-button-container');
+    if (existingContainer) {
+        existingContainer.remove();
+    }
+    
+    // 삭제 버튼 컨테이너 생성
+    const deleteContainer = document.createElement('div');
+    deleteContainer.className = 'delete-button-container';
+    deleteContainer.style.textAlign = 'right';
+    deleteContainer.style.marginBottom = '10px';
+    deleteContainer.style.paddingTop = '10px';
+    
+    // 삭제 버튼 생성
+    const deleteButton = document.createElement('button');
+    deleteButton.id = 'deleteSelectedBtn';
+    deleteButton.textContent = '선택 삭제';
+    deleteButton.style.padding = '8px 16px';
+    deleteButton.style.backgroundColor = '#dc3545';
+    deleteButton.style.color = 'white';
+    deleteButton.style.border = 'none';
+    deleteButton.style.borderRadius = '4px';
+    deleteButton.style.cursor = 'pointer';
+    deleteButton.onclick = deleteSelectedTerms;
+    
+    deleteContainer.appendChild(deleteButton);
+    
+    // h3(resultTitle) 바로 다음, table-container 바로 앞에 삽입
+    const resultTitle = document.getElementById('resultTitle');
+    const tableContainer = document.querySelector('.table-container');
+    
+    if (resultTitle && tableContainer) {
+        // resultTitle과 tableContainer 사이에 삽입
+        tableContainer.parentNode.insertBefore(deleteContainer, tableContainer);
     }
 }
 

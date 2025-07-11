@@ -7,18 +7,18 @@
 
 body {
     font-family: 'Spoqa', 'noto', '돋움', Dotum, Helvetica, AppleGothic, Sans-serif !important;
-    background-color: #f5f5f5;
+    background-color: #f5f5f5; 
     color: #333;
     line-height: 1.5;
     font-size: 14px;
 }
 
-.main-container{
-	display: flex;
+.wrapper{ 
+	display: flex !important;
 }
 
 .container {
-    min-width: 1200px;
+	flex: 1;
     padding: 20px;
     background-color: #ffffff;
     min-height: 100vh;
