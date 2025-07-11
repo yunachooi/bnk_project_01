@@ -13,12 +13,12 @@ body {
     font-size: 14px;
 }
 
-.main-container{
-	display: flex;
+.wrapper{
+	display: flex !important;
 }
 
 .container {
-    min-width: 1200px;
+    flex: 1;
     padding: 20px;
     background-color: #ffffff;
     min-height: 100vh;

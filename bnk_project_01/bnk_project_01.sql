@@ -6,6 +6,9 @@ CREATE TABLE bnk_access_log (
   device_type VARCHAR(100)
 ); 
 
+INSERT INTO BNK_USER VALUES ('supervisor', 1234, 'ROLE_SUP');
+INSERT INTO BNK_USER VALUES ('admin', 1234, 'ROLE_ADMIN');
+
 
 -- 조회
 SELECT * FROM BNK_PRODUCT;
@@ -51,14 +54,14 @@ COMMIT;
 -- 더미데이터
 -- 더미데이터(상품명)
 INSERT INTO bnk_product (pno, pname, pstatus) VALUES
-('P001', '꿈이름 외화자유적금', ‘N’),
-('P002', '업앤업 외화 MMDA',  ‘N’),
-('P003', 'EASY 환테크 듀얼통장', ‘N’),
-('P004', 'BNK UP&UP 외화정기예금', ‘N’),
-('P005', 'BNK 모아드림 외화적금', ‘N’),
-('P006', '외화정기예금', ‘N’),
-('P007', '외화당좌예금', ‘N’),
-('P008', '외화보통예금', ‘N’);
+('P001', '꿈이름 외화자유적금', 'N'),
+('P002', '업앤업 외화 MMDA',  'N'),
+('P003', 'EASY 환테크 듀얼통장', 'N'),
+('P004', 'BNK UP&UP 외화정기예금', 'N'),
+('P005', 'BNK 모아드림 외화적금', 'N'),
+('P006', '외화정기예금', 'N'),
+('P007', '외화당좌예금', 'N'),
+('P008', '외화보통예금', 'N');
 
 
 -- 더미데이터(상품 속성)
@@ -193,3 +196,7 @@ INSERT INTO bnk_category (cno, large, medium, small) VALUES ('FX085', '외환이
 INSERT INTO bnk_category (cno, large, medium, small) VALUES ('FX086', '외환이용가이드', '수수료', '수출입관련수수료');
 INSERT INTO bnk_category (cno, large, medium, small) VALUES ('FX087', '외환이용가이드', '수수료', '환전/송금관련수수료');
 INSERT INTO bnk_category (cno, large, medium, small) VALUES ('FX088', '외환이용가이드', '외환FAQ', NULL);
+
+-- 더미데이터(상품속성값)
+
+
