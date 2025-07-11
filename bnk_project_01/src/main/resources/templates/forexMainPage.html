@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>BNK 외환 정보</title>
@@ -77,8 +78,13 @@
         }
 
         @keyframes scroll-slide {
-            2% { transform: translateX(-2%); }
-            100% { transform: translateX(-100%); }
+            2% {
+                transform: translateX(-2%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
         }
 
         .rate-box {
@@ -110,6 +116,7 @@
             gap: 4px;
             line-height: 1;
         }
+
         .rate-date-label {
             text-align: right;
             margin-top: 8px;
@@ -119,8 +126,13 @@
         }
 
 
-        .rcode { color: var(--bnk-dark-red); }
-        .rvalue { color: #665c4d; }
+        .rcode {
+            color: var(--bnk-dark-red);
+        }
+
+        .rvalue {
+            color: #665c4d;
+        }
 
         /* ================================
            ✅ 1-1 환율 정보 비교 모달창
@@ -128,16 +140,20 @@
         .modal.hidden {
             display: none;
         }
+
         .modal {
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             z-index: 9999;
-            width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.6);
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: center;
             align-items: center;
         }
+
         .modal-content {
             background: #fff;
             padding: 24px;
@@ -145,6 +161,7 @@
             width: 460px;
             position: relative;
         }
+
         .close-button {
             position: absolute;
             top: 12px;
@@ -152,38 +169,47 @@
             font-size: 22px;
             cursor: pointer;
         }
+
         .modal-title {
             text-align: center;
             color: var(--bnk-red);
             margin-bottom: 10px;
         }
+
         .modal-date {
             text-align: center;
             margin-bottom: 14px;
             font-weight: bold;
             color: #333;
         }
+
         .rate-table {
             width: 100%;
             border-collapse: collapse;
             text-align: center;
         }
-        .rate-table th, .rate-table td {
+
+        .rate-table th,
+        .rate-table td {
             padding: 10px;
             border: 1px solid #ccc;
         }
+
         .change-up {
-            color: #d7191f;  /* 🔺 빨간색: 상승 */
+            color: #d7191f;
+            /* 🔺 빨간색: 상승 */
             font-weight: bold;
         }
 
         .change-down {
-            color: #0070c0;  /* 🔻 파란색: 하락 */
+            color: #0070c0;
+            /* 🔻 파란색: 하락 */
             font-weight: bold;
         }
 
         .change-same {
-            color: #888888;  /* 보합 또는 '-' */
+            color: #888888;
+            /* 보합 또는 '-' */
         }
 
 
@@ -214,7 +240,8 @@
         .banner img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* ✅ 이미지 비율 유지하며 채우기 */
+            object-fit: cover;
+            /* ✅ 이미지 비율 유지하며 채우기 */
             display: block;
         }
 
@@ -231,7 +258,8 @@
 
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* ✅ 4개 고정 */
+            grid-template-columns: repeat(4, 1fr);
+            /* ✅ 4개 고정 */
             /*grid-template-columns: repeat() ; - 자주 찾는 서비스를 없애고 3개만 할 시*/
             gap: 12px;
         }
@@ -242,7 +270,8 @@
             padding: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             transition: transform 0.2s ease;
-            min-height: 220px; /* 높이 균일하게 */
+            min-height: 220px;
+            /* 높이 균일하게 */
         }
 
         .menu-card:hover {
@@ -342,7 +371,7 @@
             width: 200px;
             height: 350px;
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         .account-title {
@@ -368,259 +397,312 @@
             font-size: 15px;
             color: var(--bnk-silver);
         }
-
     </style>
 </head>
+
 <body>
 
-<!-- ✅ 헤더 fragment -->
-<div th:replace="~{fragments/forexMainHeader :: headerFragment}"></div>
+    <!-- ✅ 헤더 fragment -->
+    <div th:replace="~{fragments/forexMainHeader :: headerFragment}"></div>
 
-<div class="full-red-line"></div>
+    <div class="full-red-line"></div>
 
-<!-- ✅ 환율 정보 -->
-<div class="rate-section">
-    <div class="container">
-        <div class="rate-container">
-            <div class="rate-track" id="rateTrack">
-                <div class="rate-box" th:each="rate : ${rates}">
-                    <img th:src="@{'/img/flags/' + ${rate.rcode.toLowerCase()} + '.png'}"
-                         class="flag-icon" alt="flag"/>
-                    <span class="rate-text">
-                        <span class="rcode" th:text="${rate.rcode}"></span>&nbsp;
-                        <span class="rvalue" th:text="${rate.rvalue}"></span>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <!-- ✅ 기준일 표시 추가 -->
-        <div class="rate-date-label" id="rateDateLabel"></div>
-    </div>
-</div>
-
-<!-- 1-1 환율 정보 비교 모달 -->
-<div id="rateModal" class="modal hidden">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2 class="modal-title">환율 비교</h2>
-        <p class="modal-date" id="modalCurrencyTitle">통화: USD</p>
-        <table class="rate-table">
-            <thead>
-            <tr>
-                <th>날짜</th>
-                <th>평균 환율</th>
-                <th>변동</th>
-            </tr>
-            </thead>
-            <tbody id="modalRateBody">
-
-            </tbody>
-        </table>
-    </div>
-</div>
-
-
-<!-- ✅ 배너 -->
-<div class="banner-section">
-    <div class="container banner-container">
-        <div class="banner">
-            <img src="/img/main/product.png" alt="상품 배너">
-        </div>
-        <div class="banner">
-            <img src="/img/main/event.png" alt="이벤트 배너">
-        </div>
-    </div>
-</div>
-
-<!-- ✅ 메뉴 -->
-<div class="menu-section">
-    <div class="container">
-        <div class="menu-grid">
-            <div class="menu-card">
-                <div class="menu-header">
-                    <img src="/img/icon/서비스.png" alt="서비스 아이콘">
-                    <div>
-                        <div class="menu-title">자주 찾는 서비스</div>
-                        <div class="divider"></div>
+    <!-- ✅ 환율 정보 -->
+    <div class="rate-section">
+        <div class="container">
+            <div class="rate-container">
+                <div class="rate-track" id="rateTrack">
+                    <div class="rate-box" th:each="rate : ${rates}">
+                        <img th:src="@{'/img/flags/' + ${rate.rcode.toLowerCase()} + '.png'}" class="flag-icon"
+                            alt="flag" />
+                        <span class="rate-text">
+                            <span class="rcode" th:text="${rate.rcode}"></span>&nbsp;
+                            <span class="rvalue" th:text="${rate.rvalue}"></span>
+                        </span>
                     </div>
                 </div>
-                <ul class="menu-list">
-                    <li><a href="#">예금 상품</a></li>
-                    <li><a href="#">환전 신청</a></li>
-                    <li><a href="#">환전 가능 지점</a></li>
-                </ul>
+            </div>
+            <!-- ✅ 기준일 표시 추가 -->
+            <div class="rate-date-label" id="rateDateLabel"></div>
+        </div>
+    </div>
+
+    <!-- 1-1 환율 정보 비교 모달 -->
+    <div id="rateModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2 class="modal-title">환율 비교</h2>
+            <p class="modal-date" id="modalCurrencyTitle">통화: USD</p>
+            <table class="rate-table">
+                <thead>
+                    <tr>
+                        <th>날짜</th>
+                        <th>평균 환율</th>
+                        <th>변동</th>
+                    </tr>
+                </thead>
+                <tbody id="modalRateBody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- ✅ 배너 -->
+    <div class="banner-section">
+        <div class="container banner-container">
+            <div class="banner">
+                <img src="/img/main/product.png" alt="상품 배너">
+            </div>
+            <div class="banner">
+                <img src="/img/main/event.png" alt="이벤트 배너">
             </div>
 
-            <div class="menu-card">
-                <div class="menu-header">
-                    <img src="/img/icon/예금 상품.png" alt="예금 아이콘">
-                    <div>
-                        <div class="menu-title">외환 예금</div>
-                        <div class="divider"></div>
+        </div>
+        <ul class="menu-list">
+            <li><a href="#" th:text="${cMap['FX071'].medium}"></a></li>
+            <li><a href="#" th:text="${cMap['FX074'].medium}"></a></li>
+            <li><a href="#" th:text="${cMap['FX076'].medium}"></a></li>
+        </ul>
+    </div>
+
+    <div class="menu-card">
+        <div class="menu-header">
+            <img src="/img/icon/예금 상품.png" alt="예금 아이콘">
+            <div>
+                <div class="menu-title" th:text="${cMap['FX001'].large}"></div>
+                <div class="divider"></div>
+            </div>
+        </div>
+        <ul class="menu-list">
+            <li><a href="#" th:text="${cMap['FX001'].medium}"></a></li>
+            <li><a href="#" th:text="${cMap['FX002'].small}"></a></li>
+            <li><a href="#" th:text="${cMap['FX005'].medium}"></a></li>
+        </ul>
+    </div>
+    </div>
+
+    <!-- ✅ 메뉴 -->
+    <div class="menu-section">
+        <div class="container">
+            <div class="menu-grid">
+                <div class="menu-card">
+                    <div class="menu-header">
+                        <img src="/img/icon/서비스.png" alt="서비스 아이콘">
+                        <div>
+                            <div class="menu-title">자주 찾는 서비스</div>
+                            <div class="divider"></div>
+                        </div>
                     </div>
+                    <ul class="menu-list">
+                        <li><a href="#">예금 상품</a></li>
+                        <li><a href="#">환전 신청</a></li>
+                        <li><a href="#">환전 가능 지점</a></li>
+                    </ul>
                 </div>
-                <ul class="menu-list">
-                    <li><a href="#">예금 상품</a></li>
-                    <li><a href="#">가입 안내</a></li>
-                </ul>
-            </div>
 
+                <div class="menu-card">
+                    <div class="menu-header">
+                        <img src="/img/icon/예금 상품.png" alt="예금 아이콘">
+                        <div>
+                            <div class="menu-title">외환 예금</div>
+                            <div class="divider"></div>
+                        </div>
+                    </div>
+                    <ul class="menu-list">
+                        <li><a href="#">예금 상품</a></li>
+                        <li><a href="#">가입 안내</a></li>
+                    </ul>
+                </div>
+
+                <div class="menu-card">
+                    <div class="menu-header">
+                        <img src="/img/icon/환전.png" alt="환전 아이콘">
+                        <div>
+                            <div class="menu-title">환율 · 환전</div>
+                            <div class="divider"></div>
+                        </div>
+                    </div>
+                    <ul class="menu-list">
+                        <li><a href="#">환전 안내</a></li>
+                        <li><a href="/forexProduct">환전 상품</a></li>
+                    </ul>
+                </div>
+
+                <div class="menu-card">
+                    <div class="menu-header">
+                        <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
+                        <div>
+                            <div class="menu-title">외환 수출입</div>
+                            <div class="divider"></div>
+                        </div>
+                    </div>
+                    <ul class="menu-list">
+                        <li><a href="#">무역 결제 안내</a></li>
+                        <li><a href="#">신청 양식</a></li>
+                    </ul>
+                </div>
+            </div>
             <div class="menu-card">
                 <div class="menu-header">
                     <img src="/img/icon/환전.png" alt="환전 아이콘">
                     <div>
-                        <div class="menu-title">환율 · 환전</div>
+                        <div class="menu-title" th:text="${cMap['FX091'].large}"></div>
                         <div class="divider"></div>
                     </div>
                 </div>
                 <ul class="menu-list">
-                    <li><a href="#">환전 안내</a></li>
-                    <li><a href="/forexProduct">환전 상품</a></li>
+                    <li><a href="#" th:text="${cMap['FX091'].medium}">환전 안내</a></li>
+                    <li><a href="/forexProduct" th:text="${cMap['FX092'].medium}">환전 상품</a></li>
+                    <li><a href="/forexProduct" th:text="${cMap['FX093'].medium}">환전 상품</a></li>
                 </ul>
             </div>
+        </div>
 
-            <div class="menu-card">
-                <div class="menu-header">
-                    <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
-                    <div>
-                        <div class="menu-title">외환 수출입</div>
-                        <div class="divider"></div>
-                    </div>
+        <!-- ✅ 스마트 계좌개설 안내 (좌우 배치) -->
+        <div class="account-section">
+            <div class="container account-flex">
+
+                <!-- ✅ 왼쪽: QR 코드 -->
+                <div class="account-left">
+                    <img src="/img/qr/app.png" alt="BNK 스마트 계좌개설 QR" class="account-qr-img">
+                    <p class="account-subtitle">BNK 앱 설치 및 계좌 개설</p>
                 </div>
-                <ul class="menu-list">
-                    <li><a href="#">무역 결제 안내</a></li>
-                    <li><a href="#">신청 양식</a></li>
-                </ul>
+
+                <div class="menu-card">
+                    <div class="menu-header">
+                        <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
+                        <div>
+                            <div class="menu-title" th:text="${cMap['FX090'].large}"></div>
+                            <!-- 외환쪽 카테고리 데이터 연결함 -->
+                            <div class="divider"></div>
+                        </div>
+                    </div>
+                    <ul class="menu-list">
+                        <li><a href="#" th:text="${cMap['FX089'].small}"></a></li>
+                        <li><a href="#" th:text="${cMap['FX090'].small}"></a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <!-- ✅ 오른쪽: 설명 텍스트 -->
+            <div class="account-right">
+                <h2 class="account-title">📱 스마트 계좌 개설</h2>
+                <p class="account-desc">
+                    영업점 방문 없이 언제 어디서나<br>
+                    QR 코드를 스캔하여 BNK를 방문하고<br>
+                    계좌를 간편하게 개설할 수 있습니다.
+                </p>
             </div>
         </div>
     </div>
-</div>
 
-<!-- ✅ 스마트 계좌개설 안내 (좌우 배치) -->
-<div class="account-section">
-    <div class="container account-flex">
 
-        <!-- ✅ 왼쪽: QR 코드 -->
-        <div class="account-left">
-            <img src="/img/qr/app.png" alt="BNK 스마트 계좌개설 QR" class="account-qr-img">
-            <p class="account-subtitle">BNK 앱 설치 및 계좌 개설</p>
-        </div>
 
-        <!-- ✅ 오른쪽: 설명 텍스트 -->
-        <div class="account-right">
-            <h2 class="account-title">📱 스마트 계좌 개설</h2>
-            <p class="account-desc">
-                영업점 방문 없이 언제 어디서나<br>
-                QR 코드를 스캔하여 BNK를 방문하고<br>
-                계좌를 간편하게 개설할 수 있습니다.
-            </p>
-        </div>
+    <div class="full-gray-line"></div>
+
+    <!-- ✅ 푸터 -->
+    <div class="footer">
+        © 2025 BNK Busan Bank. All rights reserved.
     </div>
-</div>
+
+    <!-- ✅ 스크립트 -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById('rateModal');
+            const modalRateBody = document.getElementById('modalRateBody');
+            const modalCurrencyTitle = document.getElementById('modalCurrencyTitle');
+            const closeButton = document.querySelector('.close-button');
+
+            // ✅ 기준일 계산 (오늘 -1일)
+            const baseDate = new Date();
+            baseDate.setDate(baseDate.getDate() - 1);
+            const y = String(baseDate.getFullYear()).slice(2);
+            const m = String(baseDate.getMonth() + 1).padStart(2, '0');
+            const d = String(baseDate.getDate()).padStart(2, '0');
+            const formatted = `기준일 ${y}.${m}.${d} 고지`;
+
+            const label = document.getElementById("rateDateLabel");
+            if (label) label.textContent = formatted;
 
 
+            const formatDate = (dateStr) => {
+                const d = new Date(dateStr);
+                d.setDate(d.getDate() - 1);
+                const year = String(d.getFullYear()).slice(2);
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${year}.${month}.${day}`;
+            };
 
-<div class="full-gray-line"></div>
+            // ✅ 무한 슬라이드 구성
+            const track = document.querySelector('.rate-track');
+            const items = [...track.children];
 
-<!-- ✅ 푸터 -->
-<div class="footer">
-    © 2025 BNK Busan Bank. All rights reserved.
-</div>
+            if (items.length === 0) {
+                console.warn("⚠️ .rate-track 안에 환율 항목이 없습니다. 복제 중단.");
+                return;
+            }
 
-<!-- ✅ 스크립트 -->
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const modal = document.getElementById('rateModal');
-        const modalRateBody = document.getElementById('modalRateBody');
-        const modalCurrencyTitle = document.getElementById('modalCurrencyTitle');
-        const closeButton = document.querySelector('.close-button');
+            const cloneCount = Math.ceil(6 / items.length) + 1;
 
-        // ✅ 기준일 계산 (오늘 -1일)
-        const baseDate = new Date();
-        baseDate.setDate(baseDate.getDate() - 1);
-        const y = String(baseDate.getFullYear()).slice(2);
-        const m = String(baseDate.getMonth() + 1).padStart(2, '0');
-        const d = String(baseDate.getDate()).padStart(2, '0');
-        const formatted = `기준일 ${y}.${m}.${d} 고지`;
+            for (let i = 0; i < cloneCount; i++) {
+                items.forEach(item => {
+                    const clone = item.cloneNode(true);
+                    track.appendChild(clone);
+                });
+            }
 
-        const label = document.getElementById("rateDateLabel");
-        if (label) label.textContent = formatted;
+            // ✅ 이벤트 위임으로 모달 연결
+            track.addEventListener('click', (e) => {
+                const box = e.target.closest('.rate-box');
+                if (!box) return;
 
+                const currency = box.querySelector('.rcode')?.textContent;
+                if (!currency) return;
 
-        const formatDate = (dateStr) => {
-            const d = new Date(dateStr);
-            d.setDate(d.getDate()-1);
-            const year = String(d.getFullYear()).slice(2);
-            const month = String(d.getMonth() + 1).padStart(2, '0');
-            const day = String(d.getDate()).padStart(2, '0');
-            return `${year}.${month}.${day}`;
-        };
+                fetch(`/api/compareRate?rcode=${currency}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data || data.length === 0) {
+                            modalRateBody.innerHTML = '<tr><td colspan="3">데이터 없음</td></tr>';
+                            return;
+                        }
 
-        // ✅ 무한 슬라이드 구성
-        const track = document.querySelector('.rate-track');
-        const items = [...track.children];
+                        data.sort((a, b) => new Date(a.rdate) - new Date(b.rdate));
+                        modalRateBody.innerHTML = '';
 
-        if (items.length === 0) {
-            console.warn("⚠️ .rate-track 안에 환율 항목이 없습니다. 복제 중단.");
-            return;
-        }
+                        for (let i = 0; i < data.length; i++) {
+                            const row = data[i];
+                            const prev = i > 0 ? data[i - 1].rvalue : null;
+                            const diff = prev ? (row.rvalue - prev).toFixed(4) : '-';
+                            const icon = diff === '-' ? '–' : (diff > 0 ? '▲' : '▼');
+                            const className = diff === '-' ? 'change-same' : (diff > 0 ? 'change-up' : 'change-down');
+                            const label = formatDate(row.rdate);
 
-        const cloneCount = Math.ceil(6 / items.length) + 1;
-
-        for (let i = 0; i < cloneCount; i++) {
-            items.forEach(item => {
-                const clone = item.cloneNode(true);
-                track.appendChild(clone);
-            });
-        }
-
-        // ✅ 이벤트 위임으로 모달 연결
-        track.addEventListener('click', (e) => {
-            const box = e.target.closest('.rate-box');
-            if (!box) return;
-
-            const currency = box.querySelector('.rcode')?.textContent;
-            if (!currency) return;
-
-            fetch(`/api/compareRate?rcode=${currency}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (!data || data.length === 0) {
-                        modalRateBody.innerHTML = '<tr><td colspan="3">데이터 없음</td></tr>';
-                        return;
-                    }
-
-                    data.sort((a, b) => new Date(a.rdate) - new Date(b.rdate));
-                    modalRateBody.innerHTML = '';
-
-                    for (let i = 0; i < data.length; i++) {
-                        const row = data[i];
-                        const prev = i > 0 ? data[i - 1].rvalue : null;
-                        const diff = prev ? (row.rvalue - prev).toFixed(4) : '-';
-                        const icon = diff === '-' ? '–' : (diff > 0 ? '▲' : '▼');
-                        const className = diff === '-' ? 'change-same' : (diff > 0 ? 'change-up' : 'change-down');
-                        const label = formatDate(row.rdate);
-
-                        modalRateBody.innerHTML += `
+                            modalRateBody.innerHTML += `
                         <tr>
                             <td>${label}</td>
                             <td>${parseFloat(row.rvalue).toFixed(4)}</td>
                             <td><span class="${className}">${icon} ${diff !== '-' ? Math.abs(diff) : ''}</span></td>
                         </tr>`;
-                    }
+                        }
 
-                    modalCurrencyTitle.textContent = `통화: ${currency}`;
-                    modal.classList.remove('hidden');
-                });
-        });
+                        modalCurrencyTitle.textContent = `통화: ${currency}`;
+                        modal.classList.remove('hidden');
+                    });
+            });
 
-        // 닫기 이벤트
-        closeButton.addEventListener('click', () => modal.classList.add('hidden'));
-        modal.addEventListener('click', e => {
-            if (e.target === modal) modal.classList.add('hidden');
+            // 닫기 이벤트
+            closeButton.addEventListener('click', () => modal.classList.add('hidden'));
+            modal.addEventListener('click', e => {
+                if (e.target === modal) modal.classList.add('hidden');
+            });
         });
-    });
-</script>
+    </script>
 
 </body>
+
 </html>

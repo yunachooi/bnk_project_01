@@ -4,6 +4,12 @@ import com.example.bnk_project_01.dto.ForexCompareDto;
 import com.example.bnk_project_01.entity.Rate;
 import com.example.bnk_project_01.repository.ForexMainRepository;
 import com.example.bnk_project_01.service.ForexMainService;
+
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,9 +17,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
+import com.example.bnk_project_01.entity.Category;
+import com.example.bnk_project_01.entity.Rate;
+import com.example.bnk_project_01.repository.CategoryRepository;
+import com.example.bnk_project_01.repository.ForexMainRepository;
+import com.example.bnk_project_01.service.ForexMainService;
 
 @Controller
 public class ForexMainController {
@@ -23,6 +31,9 @@ public class ForexMainController {
 
     @Autowired
     private ForexMainService forexMainService;
+    		
+    @Autowired
+    private CategoryRepository cateRepo;
 
     @GetMapping("/api/compareRate")
     @ResponseBody
@@ -42,10 +53,16 @@ public class ForexMainController {
     @GetMapping("/forex")
     public String root(Model model) {
         LocalDate today = LocalDate.now();
-
+        List<Category> categories = cateRepo.findAll();
+        Map<String, Category> cMap = cateRepo
+                .findByCnoIn(List.of("FX001", "FX089", "FX090", "FX002", "FX005", "FX093", "FX091", "FX092", "FX071", "FX074", "FX076"))   // 필요한 것만 SELECT
+                .stream()
+                .collect(Collectors.toMap(Category::getCno, c -> c));
+        model.addAttribute("cMap", cMap);						
+        model.addAttribute("categories", categories);
+        							 
         List<Rate> rates = forexMainRepository.findByRdate(today);
-
-
+        
         if (rates == null || rates.isEmpty()) {
             try {
                 forexMainService.fetch();
