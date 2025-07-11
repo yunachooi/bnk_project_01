@@ -37,7 +37,4 @@ public class Terms {
 
     @Column(name = "tcreatedate")
     private LocalDate tcreatedate;
-
-    @Column(name = "tmodifydate")
-    private LocalDate tmodifydate;
 }

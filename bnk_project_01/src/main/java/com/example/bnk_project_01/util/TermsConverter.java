@@ -19,7 +19,6 @@ public class TermsConverter {
         dto.setTfilename(terms.getTfilename());
         dto.setTstate(terms.getTstate());
         dto.setTcreatedate(terms.getTcreatedate());
-        dto.setTmodifydate(terms.getTmodifydate());
         
         return dto;
     }
@@ -36,7 +35,6 @@ public class TermsConverter {
         terms.setTfilename(dto.getTfilename());
         terms.setTstate(dto.getTstate());
         terms.setTcreatedate(dto.getTcreatedate());
-        terms.setTmodifydate(dto.getTmodifydate());
         
         return terms;
     }
