@@ -1,5 +1,3 @@
-// product.js - 외화 상품 관리
-
 let currentPage = 1;
 const itemsPerPage = 10;
 let allData = [];

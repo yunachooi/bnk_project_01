@@ -60,7 +60,7 @@ public class TermsService {
         
         Terms terms = TermsConverter.toEntity(termsDto);
         terms.setTno(generateNextTno());
-        terms.setTpath("/static/termspdf/" + savedFileName);
+        terms.setTpath("/termspdf/" + savedFileName);
         terms.setTfilename(savedFileName);
         terms.setTstate("Y");
         terms.setTcreatedate(LocalDate.now());
@@ -72,15 +72,14 @@ public class TermsService {
     private String saveFileWithVersion(MultipartFile file, String termsName) throws IOException {
         String originalFileName = file.getOriginalFilename();
         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        
-        String baseFileName = termsName + "_" + originalFileName.substring(0, originalFileName.lastIndexOf("."));
+        String baseFileName = originalFileName.substring(0, originalFileName.lastIndexOf("."));
         
         Path uploadPath = Paths.get(UPLOAD_PATH);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
         
-        String finalFileName = baseFileName + fileExtension;
+        String finalFileName = originalFileName;
         Path filePath = uploadPath.resolve(finalFileName);
         
         if (!Files.exists(filePath)) {
@@ -90,7 +89,7 @@ public class TermsService {
         
         int version = 2;
         do {
-            finalFileName = baseFileName + "_v." + version + fileExtension;
+            finalFileName = baseFileName + " (" + version + ")" + fileExtension;
             filePath = uploadPath.resolve(finalFileName);
             version++;
         } while (Files.exists(filePath));

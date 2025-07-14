@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.bnk_project_01.dto.TermsDto;
 import com.example.bnk_project_01.service.TermsService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/admin")
 public class TermsController {
@@ -28,13 +32,27 @@ public class TermsController {
 	TermsService termsService;
 	
 	@GetMapping("/termsPage")
-	public String termsPage() {
-		return "admin/termsPage";
+	public String termsPage(HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+        String role = (session != null) ? (String) session.getAttribute("role") : null;
+        
+		if (role == null || role.equals("ROLE_USER")) {
+            return "redirect:/login";
+        } else {
+        	return "admin/termsPage";
+        }
 	}
 	
-	@GetMapping("termsForm")
-	public String termsForm() {
-		return "admin/termsForm";
+	@GetMapping("/termsForm")
+	public String termsForm(HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+        String role = (session != null) ? (String) session.getAttribute("role") : null;
+        
+		if (role == null || role.equals("ROLE_USER")) {
+            return "redirect:/login";
+        } else {
+        	return "admin/termsForm";
+        }
 	}
 	
 	//find
@@ -42,6 +60,22 @@ public class TermsController {
 	@ResponseBody
 	public List<TermsDto> getTerms() {
 		return termsService.getAll();
+	}
+	
+	@GetMapping("/find/terms/{id}")
+	@ResponseBody
+	public ResponseEntity<TermsDto> getTermById(@PathVariable("id") String id) {
+	    try {
+	        TermsDto terms = termsService.findById(id);
+	        if (terms != null) {
+	            return ResponseEntity.ok(terms);
+	        } else {
+	            return ResponseEntity.notFound().build();
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	    }
 	}
 	
 	//save
@@ -124,4 +158,13 @@ public class TermsController {
 	            .body("삭제 중 오류가 발생했습니다.");
 	    }
 	}
+	
+	//compare
+	@GetMapping("/compare/terms")
+	public String compareTermsPage(@RequestParam("file1") String file1, 
+	                              @RequestParam("file2") String file2, 
+	                              Model model) {
+	    return "admin/compareTerms";
+	}
+	
 }
