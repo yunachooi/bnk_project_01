@@ -10,5 +10,7 @@ public interface ForexMainRepository extends JpaRepository<Rate,Integer> {
 
     List<Rate> findByRdate(LocalDate rdate);
 
-    List<Rate> findByRdateAndRcodeIn(LocalDate rdate, List<String> rcodes);
+    List<Rate> findByRcodeAndRdateIn(String rcode, List<LocalDate> rdates);
+
+
 }

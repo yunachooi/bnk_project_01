@@ -1,130 +1,160 @@
-@charset "UTF-8";
-
 /* ─────────────────────────┐
 │  0. Color Variables       │
 └───────────────────────── */
 :root{
   --primary      : #0067b8;
   --primary-dark : #005399;
+
+  /* mega 메뉴 색상 */
+  --mega-base   : #001436;
+  --mega-accent : #d32f2f;
+  --mega-sub    : #2d2d2d;
 }
 
 /* ─────────────────────────┐
 │  1. 기본 세팅             │
 └───────────────────────── */
 *{box-sizing:border-box;margin:0;padding:0;}
-body{margin:0;font-family:'Malgun Gothic','맑은 고딕',Arial,sans-serif;background:#f5f5f5;color:#333;font-size:14px;line-height:1.5;}
+html,body{height:100%;}
+body{
+  background:#f5f5f5;
+  color:#333;
+  font-family:'Malgun Gothic','맑은 고딕',Arial,sans-serif;
+  font-size:14px;line-height:1.5;
+}
 
 /* ─────────────────────────┐
-│  2. 헤더                  │
+│  2. 헤더(관리 공통)       │
 └───────────────────────── */
-header{height:56px;line-height:56px;padding:0 24px;background:#2b3440;color:#fff;font-size:1.2rem;font-weight:bold;}
+header.admin-top{
+  height:56px;                /* 모든 관리 화면 동일 높이 */
+  line-height:56px;
+  padding:0 24px;
+  background:#2b3440;
+  color:#fff;
+  font-size:1.2rem;
+  font-weight:bold;
+  display:flex;align-items:center;justify-content:space-between;
+}
+
+/* 상단 네비게이션 */
+.header-nav{display:flex;gap:20px;list-style:none;margin:0;padding:0;}
+.header-nav a{
+  color:#fff;text-decoration:none;
+  font-size:14px;padding:6px 10px;border-radius:4px;transition:background .2s;
+}
+.header-nav a:hover{background:#34495e;}
+.header-nav a.active{background:#3498db;}
 
 /* ─────────────────────────┐
-│  3. 레이아웃 & 사이드바   │
+│  3. 사이드바 & 레이아웃   │
 └───────────────────────── */
-.layout{display:flex;height:calc(100vh - 56px);}  
-aside{width:220px;background:#fff;border-right:1px solid #dee2e6;padding:24px 0;}
-aside ul{list-style:none;padding:0;margin:0;}aside li{margin-bottom:8px;text-align:center;}
-aside button{width:160px;padding:8px 0;border:1px solid #6c757d;background:#f8f9fa;color:#495057;border-radius:4px;cursor:pointer;font-weight:bold;}
-aside button.active{background:#dbe4ff;border-color:#4c6ef5;color:#1c3faa;}
+.layout, .main-container{display:flex;height:calc(100vh - 56px);}
+aside{
+  width:220px;flex:none;background:#fff;
+  border-right:1px solid #dee2e6;padding:24px 0;
+}
+aside ul{list-style:none;margin:0;padding:0;}
+aside li{margin-bottom:8px;text-align:center;}
+aside button{
+  width:160px;padding:8px 0;
+  border:1px solid #6c757d;background:#f8f9fa;
+  color:#495057;border-radius:4px;cursor:pointer;font-weight:bold;
+}
+aside button.active{
+  background:#dbe4ff;border-color:#4c6ef5;color:#1c3faa;
+}
+
+main, #main{flex:1;min-width:0;overflow-y:auto;padding:32px;background:#fff;}
+.page-inner{width:100%;max-width:1400px;margin:0 auto;}
+.category-inner{max-width:1100px;}
+h2{margin-top:0;padding:15px 0;margin-bottom:30px;font-size:24px;font-weight:bold;border-bottom:3px solid #dc3545;background:#f8f9fa;color:#2c2c2c;}
 
 /* ─────────────────────────┐
-│  4. 본문                  │
-└───────────────────────── */
-main{flex:1;padding:32px;overflow:auto;background:#fff;}
-h2{color:#2c2c2c;text-align:left;margin-bottom:30px;font-size:24px;font-weight:bold;padding:15px 0;border-bottom:3px solid #dc3545;background:#f8f9fa;}
-
-/* ─────────────────────────┐
-│  5. 테이블                │
+│  4. 테이블                │
 └───────────────────────── */
 table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px;table-layout:fixed;background:#fff;border:2px solid #6c757d;}
 th,td{border:1px solid #dee2e6;padding:10px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;color:#495057;}
 th{background:#495057;color:#fff;font-weight:bold;}
 td[contenteditable]{background:#fff3cd;}
-tr.selected{background:#e7f1ff;}tbody tr:nth-child(even){background:#f8f9fa;}tbody tr:hover{background:#e9ecef;}
+tbody tr:nth-child(even){background:#f8f9fa;}
+tbody tr:hover{background:#e9ecef;}
+tr.selected{background:#e7f1ff;}
 
 /* ─────────────────────────┐
-│  6. 공통 버튼             │
+│  5. 공통 버튼             │
 └───────────────────────── */
 button.small{padding:2px 6px;font-size:.85rem;}
-button.save-btn{background:#dc3545;color:#fff;border:1px solid #dc3545;padding:4px 8px;font-size:12px;font-weight:bold;border-radius:2px;cursor:pointer;}
-button.save-btn:hover{background:#c82333;border-color:#c82333;}button.save-btn:disabled{background:#6c757d;border-color:#6c757d;cursor:not-allowed;}
+button.save-btn{
+  background:#dc3545;color:#fff;border:1px solid #dc3545;
+  padding:4px 8px;font-size:12px;font-weight:bold;border-radius:2px;cursor:pointer;
+}
+button.save-btn:hover{background:#c82333;border-color:#c82333;}
+button.save-btn:disabled{background:#6c757d;border-color:#6c757d;cursor:not-allowed;}
 
-/* 등록 버튼 */
-#btnAdd{padding:.45rem .8rem;border:none;border-radius:.35rem;background:var(--primary);color:#fff;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .15s;}
-#btnAdd:hover{background:var(--primary-dark);}#btnAdd:active{transform:translateY(1px);}#btnAdd:focus-visible{outline:2px solid #83b3ef;outline-offset:2px;}
+#btnAdd{
+  padding:.45rem .8rem;border:none;border-radius:.35rem;
+  background:var(--primary);color:#fff;font-size:.95rem;font-weight:600;
+  cursor:pointer;transition:background .15s;
+}
+#btnAdd:hover{background:var(--primary-dark);}#btnAdd:active{transform:translateY(1px);}
+#btnAdd:focus-visible{outline:2px solid #83b3ef;outline-offset:2px;}
 
 /* ─────────────────────────┐
-│  7. 모달 (수정 버전)      │
+│  6. 모달                  │
 └───────────────────────── */
-
-#modal{
-  position:fixed;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.55);
-  z-index:500;
-  padding:16px;               /* ← 가장자리 여백 */
-}
+#modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:500;padding:16px;}
 #modal.hidden{display:none;}
-
-/* ▸ 모달 박스 */
 #modal .box{
-  width:100%;
-  max-width:420px;            /* 폭 */
-  max-height:calc(100vh - 48px); /* 상하 24px 여백 확보 */
-  overflow:auto;              /* 내용 많을 때 스크롤 */
-  padding:24px 28px 20px;
-  background:#fff;
-  border-radius:8px;
-  box-shadow:0 8px 24px rgba(0,0,0,.25);
+  width:100%;max-width:420px;max-height:calc(100vh - 48px);overflow:auto;
+  padding:24px 28px 20px;background:#fff;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.25);
   animation:fadeUp .25s ease-out;
 }
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(20px);}
-  to  {opacity:1;transform:translateY(0);}
-}
-
-/* ===== 폼 레이아웃 : 수직 정렬 ===== */
+/* 모달 폼 */
 #frmAdd{display:flex;flex-direction:column;row-gap:14px;}
 #frmAdd label{font-weight:bold;color:#495057;display:flex;flex-direction:column;row-gap:6px;font-size:14px;}
 #frmAdd input{width:100%;padding:.45rem .6rem;border:1px solid #ccc;border-radius:4px;font-size:14px;}
 #frmAdd input:focus{border-color:var(--primary);outline:2px solid rgba(0,103,184,.25);}
-
-/* 모달 버튼 그룹 */
 #modal .btns{margin-top:12px;display:flex;justify-content:center;gap:.8rem;}
 #btnSave,#btnClose{min-width:90px;padding:.45rem 0;border:none;border-radius:.35rem;font-weight:600;cursor:pointer;transition:background .15s;font-size:14px;}
 #btnSave{background:var(--primary);color:#fff;}#btnSave:hover{background:var(--primary-dark);}#btnSave:disabled{background:#6c757d;cursor:not-allowed;}
 #btnClose{background:#e4e7ec;color:#333;}#btnClose:hover{background:#d4d8de;}
+
 /* ─────────────────────────┐
-│  8. 페이지네이션          │
+│  7. 페이지네이션          │
 └───────────────────────── */
 #pagination{display:flex;justify-content:center;gap:.4rem;margin-top:1.5rem;font-family:sans-serif;}
 .page-btn{min-width:2rem;padding:.35rem .6rem;border:1px solid #ccc;border-radius:.3rem;background:#fff;cursor:pointer;transition:background .15s;}
 .page-btn:hover:not(:disabled){background:#f4f4f4;}.page-btn:disabled{cursor:not-allowed;opacity:.4;}.page-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600;}
 
-
-.main-container{
-	display: flex;
-}
-
-/* ─── Dashboard layout ───────────────────────────── */
-.dashboard    {display:flex;flex-wrap:wrap;gap:24px;}
-.chart-card   {flex:1 1 45%;min-width:340px;background:#fff;padding:16px;border:1px solid #dee2e6;border-radius:6px;}
+/* ─────────────────────────┐
+│  8. Dashboard 예시        │
+└───────────────────────── */
+.dashboard{display:flex;flex-wrap:wrap;gap:24px;}
+.chart-card{flex:1 1 45%;min-width:340px;background:#fff;padding:16px;border:1px solid #dee2e6;border-radius:6px;}
 .chart-card h4{margin:0 0 12px;font-size:16px;font-weight:600;}
-.chart-box    {width:100%;height:280px}   /* ← 반드시 고정 높이 지정 */
-@media (max-width:1024px){
-  .chart-card{flex:1 1 100%;}
+.chart-box{width:100%;height:280px}
+@media(max-width:1024px){.chart-card{flex:1 1 100%;}}
+
+/* ─────────────────────────┐
+│  9. Mega 메뉴 (관리용)    │
+└───────────────────────── */
+.mega-toggle{
+  background:transparent;color:var(--mega-base);
+  width:180px;padding:6px 12px;font:14px/1 'Spoqa Han Sans Neo',sans-serif;
+  cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid #e0e0e0;
 }
-/* ───────────────────────── 레이아웃 공통 ───────────────────────── */
-html,body        {height:100%;}
-.main-container  {display:flex;height:100%;}
-aside            {width:180px;flex:none;background:#f8f9fa;border-right:1px solid #dee2e6;}
-
-#main            {flex:1;min-width:0;overflow-y:auto;padding:32px;}
-
-/* 페이지별 내부 폭을 맞추기 위해 모든 탭 본문을 .page-inner 로 감쌈 */
-.page-inner      {width:100%;max-width:1400px;margin:0 auto;}
-
-h2               {margin-top:0;}                /* 상단 간격 통일 */
-.category-inner{max-width:1100px;}
+.mega{position:absolute;top:56px;left:0;background:#fff;border:1px solid #e5e5e5;box-shadow:0 4px 12px rgba(0,0,0,.08);padding:10px 0;z-index:1000;display:none;}
+.mega>ul{width:180px;margin:0;padding:0;list-style:none;}
+.mega>ul>li{width:180px;padding:4px 12px;color:var(--mega-base);cursor:pointer;transition:color .15s;position:relative;}
+.mega>ul>li:hover,.mega>ul>li.open{color:var(--mega-accent);}
+.mega ul ul{display:none;position:absolute;top:0;left:100%;min-width:190px;margin:0;padding:0;list-style:none;background:#fff;border:1px solid #e5e5e5;box-shadow:0 4px 12px rgba(0,0,0,.08);}
+.mega li.open>ul{display:block;}
+.mega ul ul>li{width:100%;padding:4px 10px;box-sizing:border-box;color:var(--mega-sub);font:13px/1.4 'Spoqa Han Sans Neo',sans-serif;cursor:pointer;transition:color .15s;}
+.mega ul ul>li:hover,.mega ul ul>li.open{color:var(--mega-accent);}
+.mega a{color:inherit;text-decoration:none;display:block;}
+.mega a:hover{text-decoration:underline;}
+.mega,.mega ul,.mega li{list-style:none;}
+.mega li::marker,.mega ul ul li::marker{content:none;}
