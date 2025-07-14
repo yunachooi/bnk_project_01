@@ -24,7 +24,7 @@
         /* ✅ 헤더 영역 */
         .page-header {
             text-align: center;
-            padding: 40px 20px 20px;
+            padding: 20px 15px 15px;
             background-color: #ffffff;
         }
 
@@ -146,6 +146,56 @@
             color: #555;
             line-height: 1.8;
         }
+        
+        
+        /* 우대내용 표 전용 스타일 */
+        .rate-discount-title {
+            color: #d7191f;
+            font-size: 10px;
+            font-weight: 600;
+            line-height: 1.6;
+        }
+
+        .rate-discount-title span {
+            display: inline-block;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .table-scroll-x {
+            overflow-x: auto;
+        }
+
+        .rate-discount-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        .rate-discount-table th,
+        .rate-discount-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+
+        .rate-discount-table thead th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+        }
+
+        .rate-discount-table thead tr:first-child {
+            border-bottom: 2px solid #d7191f;
+        }
+
+        .rate-discount-table .not-supported {
+            text-align: center;
+            font-style: italic;
+            color: #888;
+        }
+
+        
 
         .footer {
             text-align: center;
@@ -333,6 +383,7 @@
         <li class="last"><a href="#conC1" class="js-tab">유의사항</a></li>
     </ul>
 
+    <!-- conA1 - 이용안내 -->
     <div class="con" id="conA1">
         <h6 class="hd-t">환전 가능 한도</h6>
         <ul>
@@ -342,22 +393,105 @@
         </ul>
 
         <h6 class="hd-t">개인</h6>
-        <img src="/img/OneForex/개인.png" alt="개인 안내 이미지">
+        <div style="overflow-x:auto">
+            <table border="1" cellspacing="0" cellpadding="10" style="width:100%; border-collapse: collapse; text-align: center;">
+                <thead style="background-color: #f5f5f5;">
+                    <tr>
+                        <th>구분</th>
+                        <th>부산은행 회원(로그인)</th>
+                        <th>부산은행 비회원(비로그인)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>수령대상</td><td>본인 및 대리인 수령 가능</td><td>본인만 수령 가능</td></tr>
+                    <tr><td>외화 인수</td><td colspan="2">환전신청일로부터 30일 이내</td></tr>
+                    <tr><td>유효기간</td><td colspan="2">인수예정일 포함 7영업일 이내</td></tr>
+                    <tr><td>재환전 (자동환매)</td><td>현찰매입율 + 환율우대 50% 적용 후 원화 입금</td><td>이용불가</td></tr>
+                    <tr><td>유효기간 경과 후</td><td>금고 자동 보관 → 지정계좌 자동환매</td><td>현찰매입율 + 환율우대 50% 적용 후 자동환매</td></tr>
+                    <tr><td>외화 수령 - 영업점</td><td colspan="2">해당 외화 보유 영업점</td></tr>
+                    <tr><td>외화 ATM</td><td>김해공항(USD, JPY)<br>국제여객터미널(JPY)</td><td>이용불가</td></tr>
+                    <tr><td>현찰 배달</td><td>USD 100 이상 ~ 원화 150만원 이하<br>총 11개 통화, 전국 배송<br>배송시간: 평일 9~18시, 배송비: 10,000원</td><td>이용불가</td></tr>
+                    <tr><td>금고 보관</td><td>환전수령, 재환전(원화계좌), 외화계좌 모두 가능</td><td>이용불가</td></tr>
+                </tbody>
+            </table>
+        </div>
 
         <h6 class="hd-t">기업</h6>
-        <img src="/img/OneForex/기업.png" alt="기업 안내 이미지">
+        <table style="width:100%; border-collapse: collapse; font-size: 15px;">
+            <thead style="background-color: #f2f2f2;">
+                <tr><th style="border: 1px solid #ccc; padding: 10px;">구분</th><th style="border: 1px solid #ccc; padding: 10px;">내용</th></tr>
+            </thead>
+            <tbody>
+                <tr><td style="border: 1px solid #ccc; padding: 10px;">환전 수령 - 수령대상</td><td style="border: 1px solid #ccc; padding: 10px;">환전신청인 또는 지정 인수인 수령 가능</td></tr>
+                <tr><td style="border: 1px solid #ccc; padding: 10px;">외화인수</td><td style="border: 1px solid #ccc; padding: 10px;">환전신청일로부터 30일 이내</td></tr>
+                <tr><td style="border: 1px solid #ccc; padding: 10px;">유효기간</td><td style="border: 1px solid #ccc; padding: 10px;">인수예정일을 포함하여 7영업일까지</td></tr>
+                <tr><td style="border: 1px solid #ccc; padding: 10px;">재환전 (자동환매)<br>유효기간 경과 전</td><td style="border: 1px solid #ccc; padding: 10px;">재환전 시점의 현찰매입율에<br>환율우대 50% 적용하여 지정계좌에 원화 입금</td></tr>
+                <tr><td style="border: 1px solid #ccc; padding: 10px;">재환전 (자동환매)<br>유효기간 경과 후</td><td style="border: 1px solid #ccc; padding: 10px;">금고 자동 보관</td></tr>
+                <tr><td style="border: 1px solid #ccc; padding: 10px;">외화수령 - 영업점</td><td style="border: 1px solid #ccc; padding: 10px;">신청 시점의 해당 외화 보유 영업점</td></tr>
+                <tr><td style="border: 1px solid #ccc; padding: 10px;">외화 ATM</td><td style="border: 1px solid #ccc; padding: 10px;">이용불가</td></tr>
+                <tr><td style="border: 1px solid #ccc; padding: 10px;">현찰 배달</td><td style="border: 1px solid #ccc; padding: 10px;">이용불가</td></tr>
+                <tr><td style="border: 1px solid #ccc; padding: 10px;">금고 보관</td><td style="border: 1px solid #ccc; padding: 10px;">환전수령, 원화계좌 입금(재환전) 또는 외화계좌 입금 가능</td></tr>
+            </tbody>
+        </table>
     </div>
 
-    <div class="con" id="conB1">
-        <h6 class="hd-t">우대내용</h6>
-        <img src="/img/OneForex/우대내용.png" alt="우대내용 안내 이미지">
-    </div>
+	<div class="con" id="conB1">
+	    <h6 class="hd-t rate-discount-title">
+	    <span>※ 외화를 사실 때 적용받는 우대율이며 환전한 외화를 원화로 재환전 시에는 현찰매입율(환율우대 50%)이 적용됩니다.<br></span>
+	    <span>(비로그인 고객 또는 로그인 고객의 현찰배달서비스의 재환전(반송) 시에는 현찰매입율(환율우대 50%) 적용)</span>
+		</h6>
+	
+		<div class="table-scroll-x">
+		  <table class="rate-discount-table">
+		    <thead>
+		      <tr>
+		        <th rowspan="2">통화</th>
+		        <th rowspan="2">기본 우대율</th>
+		        <th colspan="2">이벤트 우대율</th>
+		        <th rowspan="2">현찰배달<br>(로그인)</th>
+		      </tr>
+		      <tr>
+		        <th>로그인환전<br>(개인/기업)</th>
+		        <th>비로그인환전</th>
+		      </tr>
+		    </thead>
+		    <tbody>
+		      <tr><td>미국 USD</td><td>50</td><td>90</td><td>80</td><td>90</td></tr>
+		      <tr><td>일본 JPY</td><td>50</td><td>90</td><td>80</td><td>90</td></tr>
+		      <tr><td>유럽 EUR</td><td>50</td><td>80</td><td>70</td><td>80</td></tr>
+		      <tr><td>영국 GBP</td><td>20</td><td>30</td><td>20</td><td>80</td></tr>
+		      <tr><td>캐나다 CAD</td><td>20</td><td>30</td><td>20</td><td>80</td></tr>
+		      <tr><td>호주 AUD</td><td>20</td><td>30</td><td>20</td><td>80</td></tr>
+		      <tr><td>싱가포르 SGD</td><td>20</td><td>30</td><td>20</td><td>80</td></tr>
+		      <tr><td>중국 CNY</td><td>30</td><td>50</td><td>40</td><td>50</td></tr>
+		      <tr><td>홍콩 HKD</td><td>20</td><td>30</td><td>20</td><td>30</td></tr>
+		      <tr><td>태국 THB</td><td>20</td><td>30</td><td>20</td><td>30</td></tr>
+		      <tr><td>스위스 CHF</td><td>20</td><td>30</td><td>20</td><td>미지원</td></tr>
+		      <tr><td>뉴질랜드 NZD</td><td>20</td><td>30</td><td>20</td><td>미지원</td></tr>
+		      <tr><td>베트남 VND</td><td>0</td><td>20</td><td>0</td><td>미지원</td></tr>
+		      <tr><td>인도네시아 IDR</td><td>0</td><td>20</td><td>0</td><td>미지원</td></tr>
+		      <tr><td>필리핀 PHP</td><td>0</td><td>0</td><td>0</td><td>미지원</td></tr>
+		      <tr><td>말레이시아 MYR</td><td colspan="4" class="not-supported">미지원</td></tr>
+		    </tbody>
+		  </table>
+		</div>
+	</div>
 
-    <div class="con" id="conC1">
-        <h6 class="hd-t">유의 사항</h6>
-        <img src="/img/OneForex/유의%20사항.png" alt="유의사항 안내 이미지">
-    </div>
+
+
+	    <!-- conC1 - 유의사항 -->
+	    <div class="con" id="conC1">
+	        <h6 class="hd-t">유의사항</h6>
+	        <ul>
+	            <li>거래 후 취소 및 내용 변경은 불가능하므로 신청 시 주의하시기 바랍니다.</li>
+	            <li>신청 시 환율이 고시되지 않은 경우 직전 고시 환율이 적용됩니다.</li>
+	            <li>우대율이란 현찰 사실 때 환율과 기준환율의 차이에 대한 할인율을 말합니다.</li>
+	            <li>같은 날짜에 미화 1만불 상당액을 초과하여 환전할 경우에는 외국환거래법에 따라 국세청으로 통보됩니다.</li>
+	            <li>미화 1만불 상당액을 초과하는 외화를 휴대하여 출국할 경우에는 출국 시 관할 세관에 신고하셔야 합니다.</li>
+	        </ul>
+	    </div>
 </div>
+
 
 <!-- 👣 푸터 -->
 <div class="footer">
