@@ -48,7 +48,7 @@ public class LoginController {
 		} else if ("ROLE_CEO".equals(user.getRole())) {
 			return "redirect:/user/import";
 		} else {
-			return "redirect:/user/userhome";
+			return "redirect:/forexMainPage";
 		}
 	}
 
@@ -59,9 +59,9 @@ public class LoginController {
 	}
 
 	// 일반 사용자 홈
-	@GetMapping("/user/userhome")
+	@GetMapping("/forexMainPage")
 	public String userHome(HttpSession session, Model model) {
-		return checkAccess(session, model, "user/userhome", "ROLE_USER");
+		return checkAccess(session, model, "/forexMainPage", "ROLE_USER");
 	}
 
 	// CEO용 문서 업로드 진입

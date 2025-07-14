@@ -2,182 +2,478 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <title>동화마을 BNK 꿈이룸</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:400,700&display=swap" rel="stylesheet">
+  <title>꿈이룸 외화자유적금</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans+KR:wght@700;900&display=swap" rel="stylesheet" />
   <style>
-    html, body { height:100%; margin:0; padding:0; }
-    body { font-family:'Noto Sans KR',sans-serif; min-height:350vh; background: linear-gradient(to bottom, #cbe7ff 0%, #e0f6d6 70%, #ffe0b2 100%);}
-    .main-scene { position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:0; }
-    .info-card {
-      position:fixed; left:50%; transform:translateX(-50%);
-      min-width:270px; max-width:410px;
-      background:rgba(255,255,255,0.95); border-radius:22px;
-      box-shadow:0 8px 38px 0 rgba(33,45,73,0.10);
-      border:1.2px solid #e6e7fa; text-align:center;
-      padding:28px 28px 16px 28px; font-size:1.08rem; font-weight:500;
-      transition:all .3s; opacity:0; pointer-events:none;
+    /* 기본 리셋 */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 18px; }
+    body {
+      font-family: 'Noto Sans KR','Montserrat',sans-serif;
+      background: #fafafb;
+      color: #212d49;
+      line-height: 1.6;
     }
-    .info-card.active { opacity:1; pointer-events:auto;}
-    .info-card .title { font-size:1.2rem; font-weight:900; color:#e54235; margin-bottom:9px;}
-    .info-card .desc { color:#29496d; margin-bottom:6px;}
-    .info-card .cta-btn {
-      display:inline-block; padding:10px 32px; border-radius:13px;
-      background:#e54235; color:#fff; font-weight:700; font-size:1.01rem;
-      border:none; margin-top:7px; box-shadow:0 2px 13px rgba(229,66,53,0.09);
-      text-decoration:none;
+
+    /* 컨테이너 */
+    .main-wrap {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
     }
-    @media (max-width:600px) { .info-card {padding:12px 2vw 8px 2vw; min-width:0; max-width:94vw;} }
+    .main-title {
+      font-size: 2.4rem; font-weight: 900;
+      border-bottom: 4px solid #212d49;
+      padding-bottom: 8px; margin-bottom: 40px;
+    }
+
+    /* 슬라이더 */
+    .slide-section {
+      position: relative;
+      background: #fff; border-radius: 1.5rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      overflow: hidden;
+      margin-bottom: 48px;
+    }
+    .slide-counter {
+      position: absolute; top: 16px; right: 16px;
+      background: rgba(33,45,73,0.1);
+      color: #212d49;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      z-index: 2;
+    }
+    .slider-outer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      height: 360px;
+    }
+    .slider-inner {
+      display: flex; transition: transform .5s ease;
+      height: 100%;
+    }
+    .slide-card {
+      flex: 0 0 100%;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      background: #ffffff;
+      border-right: 1px solid #f0f0f5;
+      padding: 0 40px;
+      min-height: 300px;
+    }
+    .slide-card:last-child { border-right: none; }
+
+    /* 그라데이션 애니메이션 텍스트 */
+    .card-title {
+      font-size: 2.4rem;
+      font-weight: 900;
+      margin-bottom: 16px;
+      background: linear-gradient(90deg, #3752a4, #ed1c24, #3752a4);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientText 4s ease infinite;
+    }
+    @keyframes gradientText {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .card-label {
+      display: inline-block;
+      background: #fff5f6; color: #ed1c24;
+      padding: 6px 16px; border-radius: 1rem;
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin-bottom: 16px;
+    }
+    .card-desc {
+      font-size: 1.2rem;
+      color: #394256;
+      line-height: 1.6; margin-bottom: 32px;
+      white-space: pre-line;
+      max-width: 800px;
+    }
+
+    /* CTA 카드 추가 강조: 그라데이션 → 더 밝게 빛나는 레드 톤 */
+    .slide-card.cta .cta-text {
+      font-size: 2.6rem;
+      font-weight: 900;
+      margin-bottom: 32px;
+      background: linear-gradient(90deg, #ff4d4d, #ffb3b3, #ff4d4d);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientTextBright 4s ease infinite, shadowPulse 2s ease-in-out infinite;
+    }
+    @keyframes gradientTextBright {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    @keyframes shadowPulse {
+      0%,100% { text-shadow: none; }
+      50% { text-shadow: 0 0 15px rgba(255,77,77,0.7); }
+    }
+
+    .cta-controls {
+      display: inline-flex; gap: 12px;
+    }
+    .cta-button {
+      background: #ed1c24; color: #fff;
+      padding: 14px 40px; font-size: 1.2rem;
+      font-weight: 900;
+      border: none; border-radius: 1rem;
+      cursor: pointer; transition: background .2s;
+    }
+    .cta-button:hover {
+      background: #c6171f;
+    }
+
+    /* 하단 컨트롤 */
+    .slider-controls {
+      display: flex; align-items: center; justify-content: center; gap: 24px;
+      padding: 16px 0 32px; background: #fff;
+    }
+    .slider-arrow {
+      width: 48px; height: 48px;
+      font-size: 1.8rem;
+      background: #fff;
+      border: 1px solid #e4e6ee;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      cursor: pointer; transition: background .2s;
+    }
+    .slider-arrow:disabled {
+      opacity: .3; cursor: default;
+    }
+    .slider-arrow:hover:not(:disabled) {
+      background: #f8f8fa;
+    }
+    .play-pause-btn {
+      width: 48px; height: 48px;
+      font-size: 1.6rem;
+      background: #ed1c24; color: #fff;
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .2s;
+    }
+    .play-pause-btn:hover {
+      background: #c6171f;
+    }
+
+    /* 추천박스 (파스텔 블루) */
+    .recommend-box {
+      background: #e3f2fd;
+      border-radius: 1.2rem;
+      padding: 24px 32px;
+      margin: 48px 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+    .reco-title {
+      font-size: 1.3rem; font-weight: 900;
+      color: #1976d2;
+      margin-bottom: 12px;
+    }
+    .reco-list { list-style: none; padding-left: 0; }
+    .reco-list li {
+      margin-bottom: 8px; font-size: 1.1rem; color: #394256;
+      position: relative; padding-left: 24px;
+    }
+    .reco-list li::before {
+      content: '✔︎'; position: absolute; left: 0; color: #1976d2;
+    }
+
+    /* 아코디언 */
+    .accordion-area-wrap { margin-bottom: 60px; }
+    .accordion-wrap {
+      background: #fff; border-radius: 1.4rem;
+      box-shadow: 0 0 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .accordion-item + .accordion-item {
+      border-top: 1px solid #e4e6ee;
+    }
+    .accordion-header {
+      width: 100%; padding: 16px 24px;
+      font-size: 1.15rem; font-weight: 900;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; background: #f8f8fa; border: none;
+    }
+    .accordion-header:hover { background: #eef7fe; }
+    .accordion-body {
+      display: none; padding: 16px 24px; background: #fff;
+      font-size: 1.05rem; color: #394256; line-height: 1.6;
+    }
+    .accordion-item.active .accordion-body {
+      display: block;
+    }
+    .accordion-arrow {
+      font-size: 1.4rem; transition: transform .2s;
+    }
+    .accordion-item.active .accordion-arrow {
+      transform: rotate(180deg);
+    }
+    .detail-table {
+      width: 100%; border-collapse: collapse; margin-top: 12px;
+    }
+    .detail-table th, .detail-table td {
+      border: 1px solid #e4e6ee; padding: 10px 14px;
+      text-align: left; vertical-align: top;
+    }
+    .detail-table th {
+      width: 160px; background: #f1f2f6; font-weight: 700;
+    }
+
+    @media (max-width: 1100px) {
+      html { font-size: 17px; }
+    }
+    @media (max-width: 700px) {
+      html { font-size: 16px; }
+      .slide-card { padding: 20px; }
+      .slider-arrow, .play-pause-btn {
+        width: 40px; height: 40px; font-size: 1.4rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <svg class="main-scene" id="scene" viewBox="0 0 1200 900" preserveAspectRatio="none"></svg>
+  <div class="main-wrap">
+    <div class="main-title">꿈이룸 외화자유적금</div>
 
-  <!-- 카드(구간별 노출) -->
-  <div class="info-card" id="card1" style="top:11vh;">
-    <div class="title">따뜻한 마을에서 시작하는 금융</div>
-    <div class="desc">BNK 마스코트와 친구들이<br>하늘 아래 첫걸음을 내딛어요.</div>
-  </div>
-  <div class="info-card" id="card2" style="top:37vh;">
-    <div class="title">함께 걷는 금융 여정</div>
-    <div class="desc">집과 나무, 친구들이<br>도란도란 어울리는 따뜻한 동화마을.</div>
-  </div>
-  <div class="info-card" id="card3" style="top:70vh;">
-    <div class="title">꿈을 향한 도착</div>
-    <div class="desc">행복한 금융, 든든하게 골인!<br>지금 BNK와 시작해 보세요.</div>
-    <a class="cta-btn" href="#">가입상담 신청</a>
+    <!-- 슬라이더 -->
+    <div class="slide-section" id="slideSection">
+      <div class="slide-counter" id="slideCounter">1 / 6</div>
+      <div class="slider-outer">
+        <div class="slider-inner" id="sliderInner"></div>
+      </div>
+      <div class="slider-controls">
+        <button class="slider-arrow" id="slidePrev">&#x2039;</button>
+        <button class="play-pause-btn" id="playPauseBtn" title="재생/정지">❚❚</button>
+        <button class="slider-arrow" id="slideNext">&#x203A;</button>
+      </div>
+    </div>
+
+    <!-- 추천박스 -->
+    <div class="recommend-box">
+      <div class="reco-title">이런 분께 추천합니다!</div>
+      <ul class="reco-list">
+        <li>만 <span style="color:#1976d2;">18세 이하</span> 자녀(학생)의 외화 달러 자산을 모으고 싶은 분</li>
+        <li><span style="color:#1976d2;">환율 우대</span>와 다양한 우대금리 혜택을 누리고 싶은 가정</li>
+        <li>미국 <span style="color:#1976d2;">유학·여행·장기환전</span> 등 외화 활용이 예상되는 가족</li>
+        <li>어린이·청소년의 달러 자산을 체계적으로 모으고 싶은 <span style="color:#1976d2;">부모님</span></li>
+        <li><span style="color:#1976d2;">환테크</span>(환율차익)에 관심 있는 미성년 자녀를 둔 분</li>
+      </ul>
+    </div>
+
+    <!-- 아코디언 -->
+    <div class="accordion-area-wrap">
+      <div class="accordion-wrap">
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            상품개요 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr>
+                <th>설명</th>
+                <td>
+                  자동이체금액을 “외화 입금액” 또는 “원화 지급액” 기준 중 선택 가능하며,<br>
+                  1년 단위 자동 재예치를 통해 장기적인 목돈 마련이 가능합니다.
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            가입조건 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>가입대상</th><td>만 18세 이하 실명 개인(1인 1계좌)</td></tr>
+              <tr><th>가입금액</th><td>미화 1불 상당액 이상</td></tr>
+              <tr><th>가입기간</th><td>12개월</td></tr>
+              <tr><th>납입한도</th><td>최대 미화 1만불 적립(잔액 초과 시 재예치만 가능)</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            자동이체 적립서비스 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>선택기준</th><td>‘외화 입금액’ 또는 ‘원화 지급액’ 중 선택</td></tr>
+              <tr><th>환율 우대</th><td>부산은행 원화출금계좌 자동이체 시 전신환매도율 적용 후 70% 우대</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            금리정보 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>기본금리</th><td>신규가입 시점 고시 외화 적금 이율 적용</td></tr>
+              <tr><th>우대금리</th><td>
+                꿈이룸 가입 0.10%<br>
+                재예치 고객 0.10%<br>
+                자동이체 등록 0.20%<br>
+                (최대 0.3%, 중도해지·특별해지 시 미적용)
+              </td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            수수료 우대 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>6개월 후 인출</th><td>외화 현찰 수수료 면제, 해외송금 수수료 1회 면제 (웨스턴유니온 제외)</td></tr>
+              <tr><th>환율 우대</th><td>미화 외 통화 송금 시 90% 우대</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            만기·중도해지 이율 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>만기 후</th><td>1년 이내 30%, 1년 초과 10%</td></tr>
+              <tr><th>중도해지</th><td>
+                7일 미만: 보통예금 이율<br>
+                7일~1개월: 10%<br>
+                1~3개월: 30%<br>
+                3~6개월: 40%<br>
+                6~9개월: 50%<br>
+                9~12개월: 80%
+              </td></tr>
+              <tr><th>특별중도해지</th><td>지정 외국환은행 거래고객: 약정 기본이율 적용</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            기타 정보 <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body">
+            <table class="detail-table">
+              <tr><th>이자지급</th><td>만기일시지급식</td></tr>
+              <tr><th>적립방법</th><td>자유적립식 (원화 계좌 및 현금 적립)</td></tr>
+              <tr><th>예금자보호</th><td>원금+이자 합산 1인당 5천만원 보호</td></tr>
+              <tr><th>공시승인번호</th><td>2025-1233 (2025.06.10)</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
-    // SVG 동화마을 씬 생성
-    const svg = document.getElementById('scene');
-    const w = 1200, h = 900;
-    svg.setAttribute('width', w);
-    svg.setAttribute('height', h);
+    const slideData = [
+      { first: true, title: "BNK 꿈이룸 외화자유적금" },
+      { label: "상품개요", title: "상품개요", desc: "자동이체금액을 “외화 입금액” 또는 “원화 지급액” 기준 중 선택 가능하며,\n1년 단위 자동 재예치를 통해 장기적인 목돈 마련이 가능합니다." },
+      { label: "가입조건", title: "가입조건 안내", desc: "만 18세 이하 실명 개인(1인 1계좌),\n최소 미화 1불부터 최대 미화 1만불까지 적립 가능." },
+      { label: "우대혜택", title: "혜택 안내", desc: "자동이체 등록 시 환율 70% 우대,\n최대 0.3% 우대금리 제공,\n수수료 감면 혜택까지." },
+      { label: "중도해지/만기", title: "이율 안내", desc: "만기 후 1년 이내 30%, 1년 초과 10%,\n중도해지 시 기간별 차등 이율 적용." },
+      { cta: true }
+    ];
+    let curIdx = 0, autoInt, autoPlay = true;
+    const inner    = document.getElementById("sliderInner"),
+          counter  = document.getElementById("slideCounter"),
+          prev     = document.getElementById("slidePrev"),
+          next     = document.getElementById("slideNext"),
+          playBtn  = document.getElementById("playPauseBtn");
 
-    // 하늘/구름
-    function cloud(cx,cy,s) {
-      let c = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
-      c.setAttribute("cx",cx); c.setAttribute("cy",cy);
-      c.setAttribute("rx",70*s); c.setAttribute("ry",30*s);
-      c.setAttribute("fill","#fff"); c.setAttribute("opacity","0.88");
-      svg.appendChild(c);
-    }
-    cloud(220,110,1.1); cloud(800,100,0.85); cloud(540,75,1.15); cloud(420,170,0.65); cloud(1000,145,0.65);
-
-    // 마을 땅
-    let ground = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
-    ground.setAttribute("cx",w/2); ground.setAttribute("cy",h-110);
-    ground.setAttribute("rx",430); ground.setAttribute("ry",95);
-    ground.setAttribute("fill","#d1f4b2");
-    svg.appendChild(ground);
-
-    // 울타리
-    for(let i=0;i<16;i++){
-      let fence = document.createElementNS("http://www.w3.org/2000/svg","rect");
-      fence.setAttribute("x",250+i*32); fence.setAttribute("y",h-210);
-      fence.setAttribute("width",16); fence.setAttribute("height",38);
-      fence.setAttribute("fill","#ffe079"); fence.setAttribute("rx","6");
-      svg.appendChild(fence);
-    }
-
-    // 집/나무/동화 오브젝트
-    function house(x,y) {
-      let g = document.createElementNS("http://www.w3.org/2000/svg","g");
-      let base = document.createElementNS("http://www.w3.org/2000/svg","rect");
-      base.setAttribute("x",x); base.setAttribute("y",y); base.setAttribute("width",90); base.setAttribute("height",60); base.setAttribute("fill","#fff2da"); base.setAttribute("rx","14");
-      g.appendChild(base);
-      let roof = document.createElementNS("http://www.w3.org/2000/svg","polygon");
-      roof.setAttribute("points",`${x-10},${y+10} ${x+45},${y-35} ${x+100},${y+10}`);
-      roof.setAttribute("fill","#f9c978");
-      g.appendChild(roof);
-      svg.appendChild(g);
-    }
-    function tree(x,y,clr){
-      let trunk = document.createElementNS("http://www.w3.org/2000/svg","rect");
-      trunk.setAttribute("x",x+18); trunk.setAttribute("y",y+40);
-      trunk.setAttribute("width",13); trunk.setAttribute("height",27);
-      trunk.setAttribute("fill","#cda872");
-      svg.appendChild(trunk);
-      let leaf = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
-      leaf.setAttribute("cx",x+25); leaf.setAttribute("cy",y+32); leaf.setAttribute("rx",32); leaf.setAttribute("ry",28);
-      leaf.setAttribute("fill",clr||"#b6e39f");
-      svg.appendChild(leaf);
-    }
-    house(380,630); tree(300,690); tree(900,720,"#e3d18e"); tree(690,645,"#aee9e9");
-    house(750,760);
-
-    // BNK 마스코트(동글이): 동물의 숲/캐릭터 느낌
-    function mascot(x,y,faceColor){
-      let g = document.createElementNS("http://www.w3.org/2000/svg","g");
-      // 몸통
-      let body = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
-      body.setAttribute("cx",x); body.setAttribute("cy",y+34); body.setAttribute("rx",28); body.setAttribute("ry",35); body.setAttribute("fill",faceColor||"#ffbaba");
-      g.appendChild(body);
-      // 머리
-      let head = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
-      head.setAttribute("cx",x); head.setAttribute("cy",y); head.setAttribute("rx",30); head.setAttribute("ry",30); head.setAttribute("fill",faceColor||"#e54235");
-      g.appendChild(head);
-      // 얼굴
-      let eyeL = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
-      eyeL.setAttribute("cx",x-9); eyeL.setAttribute("cy",y-4); eyeL.setAttribute("rx",4.5); eyeL.setAttribute("ry",6.2); eyeL.setAttribute("fill","#fff");
-      g.appendChild(eyeL);
-      let eyeR = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
-      eyeR.setAttribute("cx",x+10); eyeR.setAttribute("cy",y-4); eyeR.setAttribute("rx",4.5); eyeR.setAttribute("ry",6.2); eyeR.setAttribute("fill","#fff");
-      g.appendChild(eyeR);
-      let pupilL = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
-      pupilL.setAttribute("cx",x-8); pupilL.setAttribute("cy",y-2); pupilL.setAttribute("rx",2); pupilL.setAttribute("ry",3); pupilL.setAttribute("fill","#333");
-      g.appendChild(pupilL);
-      let pupilR = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
-      pupilR.setAttribute("cx",x+9); pupilR.setAttribute("cy",y-2); pupilR.setAttribute("rx",2); pupilR.setAttribute("ry",3); pupilR.setAttribute("fill","#333");
-      g.appendChild(pupilR);
-      let smile = document.createElementNS("http://www.w3.org/2000/svg","ellipse");
-      smile.setAttribute("cx",x); smile.setAttribute("cy",y+8); smile.setAttribute("rx",8); smile.setAttribute("ry",3.2); smile.setAttribute("fill","#fff7f7");
-      g.appendChild(smile);
-      svg.appendChild(g);
-      return g;
-    }
-    // 캐릭터 여러명 배치
-    mascot(360,640,"#e54235");
-    mascot(805,790,"#ffd1a8");
-    mascot(670,790,"#e2b8ff");
-    mascot(520,720,"#7ed7ff");
-
-    // --- 캐릭터 이동 (좌우로 지그재그 산책) ---
-    let mascotWalker = mascot(540,150,"#e54235");
-    function moveMascot(scrollT){
-      // y는 150~800까지, x는 지그재그 350~850
-      let y = 150 + (scrollT*660);
-      let x = 540 + Math.sin(scrollT*3.2*Math.PI) * 210;
-      mascotWalker.setAttribute("transform",`translate(${x-540},${y-150})`);
+    function render(i) {
+      inner.innerHTML = "";
+      slideData.forEach((d, idx) => {
+        const card = document.createElement("div");
+        card.className = "slide-card" + (idx === i ? " current" : "") + (d.cta ? " cta" : "");
+        if (d.first) {
+          card.innerHTML = `<div class="card-title">${d.title}</div>`;
+        } else if (d.cta) {
+          card.innerHTML = `
+            <div class="cta-text">당신의 첫걸음을 내딛어 보세요</div>
+            <div class="cta-controls">
+              <button class="cta-button">지금 가입하기</button>
+            </div>`;
+        } else {
+          card.innerHTML = `
+            <div class="card-label">${d.label}</div>
+            <div class="card-title">${d.title}</div>
+            <div class="card-desc">${d.desc.replace(/\n/g,"<br>")}</div>`;
+        }
+        inner.appendChild(card);
+      });
+      const w = inner.clientWidth;
+      inner.style.transform = `translateX(-${curIdx * w}px)`;
+      updateControls();
     }
 
-    // --- 카드 노출 ---
-    const cards = [document.getElementById('card1'), document.getElementById('card2'), document.getElementById('card3')];
+    function updateControls() {
+      counter.textContent = `${curIdx + 1} / ${slideData.length}`;
+      prev.disabled = curIdx === 0;
+      next.disabled = curIdx === slideData.length - 1;
+    }
 
-    window.addEventListener("scroll",function(){
-      let scrollY = window.scrollY || window.pageYOffset;
-      let docH = document.body.scrollHeight - window.innerHeight;
-      let t = Math.min(Math.max(scrollY/docH,0),1);
-      moveMascot(t);
+    prev.onclick = () => { if (curIdx>0) { reset(); curIdx--; render(curIdx); } };
+    next.onclick = () => { if (curIdx<slideData.length-1) { reset(); curIdx++; render(curIdx); } };
 
-      // 카드 노출
-      if (t < 0.28) {
-        cards[0].classList.add('active');
-        cards[1].classList.remove('active');
-        cards[2].classList.remove('active');
-      } else if (t < 0.63) {
-        cards[0].classList.remove('active');
-        cards[1].classList.add('active');
-        cards[2].classList.remove('active');
-      } else {
-        cards[0].classList.remove('active');
-        cards[1].classList.remove('active');
-        cards[2].classList.add('active');
-      }
+    function startAuto() {
+      autoInt = setInterval(() => {
+        curIdx = (curIdx + 1) % slideData.length;
+        render(curIdx);
+      }, 5000);
+    }
+    function stopAuto() { clearInterval(autoInt); }
+    function reset() { stopAuto(); if (autoPlay) startAuto(); }
+    function togglePlay() {
+      autoPlay = !autoPlay;
+      if (autoPlay) { startAuto(); playBtn.textContent="❚❚"; }
+      else { stopAuto(); playBtn.textContent="▶"; }
+    }
+    playBtn.onclick = togglePlay;
+
+    window.addEventListener("DOMContentLoaded", () => {
+      render(0);
+      startAuto();
     });
 
-    // 첫 진입시 캐릭터 위치 초기화
-    moveMascot(0);
+    // 휠 훅
+    const outer   = document.querySelector(".slider-outer"),
+          section = document.getElementById("slideSection");
+    function onWheel(e) {
+      e.preventDefault();
+      if (e.deltaY>0 && curIdx<slideData.length-1) { reset(); curIdx++; render(curIdx); }
+      if (e.deltaY<0 && curIdx>0) { reset(); curIdx--; render(curIdx); }
+    }
+    new IntersectionObserver(entries=> {
+      entries.forEach(ent=>{
+        if (ent.isIntersecting)
+          outer.addEventListener("wheel", onWheel, { passive:false });
+        else
+          outer.removeEventListener("wheel", onWheel);
+      });
+    },{threshold:0.6}).observe(section);
+
+    // 아코디언
+    function toggleAccordion(btn) {
+      const item = btn.parentNode;
+      item.classList.toggle("active");
+      btn.querySelector(".accordion-arrow")
+         .textContent = item.classList.contains("active")?"▲":"▼";
+    }
   </script>
 </body>
+</html>

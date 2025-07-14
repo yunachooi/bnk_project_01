@@ -33,25 +33,15 @@
       <a href="#">국민주택채권</a>
     </nav>
   </header>
+	<div id="megaToggle" class="mega-toggle">외화예금 ▼</div>
+	<nav  id="megaMenu"  class="mega"></nav>
+  <script th:inline="javascript">
+  /*<![CDATA[*/
+    /* 서버에서 넘어온 List<Category> → JS 배열 */
+    const categoriesData = /*[[${categories}]]*/ [];
+  /*]]>*/
+  </script>
 
-  <div class="breadcrumb-wrap">
-    <div class="breadcrumb">
-      <span class="fixed-label">외환</span>
-      <span>›</span>
-      <div class="dropdown" onclick="toggleMenu('menu1')">
-        <span id="step1-label">외화예금</span><span class="arrow">▼</span>
-        <div class="dropdown-menu" id="menu1"></div>
-      </div>
-      <span>›</span>
-      <div class="dropdown" onclick="toggleMenu('menu2')">
-        <span id="step2-label">예금</span><span class="arrow">▼</span>
-        <div class="dropdown-menu" id="menu2"></div>
-      </div>
-      <span>›</span>
-      <div class="dropdown" onclick="toggleMenu('menu3')">
-        <span id="step3-label" class="final">USD예금</span><span class="arrow">▼</span>
-        <div class="dropdown-menu" id="menu3"></div>
-      </div>
-    </div>
-  </div>
+  <!-- ▼▼▼ ② 메뉴 토글·렌더링 로직(header.js) 로드 ▼▼▼ -->
+  <script th:src="@{/js/header.js}" defer></script>
 </div>
