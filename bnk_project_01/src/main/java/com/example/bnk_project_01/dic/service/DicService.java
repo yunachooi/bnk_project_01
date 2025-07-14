@@ -125,7 +125,7 @@ public class DicService {
 		result.put("explanation", clean(explanation));
 		return result;
 	}
-
+	
 	private String clean(String text) {
 		if (text == null)
 			return "";

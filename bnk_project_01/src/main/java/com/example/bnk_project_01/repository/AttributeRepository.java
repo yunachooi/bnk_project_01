@@ -16,5 +16,8 @@ public interface AttributeRepository extends JpaRepository<Attribute, String> {
     	       "FROM Attribute a JOIN a.property p " +
     	       "WHERE a.product.pno = :pno")
     List<ProductAttrDto> findAttrsByProduct(@Param("pno") String pno); //용환꺼 mergy할때 지우지마세요 ㅠㅠ 
+    
+    List<Attribute> findByProduct_Pno(String pno); //product.pno를 기준으로 Attribute 전체를 가져옴(상품 상세 페이지에 사용)
+    
 }
 
