@@ -1,5 +1,3 @@
-// submit.js - 외화 약관 등록
-
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('termsForm');
     const fileInput = document.getElementById('fileUpload');
