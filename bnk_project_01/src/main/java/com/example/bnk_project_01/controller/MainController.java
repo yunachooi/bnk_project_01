@@ -41,4 +41,9 @@ public class MainController {
 	public String productP() {
 		return "product";
 	}
+	
+	@GetMapping("/newIndex")
+	public String newIndexP() {
+		return "newIndex";
+	}
 }
