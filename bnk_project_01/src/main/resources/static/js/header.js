@@ -1,6 +1,6 @@
 /* 0. 3개 코드 → 실제 완성 URL */
 const routeMap = {
-  FX001 : "/productDetail",      // 외화예금상품
+  FX001 : "/product",      // 외화예금상품
   FX089 : "/user/uploadForm",    // 수입서류제출
   FX092 : "/forexProduct"        // 환전상품
 };
