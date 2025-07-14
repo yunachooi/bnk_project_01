@@ -1,6 +1,6 @@
 let allTermsData = [];
 let currentPage = 1;
-const itemsPerPage = 10;
+const itemsPerPage = 5;
 let filteredData = [];
 
 document.addEventListener('DOMContentLoaded', function() {
