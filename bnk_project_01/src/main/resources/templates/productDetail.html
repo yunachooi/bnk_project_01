@@ -284,10 +284,7 @@
             <table class="detail-table">
               <tr>
                 <th>설명</th>
-                <td>
-                  자동이체금액을 “외화 입금액” 또는 “원화 지급액” 기준 중 선택 가능하며,<br>
-                  1년 단위 자동 재예치를 통해 장기적인 목돈 마련이 가능합니다.
-                </td>
+                	<td th:text="${attributes['PR001'][0].avalue}">내용</td>
               </tr>
             </table>
           </div>
@@ -298,10 +295,10 @@
           </button>
           <div class="accordion-body">
             <table class="detail-table">
-              <tr><th>가입대상</th><td>만 18세 이하 실명 개인(1인 1계좌)</td></tr>
-              <tr><th>가입금액</th><td>미화 1불 상당액 이상</td></tr>
-              <tr><th>가입기간</th><td>12개월</td></tr>
-              <tr><th>납입한도</th><td>최대 미화 1만불 적립(잔액 초과 시 재예치만 가능)</td></tr>
+              <tr><th>가입대상</th><td th:text="${attributes['PR005'][0].avalue}">내용</td>
+              <tr><th>가입금액</th><td th:text="${attributes['PR006'][0].avalue}">내용</td></tr>
+              <tr><th>가입기간</th><td th:text="${attributes['PR007'][0].avalue}">내용</td></tr>
+              <tr><th>납입한도</th><td th:text="${attributes['PR008'][0].avalue}">내용</td></tr>
             </table>
           </div>
         </div>
@@ -311,8 +308,7 @@
           </button>
           <div class="accordion-body">
             <table class="detail-table">
-              <tr><th>선택기준</th><td>‘외화 입금액’ 또는 ‘원화 지급액’ 중 선택</td></tr>
-              <tr><th>환율 우대</th><td>부산은행 원화출금계좌 자동이체 시 전신환매도율 적용 후 70% 우대</td></tr>
+              <tr><th>선택기준</th><td style="white-space: pre-line;" th:text="${attributes['PR013'][0].avalue}">내용</td></tr>
             </table>
           </div>
         </div>
@@ -322,13 +318,8 @@
           </button>
           <div class="accordion-body">
             <table class="detail-table">
-              <tr><th>기본금리</th><td>신규가입 시점 고시 외화 적금 이율 적용</td></tr>
-              <tr><th>우대금리</th><td>
-                꿈이룸 가입 0.10%<br>
-                재예치 고객 0.10%<br>
-                자동이체 등록 0.20%<br>
-                (최대 0.3%, 중도해지·특별해지 시 미적용)
-              </td></tr>
+              <tr><th>기본금리</th><td style="white-space: pre-line;" th:text="${attributes['PR014'][0].avalue}">내용</td></tr>
+              <tr><th>우대금리</th><td style="white-space: pre-line;" th:text="${attributes['PR015'][0].avalue}">내용</td></tr>
             </table>
           </div>
         </div>
@@ -338,8 +329,7 @@
           </button>
           <div class="accordion-body">
             <table class="detail-table">
-              <tr><th>6개월 후 인출</th><td>외화 현찰 수수료 면제, 해외송금 수수료 1회 면제 (웨스턴유니온 제외)</td></tr>
-              <tr><th>환율 우대</th><td>미화 외 통화 송금 시 90% 우대</td></tr>
+              <tr><th>수수료 우대</th><td style="white-space: pre-line;" th:text="${attributes['PR016'][0].avalue}">내용</td></tr>
             </table>
           </div>
         </div>
@@ -349,16 +339,9 @@
           </button>
           <div class="accordion-body">
             <table class="detail-table">
-              <tr><th>만기 후</th><td>1년 이내 30%, 1년 초과 10%</td></tr>
-              <tr><th>중도해지</th><td>
-                7일 미만: 보통예금 이율<br>
-                7일~1개월: 10%<br>
-                1~3개월: 30%<br>
-                3~6개월: 40%<br>
-                6~9개월: 50%<br>
-                9~12개월: 80%
-              </td></tr>
-              <tr><th>특별중도해지</th><td>지정 외국환은행 거래고객: 약정 기본이율 적용</td></tr>
+              <tr><th>만기 후</th><td style="white-space: pre-line;" th:text="${attributes['PR017'][0].avalue}">내용</td></tr>
+              <tr><th>중도해지</th><td style="white-space: pre-line;" th:text="${attributes['PR018'][0].avalue}">내용</td></tr>
+              <tr><th>특별중도해지</th><td style="white-space: pre-line;" th:text="${attributes['PR019'][0].avalue}">내용</td></tr>
             </table>
           </div>
         </div>
@@ -368,10 +351,10 @@
           </button>
           <div class="accordion-body">
             <table class="detail-table">
-              <tr><th>이자지급</th><td>만기일시지급식</td></tr>
-              <tr><th>적립방법</th><td>자유적립식 (원화 계좌 및 현금 적립)</td></tr>
-              <tr><th>예금자보호</th><td>원금+이자 합산 1인당 5천만원 보호</td></tr>
-              <tr><th>공시승인번호</th><td>2025-1233 (2025.06.10)</td></tr>
+              <tr><th>이자지급</th><td style="white-space: pre-line;" th:text="${attributes['PR020'][0].avalue}">내용</td></tr>
+              <tr><th>적립방법</th><td style="white-space: pre-line;" th:text="${attributes['PR024'][0].avalue}">내용</td></tr>
+              <tr><th>예금자보호</th><td style="white-space: pre-line;" th:text="${attributes['PR035'][0].avalue}">내용</td></tr>
+              <tr><th>공시승인번호</th><td style="white-space: pre-line;" th:text="${attributes['PR038'][0].avalue}">내용</td></tr>
             </table>
           </div>
         </div>
