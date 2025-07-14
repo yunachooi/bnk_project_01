@@ -72,14 +72,12 @@ public class MainController {
 	@GetMapping("/product/names")
 	@ResponseBody
 	public List<String> getActiveProductNames() {
-	    return proRepo.findActiveProductNames(); // pstatus = 'Y'인 상품명만
+	    return proRepo.findActiveProductNames();
+	    } // pstatus = 'Y'인 상품명만
 	
 	@GetMapping("/newIndex")
 	public String newIndexP() {
 		return "newIndex";
 	}
-
-		@GetMapping("/newIndex")
-	public String newIndexP() {
-		return "newIndex";
 }
+	
