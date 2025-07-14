@@ -507,7 +507,7 @@
                 <ul class="menu-list">
                     <li><a href="#" th:text="${cMap['FX091'].medium}">환전 안내</a></li>
                     <li><a href="/forexProduct" th:text="${cMap['FX092'].medium}">환전 상품</a></li>
-                    <li><a href="/forexProduct" th:text="${cMap['FX093'].medium}">환전 상품</a></li>
+                    <li><a href="/forexEvent" th:text="${cMap['FX093'].medium}">환전 이벤트]</a></li>
                 </ul>
        		    </div>
 	
@@ -530,28 +530,28 @@
         </div>
 
         <!-- ✅ 스마트 계좌개설 안내 (좌우 배치) -->
-        <div class="account-section">
-            <div class="container account-flex">
+		<div class="account-section">
+		    <div class="container account-flex">
+		
+		        <!-- ✅ 왼쪽: QR 코드 -->
+		        <div class="account-left">
+		            <img src="/img/qr/app.png" alt="BNK 스마트 계좌개설 QR" class="account-qr-img">
+		            <p class="account-subtitle">BNK 앱 설치 및 계좌 개설</p>
+		        </div>
+		
+		        <!-- ✅ 오른쪽: 설명 텍스트 -->
+		        <div class="account-right">
+		            <h2 class="account-title">📱 스마트 계좌 개설</h2>
+		            <p class="account-desc">
+		                영업점 방문 없이 언제 어디서나<br>
+		                QR 코드를 스캔하여 BNK를 방문하고<br>
+		                계좌를 간편하게 개설할 수 있습니다.
+		            </p>
+		        </div>
+		
+		    </div>
+		</div>
 
-                <!-- ✅ 왼쪽: QR 코드 -->
-                <div class="account-left">
-                    <img src="/img/qr/app.png" alt="BNK 스마트 계좌개설 QR" class="account-qr-img">
-                    <p class="account-subtitle">BNK 앱 설치 및 계좌 개설</p>
-                </div>
-            </div>
-
-
-            <!-- ✅ 오른쪽: 설명 텍스트 -->
-            <div class="account-right">
-                <h2 class="account-title">📱 스마트 계좌 개설</h2>
-                <p class="account-desc">
-                    영업점 방문 없이 언제 어디서나<br>
-                    QR 코드를 스캔하여 BNK를 방문하고<br>
-                    계좌를 간편하게 개설할 수 있습니다.
-                </p>
-            </div>
-        </div>
-    </div>
 
 
 

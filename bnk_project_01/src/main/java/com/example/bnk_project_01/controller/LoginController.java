@@ -48,7 +48,7 @@ public class LoginController {
 		} else if ("ROLE_CEO".equals(user.getRole())) {
 			return "redirect:/user/import";
 		} else {
-			return "redirect:/forexMainPage";
+			return "redirect:/forex";
 		}
 	}
 
