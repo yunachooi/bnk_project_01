@@ -35,12 +35,10 @@
   </header>
 	<div id="megaToggle" class="mega-toggle">외화예금 ▼</div>
 	<nav  id="megaMenu"  class="mega"></nav>
-  <script th:inline="javascript">
-  /*<![CDATA[*/
-    /* 서버에서 넘어온 List<Category> → JS 배열 */
-    const categoriesData = /*[[${categories}]]*/ [];
-  /*]]>*/
-  </script>
+<script th:inline="javascript">
+  const categoriesData = [];
+  console.log("📦 categoriesData from server:", categoriesData);
+</script>
 
   <!-- ▼▼▼ ② 메뉴 토글·렌더링 로직(header.js) 로드 ▼▼▼ -->
   <script th:src="@{/js/header.js}" defer></script>
