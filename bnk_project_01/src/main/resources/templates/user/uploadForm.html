@@ -3,18 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>수입서류 제출 페이지</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}" />
+  
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
       background-color: #eef3f9;
       color: #212d49;
       margin: 0;
-      padding: 60px 20px;
+      
     }
 
-    .container {
+    .container2 {
       max-width: 1000px;
-      margin: 0 auto;
+      margin: 20px auto;
     }
 
     .back-btn {
@@ -159,10 +161,11 @@
   <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
 </head>
 <body>
-
+	<div th:replace="~{fragments/header2 :: header}"></div>
+	
   <button class="back-btn" onclick="location.href='/user/import'">◀</button>
 
-  <div class="container">
+  <div class="container2">
     <h2 th:text="${username + '님 서류 제출현황'}"></h2>
 
     <div class="slider-card">
@@ -258,6 +261,6 @@
 
   <!-- 사전버튼 include -->
   <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
-
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

@@ -5,19 +5,19 @@
   <title>기업 시스템</title>
   
   <link rel="stylesheet" th:href="@{/css/header.css}" />
-  
+  <link rel="stylesheet" th:href="@{/css/common.css}" />
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
       background-color: #eef3f9;
       margin: 0;
-      padding: 40px 0;
+     
     }
 
     .container {
       width: 90%;
       max-width: 1000px;
-      margin: 0 auto;
+      margin: 20px auto;
     }
 
     h2 {
@@ -215,9 +215,7 @@
 </head>
 <body>
 
-	<!-- ✅ 헤더 fragment -->
-    <div th:replace="fragments/header :: headerFragment"></div>
-    <!-- --------------- -->
+	<div th:replace="~{fragments/header2 :: header}"></div>
 
 
 <div class="container">
@@ -313,5 +311,6 @@
 	<!-- --------------------------------- 사전버튼 --------------------------------- -->
     <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
     <!-- -------------------------------------------------------------------------- -->
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

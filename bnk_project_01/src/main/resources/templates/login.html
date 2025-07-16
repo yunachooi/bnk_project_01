@@ -3,20 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>로그인</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}" />
+<link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
   
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background-color: #eef3f9;
+      background-color: #ffffff;
       color: #212d49;
       margin: 0;
-      padding: 80px 20px;
+      
     }
 
-    .container {
+    .container2 {
       width: 100%;
       max-width: 420px;
-      margin: 0 auto;
+      margin: 40px auto;
       background: #ffffff;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
@@ -86,10 +88,11 @@
       text-align: center;
     }
   </style>
+
 </head>
 <body>
-
-  <div class="container">
+  <div th:replace="~{fragments/header2 :: header}"></div>
+  <div class="container2">
     <h2>로그인</h2>
     <form th:action="@{/login}" method="post" th:object="${userDto}">
       <label>아이디</label>
@@ -107,6 +110,7 @@
       <p th:text="${error}"></p>
     </div>
   </div>
-
+<div th:replace="fragments/dictionary-button :: dictionary-button"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

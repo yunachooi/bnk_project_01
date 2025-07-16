@@ -1,0 +1,178 @@
+<div th:fragment="header">
+  <div class="topbar">
+    <div class="topbar-container">
+      <a href="#">KR</a><span class="separator">·</span>
+      <a href="#">EN</a><span class="separator">·</span>
+      <a href="#">CN</a>
+      <a href="#" class="global-link">은행소개</a>
+    </div>
+  </div>
+  <nav>
+    <div class="nav-container">
+      <div class="navbar-top">
+        <div class="navbar-top-left">
+          <div class="logo">BNK 부산은행</div>
+          <ul class="primary-nav">
+            <li><a href="#">개인</a></li>
+            <li><a href="#">기업</a></li>
+            <li><a href="#" class="active">금융상품</a></li>
+          </ul>
+        </div>
+        <div class="user-actions">
+          <a href="#">로그인</a>
+          <a href="#">인증센터</a>
+          <a href="#" class="search-toggle" id="searchToggle">검색하기</a>
+        </div>
+      </div>
+      <div class="search-dropdown" id="searchDropdown">
+        <div class="dropdown-inner">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="검색할 내용을 입력해 주세요">
+            <button id="searchBtn">검색하기</button>
+          </div>
+          <div class="suggestions-title">추천 검색어</div>
+          <ul class="search-suggestions">
+            <li><a href="#">예금</a></li>
+            <li><a href="#">대출</a></li>
+            <li><a href="#">외환</a></li>
+            <li><a href="#">펀드</a></li>
+            <li><a href="#">카드</a></li>
+          </ul>
+        </div>
+      </div>
+      <ul class="navbar-submenu">
+        <li><a href="#">예금</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+        <li><a href="#">골드바</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+        <li><a href="#">신탁</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+        <li><a href="#">웰스타로보B</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+        <li><a href="#">펀드</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+        <li><a href="#">대출</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+        <li><a href="#">카드</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+        <li><a href="#">보험/공제</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+        <li>
+          <a href="#" class="submenu-exchange-active">외환</a>
+          <div class="dropdown forex-menu">
+            <div class="dropdown-inner">
+              <div class="mega-menu">
+                <div class="mega-column">
+                  <h4>외화예금</h4>
+                  <ul>
+                    <li><a href="#" class="active-link">외화예금상품</a></li>
+                    <li><a href="#" class="inactive-link">외화예금안내</a></li>
+                    <li><a href="#" class="inactive-link">외화예금우대서비스</a></li>
+                  </ul>
+                </div>
+                <div class="mega-column">
+                  <h4>외화송금</h4>
+                  <ul>
+                    <li><a href="#" class="inactive-link">외화송금서비스</a></li>
+                    <li><a href="#" class="inactive-link">외화송금보내기</a></li>
+                    <li><a href="#" class="inactive-link">외화송금받기</a></li>
+                  </ul>
+                </div>
+                <div class="mega-column">
+                  <h4>수출입금융</h4>
+                  <ul>
+                    <li><a href="#" class="inactive-link">수출업무</a></li>
+                    <li><a href="#" class="active-link">수입업무</a></li>
+                    <li><a href="#" class="inactive-link">내국신용장/무역금융</a></li>
+                    <li><a href="#" class="inactive-link">전자무역</a></li>
+                    <li><a href="#" class="inactive-link">수출입통관 상담 서비스 안내</a></li>
+                  </ul>
+                </div>
+                <div class="mega-column">
+                  <h4>국내외투자</h4>
+                  <ul>
+                    <li><a href="#" class="inactive-link">해외직접투자</a></li>
+                    <li><a href="#" class="inactive-link">해외사무소(지사)설치</a></li>
+                    <li><a href="#" class="inactive-link">해외부동산투자</a></li>
+                    <li><a href="#" class="inactive-link">외국인국내투자</a></li>
+                    <li><a href="#" class="inactive-link">외국인국내부동산투자</a></li>
+                  </ul>
+                </div>
+                <div class="mega-column">
+                  <h4>환전</h4>
+                  <ul>
+                    <li><a href="#" class="inactive-link">환전안내</a></li>
+                    <li><a href="#" class="active-link">환전서비스안내</a></li>
+                    <li><a href="#" class="inactive-link">환율우대</a></li>
+                    <li><a href="#" class="inactive-link">환전계산기</a></li>
+                    <li><a href="#" class="inactive-link">동북아허브영업점</a></li>
+                    <li><a href="#" class="inactive-link">외화수표매입안내</a></li>
+                  </ul>
+                </div>
+                <div class="mega-column">
+                  <h4>환율</h4>
+                  <ul>
+                    <li><a href="#" class="inactive-link">환율제공서비스</a></li>
+                    <li><a href="#" class="inactive-link">외환시장동향</a></li>
+                    <li><a href="#" class="inactive-link">환리스크관리</a></li>
+                    <li><a href="#" class="active-link">환율우대쿠폰</a></li>
+                  </ul>
+                </div>
+                <div class="mega-column">
+                  <h4>유학/이주/여행</h4>
+                  <ul>
+                    <li><a href="#" class="inactive-link">유학</a></li>
+                    <li><a href="#" class="inactive-link">이주</a></li>
+                    <li><a href="#" class="inactive-link">여행</a></li>
+                  </ul>
+                </div>
+                <div class="mega-column">
+                  <h4>부가서비스</h4>
+                  <ul>
+                    <li><a href="#" class="inactive-link">환율/이율조회</a></li>
+                    <li><a href="#" class="inactive-link">외환서식 프로그램</a></li>
+                  </ul>
+                </div>
+                <div class="mega-column">
+                  <h4>글로벌파워셀러 특화서비스</h4>
+                  <ul>
+                    <li><a href="#" class="inactive-link">서비스 안내</a></li>
+                  </ul>
+                </div>
+                <div class="mega-column">
+                  <h4>외환이용가이드</h4>
+                  <ul>
+                    <li><a href="#" class="inactive-link">외환상담안내</a></li>
+                    <li><a href="#" class="inactive-link">법규/규정</a></li>
+                    <li><a href="#" class="inactive-link">수수료</a></li>
+                    <li><a href="#" class="inactive-link">외환FAQ</a></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="#">퇴직연금</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+        <li><a href="#">서민금융</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+        <li><a href="#">국민주택채권</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
+      </ul>
+    </div>
+  </nav>
+  
+  <div class="submenu-quick">
+  <ul>
+    <li class="active"><a href="#">메인</a></li>
+    <li><a href="#">외화예금</a></li>
+    <li><a href="#">수입업무</a></li>
+    <li><a href="#">환전</a></li>
+    <li><a href="#">환율</a></li>
+  </ul>
+</div>
+
+  <script>
+    // 검색 드롭다운
+    const searchToggle = document.getElementById('searchToggle');
+    const searchDropdown = document.getElementById('searchDropdown');
+    searchToggle.addEventListener('click', e => {
+      e.preventDefault();
+      searchDropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', e => {
+      if (!searchDropdown.contains(e.target) && e.target !== searchToggle) {
+        searchDropdown.classList.remove('open');
+      }
+    });
+  </script>
+</div>

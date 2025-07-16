@@ -102,14 +102,16 @@ public class ForexMainController {
                 .toList();
 
         // ✅ 카테고리 매핑
-        List<String> cnoList = List.of("FX001", "FX089", "FX090", "FX002", "FX005", "FX093", "FX091", "FX092", "FX071", "FX074", "FX076");
-        Map<String, Category> cMap = cateRepo.findByCnoIn(cnoList).stream()
-                .collect(Collectors.toMap(Category::getCno, c -> c));
-
+        List<Category> categories = cateRepo.findAll();
+        Map<String, Category> cMap = cateRepo
+                .findByCnoIn(List.of("FX001", "FX089", "FX090", "FX002", "FX005", "FX093", "FX091", "FX092", "FX071", "FX074", "FX076"))   // 필요한 것만 SELECT
+                .stream()
+                .collect(Collectors.toMap(c -> c.getCno().trim(), c -> c));   // ← trim() 추가!
+        model.addAttribute("cMap", cMap);						
+        model.addAttribute("categories", categories);
+        
         model.addAttribute("rates", rates);
-        model.addAttribute("categories", cateRepo.findAll());
-        model.addAttribute("cMap", cMap);
-
+      
         return "forexMainPage";
     }
 

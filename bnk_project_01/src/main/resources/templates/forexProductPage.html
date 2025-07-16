@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8" />
     <title>BNK ONE 환전</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}" />
+<link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
+    
     <style>
         * { box-sizing: border-box; }
 
@@ -197,17 +200,14 @@
 
         
 
-        .footer {
-            text-align: center;
-            padding: 40px 20px;
-            font-size: 0.9rem;
-            color: #888;
-        }
+       
 
-        /* 📱 반응형 */
-        @media (max-width: 768px) {
+        /* 📱 반응형
+        @media (max-width: 1024px) {
+         	html{ font-size:16px !important; }
             .video-section video {
                 width: 95vw;
+                
             }
 
             .video-overlay {
@@ -244,9 +244,9 @@
             .page-header h1 {
                 font-size: 2rem;
             }
-        }
+        } */
 
-        /* 상품 상세 정보 */
+        /* 상품 상세 정보 
         .tab-type2 {
             max-width: 1000px;
             margin: 40px auto;
@@ -319,27 +319,22 @@
             margin: 20px 0;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-        }
-
+        }*/
+		
     </style>
 </head>
 <body>
-
-<!-- ✅ 헤더 -->
-<div class="page-header">
-    <h1>BNK ONE 환전 서비스 Page</h1>
-    <hr>
-</div>
+<div th:replace="~{fragments/header2 :: header}"></div>
 
 <!-- 🎥 배경 영상 -->
 <section class="video-section">
     <video src="/videos/ONE%20환전.mp4" autoplay muted loop playsinline></video>
 
-    <div class="video-overlay">
+   <!--   <div class="video-overlay">
         <h1>BNK One 환전</h1>
         <p>최대 90% 우대 혜택</p>
         <button class="cta-button" onclick="location.href='#'">지금 환전하기</button>
-    </div>
+    </div> -->
 </section>
 
 <!-- 🔽 콘텐츠 섹션 -->
@@ -493,10 +488,9 @@
 </div>
 
 
-<!-- 👣 푸터 -->
-<div class="footer">
-    ⓒ 2025 BNK 부산은행. All rights reserved.
-</div>
+
+<div th:replace="fragments/dictionary-button :: dictionary-button"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
