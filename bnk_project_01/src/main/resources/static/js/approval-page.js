@@ -1,19 +1,28 @@
-// approval-page.js — 간단 · 이벤트 위임 버전
-// ==========================================================
-const API   = '/api/approve';   // GET 전체, POST /{pno}
-let modal = document.getElementById('attr-modal');
-let attrBody   = document.getElementById('attr-body');
-let modalTitle = document.getElementById('modal-title');
-document.getElementById('attr-close').onclick = () => modal.classList.add('hidden');
+// approval-page.js — 간단 · 이벤트 위임 버전 (수정됨)
+// ==================================================
+const API = '/api/approve';   // GET 전체, POST /{pno}
 
-export function init(){
-	modal       = document.getElementById('attr-modal');
-	attrBody    = document.getElementById('attr-body');
-	modalTitle  = document.getElementById('modal-title');
-	document.getElementById('attr-close').onclick =
-	        () => modal.classList.add('hidden');
-	loadTable();           // 그 다음 리스트 렌더 
-	}
+// ────────── 상태 변수 ──────────
+let modal = null;
+let attrBody = null;
+let modalTitle = null;
+
+/* ---------------- 초기화 ---------------- */
+export function init () {
+  // DOM 이 완전히 렌더링된 뒤에 요소를 가져온다
+  modal       = document.getElementById('attr-modal');
+  attrBody    = document.getElementById('attr-body');
+  modalTitle  = document.getElementById('modal-title');
+  const closeBtn = document.getElementById('attr-close');
+
+  // 닫기 버튼(×)에 클릭 핸들러 1회만 바인딩
+  if (!closeBtn.__bound) {
+    closeBtn.__bound = true;
+    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+  }
+
+  loadTable();      // 이후 리스트 렌더링
+}
 
 /* ---------------- 테이블 로딩 ---------------- */
 async function loadTable(){
@@ -42,7 +51,7 @@ async function loadTable(){
 
 /* ---------------- 이벤트 위임 ---------------- */
 function attachDelegation(wrapper){
-  if(wrapper.__bound) return;
+  if(wrapper.__bound) return;         // 중복 바인딩 방지
   wrapper.__bound = true;
   wrapper.addEventListener('click', async e=>{
     const tr = e.target.closest('tr');
@@ -55,7 +64,7 @@ function attachDelegation(wrapper){
       const to  = e.target.dataset.to;      // "Y" | "N"
       const msg = (to==='Y'? '게시':'미게시');
       if(!confirm(`이 상품을 ${msg} 상태로 변경할까요?`)) return;
-      await fetch(`${API}/${id}`,{
+      await fetch(`${API}/${id}` ,{
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({pstatus:to})
@@ -78,7 +87,6 @@ function attachDelegation(wrapper){
 async function showAttrs(pno){
   const data = await fetch(`${API}/${pno}/attrs`).then(r=>r.json());
   attrBody.innerHTML = data.map(({prname,avalue})=>
-    `<tr><td>${prname}</td><td>${avalue}</td></tr>`).join('');
+    `<tr><td class="wrap">${prname}</td><td class="wrap">${avalue}</td></tr>`).join('');
   modal.classList.remove('hidden');
 }
-

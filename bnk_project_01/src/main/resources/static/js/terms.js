@@ -1,8 +1,6 @@
-// terms.js - 외화 약관 관리
-
 let allTermsData = [];
 let currentPage = 1;
-const itemsPerPage = 10;
+const itemsPerPage = 5;
 let filteredData = [];
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -71,39 +69,42 @@ function updateResultTitle(searchInfo) {
 		resultTitle.textContent = `${searchInfo} (${totalCount}건)`;
 	}
 
-	addDeleteButton();
+	addActionButtons();
 }
 
-function addDeleteButton() {
-	const existingContainer = document.querySelector('.delete-button-container');
+function addActionButtons() {
+	const existingContainer = document.querySelector('.button-container');
 	if (existingContainer) {
 		existingContainer.remove();
 	}
 
-	const deleteContainer = document.createElement('div');
-	deleteContainer.className = 'delete-button-container';
-	deleteContainer.style.textAlign = 'right';
-	deleteContainer.style.marginBottom = '10px';
-	deleteContainer.style.paddingTop = '10px';
+	const buttonContainer = document.createElement('div');
+	buttonContainer.className = 'button-container';
+
+	const compareButton = document.createElement('button');
+	compareButton.id = 'compareSelectedBtn';
+	compareButton.textContent = '파일 비교';
+	compareButton.className = 'search-btn';
+	compareButton.style.backgroundColor = '#6c757d';
+	compareButton.style.borderColor = '#6c757d';
+	compareButton.style.marginRight = '8px';
+	compareButton.style.cursor = 'not-allowed';
+	compareButton.disabled = true;
+	compareButton.onclick = compareSelectedTerms;
 
 	const deleteButton = document.createElement('button');
 	deleteButton.id = 'deleteSelectedBtn';
 	deleteButton.textContent = '선택 삭제';
-	deleteButton.style.padding = '8px 16px';
-	deleteButton.style.backgroundColor = '#dc3545';
-	deleteButton.style.color = 'white';
-	deleteButton.style.border = 'none';
-	deleteButton.style.borderRadius = '4px';
-	deleteButton.style.cursor = 'pointer';
 	deleteButton.onclick = deleteSelectedTerms;
 
-	deleteContainer.appendChild(deleteButton);
+	buttonContainer.appendChild(compareButton);
+	buttonContainer.appendChild(deleteButton);
 
 	const resultTitle = document.getElementById('resultTitle');
 	const tableContainer = document.querySelector('.table-container');
 
 	if (resultTitle && tableContainer) {
-		tableContainer.parentNode.insertBefore(deleteContainer, tableContainer);
+		tableContainer.parentNode.insertBefore(buttonContainer, tableContainer);
 	}
 }
 
@@ -162,23 +163,22 @@ function displayTermsData(data) {
 
 		row.innerHTML = `
             <td>
-                <input type="checkbox" class="item-checkbox" value="${term.tno}">
+                <input type="checkbox" class="item-checkbox" value="${term.tno}" onchange="updateButtonStates()">
             </td>
             <td>${globalIndex}</td>
             <td>${term.tname}</td>
             <td>${term.tinfo}</td>
             <td>${formatDate(term.tcreatedate)}</td>
             <td>
-                <button class="download-btn" onclick="downloadTerms('${term.tno}')">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 16L7 11L8.4 9.55L11 12.15V4H13V12.15L15.6 9.55L17 11L12 16Z" fill="currentColor"/>
-                        <path d="M5 20V18H19V20H5Z" fill="currentColor"/>
-                    </svg>
+                <button class="save-btn" onclick="downloadTerms('${term.tno}')">
+                    다운로드
                 </button>
             </td>
         `;
 		tbody.appendChild(row);
 	});
+
+	updateButtonStates();
 }
 
 function createPagination(data) {
@@ -282,26 +282,78 @@ function toggleAllCheckboxes() {
 	itemCheckboxes.forEach(checkbox => {
 		checkbox.checked = selectAll.checked;
 	});
+
+	updateButtonStates();
 }
 
-document.addEventListener('change', function(e) {
-	if (e.target.classList.contains('item-checkbox')) {
-		const itemCheckboxes = document.querySelectorAll('.item-checkbox');
-		const checkedCount = document.querySelectorAll('.item-checkbox:checked').length;
-		const selectAll = document.getElementById('selectAll');
+function updateButtonStates() {
+	const checkedBoxes = document.querySelectorAll('.item-checkbox:checked');
+	const selectAll = document.getElementById('selectAll');
+	const compareButton = document.getElementById('compareSelectedBtn');
+	const deleteButton = document.getElementById('deleteSelectedBtn');
+	
+	const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+	if (checkedBoxes.length === 0) {
+		selectAll.checked = false;
+		selectAll.indeterminate = false;
+	} else if (checkedBoxes.length === itemCheckboxes.length) {
+		selectAll.checked = true;
+		selectAll.indeterminate = false;
+	} else {
+		selectAll.checked = false;
+		selectAll.indeterminate = true;
+	}
 
-		if (checkedCount === 0) {
-			selectAll.checked = false;
-			selectAll.indeterminate = false;
-		} else if (checkedCount === itemCheckboxes.length) {
-			selectAll.checked = true;
-			selectAll.indeterminate = false;
+	if (compareButton) {
+		if (checkedBoxes.length === 2) {
+			compareButton.disabled = false;
+			compareButton.style.backgroundColor = '#dc3545';
+			compareButton.style.borderColor = '#dc3545';
+			compareButton.style.cursor = 'pointer';
 		} else {
-			selectAll.checked = false;
-			selectAll.indeterminate = true;
+			compareButton.disabled = true;
+			compareButton.style.backgroundColor = '#6c757d';
+			compareButton.style.borderColor = '#6c757d';
+			compareButton.style.cursor = 'not-allowed';
 		}
 	}
-});
+
+	if (deleteButton) {
+		deleteButton.disabled = checkedBoxes.length === 0;
+	}
+}
+
+function compareSelectedTerms() {
+	const selectedCheckboxes = document.querySelectorAll('.item-checkbox:checked');
+
+	if (selectedCheckboxes.length !== 2) {
+		alert('파일 비교를 위해 정확히 2개의 파일을 선택해주세요.');
+		return;
+	}
+
+	const selectedIds = Array.from(selectedCheckboxes).map(checkbox => checkbox.value);
+	const file1Id = selectedIds[0];
+	const file2Id = selectedIds[1];
+
+	const term1 = allTermsData.find(term => term.tno === file1Id);
+	const term2 = allTermsData.find(term => term.tno === file2Id);
+
+	if (!term1 || !term2) {
+		alert('선택한 파일 정보를 찾을 수 없습니다.');
+		return;
+	}
+
+	const compareUrl = `/admin/compare/terms?file1=${file1Id}&file2=${file2Id}`;
+	const compareWindow = window.open(
+		compareUrl, 
+		'compareTerms', 
+		'width=1400,height=800,scrollbars=yes,resizable=yes,menubar=no,toolbar=no,location=no,status=no'
+	);
+
+	if (!compareWindow) {
+		alert('팝업이 차단되었습니다. 팝업 허용 후 다시 시도해주세요.');
+	}
+}
 
 function deleteSelectedTerms() {
 	const selectedCheckboxes = document.querySelectorAll('.item-checkbox:checked');
@@ -525,27 +577,13 @@ function showTermsViewer(term) {
 	
 	const downloadBtn = document.createElement('button');
 	downloadBtn.textContent = '텍스트 다운로드';
-	downloadBtn.style.cssText = `
-		background: #007bff;
-		color: white;
-		border: none;
-		padding: 10px 20px;
-		border-radius: 4px;
-		cursor: pointer;
-		margin-right: 10px;
-	`;
+	downloadBtn.className = 'search-btn';
+	downloadBtn.style.marginRight = '10px';
 	downloadBtn.onclick = () => downloadAsText(term);
 	
 	const closeFooterBtn = document.createElement('button');
 	closeFooterBtn.textContent = '닫기';
-	closeFooterBtn.style.cssText = `
-		background: #6c757d;
-		color: white;
-		border: none;
-		padding: 10px 20px;
-		border-radius: 4px;
-		cursor: pointer;
-	`;
+	closeFooterBtn.className = 'save-btn';
 	closeFooterBtn.onclick = () => modal.remove();
 	
 	footer.appendChild(downloadBtn);

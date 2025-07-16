@@ -4,92 +4,90 @@
   <meta charset="UTF-8">
   <title>로그인</title>
   
-  <!-- <link rel="stylesheet" th:href="@{/css/header.css}" />  -->
-  
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background: #fff;
-      color: #000;
+      background-color: #eef3f9;
+      color: #212d49;
       margin: 0;
-      padding: 60px 0;
+      padding: 80px 20px;
     }
 
     .container {
-      width: 400px;
+      width: 100%;
+      max-width: 420px;
       margin: 0 auto;
-      background: #fefefe;
-      border: 1px solid #eee;
-      border-radius: 12px;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
-      padding: 40px 30px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      padding: 50px 40px;
     }
 
     h2 {
-      font-size: 1.8rem;
-      color: #212d49;
-      margin-bottom: 30px;
+      font-size: 2rem;
       text-align: center;
-      border-bottom: 2px solid #212d49;
-      padding-bottom: 10px;
+      color: #212d49;
+      margin-bottom: 40px;
       font-weight: 700;
+      border-bottom: 2px solid #212d49;
+      padding-bottom: 12px;
     }
 
     label {
+      display: block;
+      margin-bottom: 6px;
       font-weight: 600;
-      color: #212d49;
       font-size: 0.95rem;
+      color: #212d49;
     }
 
     input[type="text"],
     input[type="password"] {
       width: 100%;
-      padding: 10px 12px;
-      margin-top: 6px;
-      margin-bottom: 16px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
       border: 1px solid #ccc;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 1rem;
       box-sizing: border-box;
+      background-color: #fdfdfd;
     }
 
     .error {
       color: #e60012;
       font-size: 0.88rem;
-      margin-top: -10px;
-      margin-bottom: 12px;
+      margin-top: -14px;
+      margin-bottom: 14px;
     }
 
     button[type="submit"] {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       background-color: #212d49;
       color: white;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 10px;
+      font-size: 1.05rem;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.2s ease;
+      transition: background-color 0.2s ease, transform 0.2s;
     }
 
     button[type="submit"]:hover {
       background-color: #e60012;
+      transform: scale(1.03);
     }
 
     .login-error {
-      margin-top: 20px;
+      margin-top: 24px;
       color: #e60012;
       font-weight: 500;
       font-size: 0.95rem;
       text-align: center;
     }
   </style>
-
 </head>
 <body>
-
-  <!-- <div th:replace="fragments/header :: header"></div> -->
 
   <div class="container">
     <h2>로그인</h2>
@@ -109,8 +107,6 @@
       <p th:text="${error}"></p>
     </div>
   </div>
-  
-  <!-- <script th:src="@{/js/header.js}"></script> -->
-  
+
 </body>
 </html>

@@ -6,8 +6,8 @@
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background-color: #fff;
-      color: #000;
+      background-color: #eef3f9;
+      color: #212d49;
       margin: 0;
       padding: 60px 20px;
     }
@@ -37,37 +37,44 @@
     }
 
     h2 {
-      font-size: 1.8rem;
+      font-size: 2rem;
       color: #212d49;
       text-align: center;
       margin-bottom: 40px;
       font-weight: 700;
-      border-bottom: 2px solid #212d49;
-      padding-bottom: 12px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background-color: #fefefe;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    .slider-card {
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+      padding: 40px;
+      margin-bottom: 40px;
     }
 
-    th, td {
-      padding: 14px 10px;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
-      font-size: 0.96rem;
-    }
-
-    th {
-      background-color: #dde4f1;
-      color: #212d49;
-      font-weight: 600;
-    }
+	table {
+	  width: 100%;
+	  border-collapse: collapse;
+	  margin-top: 10px;
+	  background-color: #fff;
+	  border: 1px solid #d0d7e2;
+	  border-radius: 16px;
+	  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+	  overflow: hidden;
+	}
+	
+	th, td {
+	  padding: 14px 10px;
+	  border: 1px solid #d0d7e2;
+	  text-align: center;
+	  font-size: 0.96rem;
+	}
+	
+	th {
+	  background-color: #dde4f1;
+	  color: #212d49;
+	  font-weight: 600;
+	}
 
     tr:last-child td {
       border-bottom: none;
@@ -79,7 +86,7 @@
       padding: 6px 10px;
       font-size: 0.95rem;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 8px;
       background-color: #fff;
       width: 90%;
       max-width: 320px;
@@ -87,13 +94,14 @@
     }
 
     .clear-btn {
-      background-color: #f0f0f0;
+      background-color: #f4f4f4;
       border: 1px solid #999;
       padding: 6px 10px;
       border-radius: 8px;
       cursor: pointer;
       margin-top: 6px;
       font-size: 0.85rem;
+      transition: background-color 0.2s ease;
     }
 
     .clear-btn:hover {
@@ -146,6 +154,9 @@
       color: #e60012;
     }
   </style>
+
+  <!-- 사전버튼 전용 CSS -->
+  <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
 </head>
 <body>
 
@@ -154,80 +165,83 @@
   <div class="container">
     <h2 th:text="${username + '님 서류 제출현황'}"></h2>
 
-    <form method="post" enctype="multipart/form-data" action="/user/upload">
-      <table>
-        <thead>
-          <tr>
-            <th>문서 종류</th>
-            <th>파일 업로드</th>
-            <th>상태</th>
-            <th>파일명</th>
-            <th>제출일</th>
-            <th>DB 삭제</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Invoice -->
-          <tr>
-            <td>Invoice</td>
-            <td>
-              <input type="file" name="invoice" id="invoice" onchange="toggleClearBtn('invoice')" />
-              <button type="button" id="clear-invoice" class="clear-btn" style="display: none;" onclick="clearInput('invoice')">선택취소</button>
-            </td>
-            <td th:text="${hasInvoice} ? '✅' : '❌'"></td>
-            <td th:text="${invoiceImport != null} ? ${invoiceImport.iname} : '-'"></td>
-            <td th:text="${invoiceImport != null} ? ${#temporals.format(invoiceImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
-            <td>
-              <a th:if="${hasInvoice}" th:href="@{/user/deleteFileDb(code='INVOICE')}">
-                <button type="button" class="delete-btn">삭제</button>
-              </a>
-            </td>
-          </tr>
+    <div class="slider-card">
+      <form method="post" enctype="multipart/form-data" action="/user/upload">
+        <table>
+          <thead>
+            <tr>
+              <th>문서 종류</th>
+              <th>파일 업로드</th>
+              <th>상태</th>
+              <th>파일명</th>
+              <th>제출시간</th>
+              <th>서류삭제</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Invoice -->
+            <tr>
+              <td>Invoice</td>
+              <td>
+                <input type="file" name="invoice" id="invoice" onchange="toggleClearBtn('invoice')" />
+                <button type="button" id="clear-invoice" class="clear-btn" style="display: none;" onclick="clearInput('invoice')">선택취소</button>
+              </td>
+              <td th:text="${hasInvoice} ? '✅' : '❌'"></td>
+              <td th:text="${invoiceImport != null} ? ${invoiceImport.iname} : '-'"></td>
+              <td th:text="${invoiceImport != null} ? ${#temporals.format(invoiceImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
+              <td>
+                <a th:if="${hasInvoice}" th:href="@{/user/deleteFileDb(code='INVOICE')}">
+                  <button type="button" class="delete-btn">삭제</button>
+                </a>
+              </td>
+            </tr>
 
-          <!-- Packing List -->
-          <tr>
-            <td>Packing List (PL)</td>
-            <td>
-              <input type="file" name="pl" id="pl" onchange="toggleClearBtn('pl')" />
-              <button type="button" id="clear-pl" class="clear-btn" style="display: none;" onclick="clearInput('pl')">선택취소</button>
-            </td>
-            <td th:text="${hasPL} ? '✅' : '❌'"></td>
-            <td th:text="${plImport != null} ? ${plImport.iname} : '-'"></td>
-            <td th:text="${plImport != null} ? ${#temporals.format(plImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
-            <td>
-              <a th:if="${hasPL}" th:href="@{/user/deleteFileDb(code='PL')}">
-                <button type="button" class="delete-btn">삭제</button>
-              </a>
-            </td>
-          </tr>
+            <!-- Packing List -->
+            <tr>
+              <td>Packing List (PL)</td>
+              <td>
+                <input type="file" name="pl" id="pl" onchange="toggleClearBtn('pl')" />
+                <button type="button" id="clear-pl" class="clear-btn" style="display: none;" onclick="clearInput('pl')">선택취소</button>
+              </td>
+              <td th:text="${hasPL} ? '✅' : '❌'"></td>
+              <td th:text="${plImport != null} ? ${plImport.iname} : '-'"></td>
+              <td th:text="${plImport != null} ? ${#temporals.format(plImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
+              <td>
+                <a th:if="${hasPL}" th:href="@{/user/deleteFileDb(code='PL')}">
+                  <button type="button" class="delete-btn">삭제</button>
+                </a>
+              </td>
+            </tr>
 
-          <!-- BL -->
-          <tr>
-            <td>Bill of Lading (BL)</td>
-            <td>
-              <input type="file" name="bl" id="bl" onchange="toggleClearBtn('bl')" />
-              <button type="button" id="clear-bl" class="clear-btn" style="display: none;" onclick="clearInput('bl')">선택취소</button>
-            </td>
-            <td th:text="${hasBL} ? '✅' : '❌'"></td>
-            <td th:text="${blImport != null} ? ${blImport.iname} : '-'"></td>
-            <td th:text="${blImport != null} ? ${#temporals.format(blImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
-            <td>
-              <a th:if="${hasBL}" th:href="@{/user/deleteFileDb(code='BL')}">
-                <button type="button" class="delete-btn">삭제</button>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            <!-- BL -->
+            <tr>
+              <td>Bill of Lading (BL)</td>
+              <td>
+                <input type="file" name="bl" id="bl" onchange="toggleClearBtn('bl')" />
+                <button type="button" id="clear-bl" class="clear-btn" style="display: none;" onclick="clearInput('bl')">선택취소</button>
+              </td>
+              <td th:text="${hasBL} ? '✅' : '❌'"></td>
+              <td th:text="${blImport != null} ? ${blImport.iname} : '-'"></td>
+              <td th:text="${blImport != null} ? ${#temporals.format(blImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
+              <td>
+                <a th:if="${hasBL}" th:href="@{/user/deleteFileDb(code='BL')}">
+                  <button type="button" class="delete-btn">삭제</button>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-      <div class="button-group">
-        <button type="submit">제출</button>
-      </div>
-    </form>
+        <div class="button-group">
+          <button type="submit">제출</button>
+        </div>
+      </form>
 
-    <div class="message" th:if="${message}" th:text="${message}"></div>
+      <div class="message" th:if="${message}" th:text="${message}"></div>
+    </div>
   </div>
 
+  <!-- 입력 취소 기능 -->
   <script>
     function toggleClearBtn(id) {
       const fileInput = document.getElementById(id);
@@ -241,5 +255,9 @@
       toggleClearBtn(id);
     }
   </script>
+
+  <!-- 사전버튼 include -->
+  <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
+
 </body>
 </html>

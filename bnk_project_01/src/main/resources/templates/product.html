@@ -384,14 +384,14 @@
   </div>
   <script>
     const products = [
-      { name: "꿈이룸 외화자유적금", type: "적금", description: "자동이체로 외화 목돈을 차곡차곡 모으고 싶은 분께 추천", period: "12개월", currencies: ["USD"], join: ["영업점 가입"], categories: ["study"] },
-      { name: "BNK모아드림외화적금", type: "적금", description: "짧은 기간에도 꾸준히 외화를 모으고 싶은 분께", period: "1~12개월", currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"], categories: ["study"] },
-      { name: "BNK UP & UP 외화정기예금", type: "정기예금", description: "예치기간 따라 금리가 올라가는 안정형 외화 예금", period: "1년", currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["investment"] },
-      { name: "외화정기예금", type: "정기예금", description: "가장 높은 금리를 원하고 장기 예치가 가능한 분께", period: "1개월~3년", currencies: ["USD", "JPY", "GBP", "CHF", "EUR", "AUD", "CAD"], join: ["영업점 가입", "인터넷 가입"], categories: ["investment"] },
-      { name: "업앤업 외화MMDA", type: "입출금예금", description: "하루만 맡겨도 이자가 쌓이는 유동성 높은 외화예금", period: "제한 없음", currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["travel"] },
-      { name: "외화당좌예금", type: "입출금예금", description: "외화수표 발행이 필요한 기업 고객에게 적합", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF"], join: ["영업점 가입"], categories: ["immigration"] },
-      { name: "외화보통예금", type: "입출금예금", description: "외화를 자주 입출금하는 개인 고객에게 추천", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF", "CAD", "AUD", "CNY"], join: ["영업점 가입"], categories: ["immigration"] },
-      { name: "EASY 환테크 듀얼통장", type: "복합형", description: "환율 시세 걱정 없이 자동으로 외화를 사고팔고 싶은 분께", period: "제한 없음", currencies: ["USD"], join: ["영업점 가입"], categories: ["travel"] }
+      { pno: "P001", name: "꿈이룸 외화자유적금", type: "적금", description: "자동이체로 외화 목돈을 차곡차곡 모으고 싶은 분께 추천", period: "12개월", currencies: ["USD"], join: ["영업점 가입"], categories: ["study"] },
+      { pno: "P002", name: "BNK모아드림외화적금", type: "적금", description: "짧은 기간에도 꾸준히 외화를 모으고 싶은 분께", period: "1~12개월", currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"], categories: ["study"] },
+      { pno: "P003", name: "BNK UP & UP 외화정기예금", type: "정기예금", description: "예치기간 따라 금리가 올라가는 안정형 외화 예금", period: "1년", currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["investment"] },
+      { pno: "P006", name: "외화정기예금", type: "정기예금", description: "가장 높은 금리를 원하고 장기 예치가 가능한 분께", period: "1개월~3년", currencies: ["USD", "JPY", "GBP", "CHF", "EUR", "AUD", "CAD"], join: ["영업점 가입", "인터넷 가입"], categories: ["investment"] },
+      { pno: "P004", name: "업앤업 외화MMDA", type: "입출금예금", description: "하루만 맡겨도 이자가 쌓이는 유동성 높은 외화예금", period: "제한 없음", currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["travel"] },
+      { pno: "P007", name: "외화당좌예금", type: "입출금예금", description: "외화수표 발행이 필요한 기업 고객에게 적합", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF"], join: ["영업점 가입"], categories: ["immigration"] },
+      { pno: "P008", name: "외화보통예금", type: "입출금예금", description: "외화를 자주 입출금하는 개인 고객에게 추천", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF", "CAD", "AUD", "CNY"], join: ["영업점 가입"], categories: ["immigration"] },
+      { pno: "P005", name: "EASY 환테크 듀얼통장", type: "복합형", description: "환율 시세 걱정 없이 자동으로 외화를 사고팔고 싶은 분께", period: "제한 없음", currencies: ["USD"], join: ["영업점 가입"], categories: ["travel"] }
     ];
     let compareList = [];
     let currentType = 'all', currentCat = '';
@@ -450,10 +450,10 @@
         card.innerHTML = `
           <input type="checkbox" class="compare-checkbox" title="비교함에 추가" data-name="${p.name}" ${compareList.some(c=>c.name===p.name)?"checked":""} ${(compareList.length>=3&&!compareList.some(c=>c.name===p.name))?"disabled":""} style="position:absolute;">
           <div class="signup-links">${p.join.map(j => `<a href="#">${j}</a>`).join(' ')}</div>
-          <div class="product-name">
-            ${p.name}
-            <span class="shield-icon" data-tooltip="예금자보호 대상 금융상품입니다.">🛡️</span>
-          </div>
+          <a href="productDetail?pno=${encodeURIComponent(p.pno)}" class="product-name">
+          ${p.name}
+          <span class="shield-icon" data-tooltip="예금자보호 대상 금융상품입니다.">🛡️</span>
+          </a>
           <div class="recommendation">${p.description}</div>
           <button class="toggle-btn" onclick="toggleDetails(this)">자세히 보기</button>
           <div class="details">
@@ -462,7 +462,7 @@
           </div>
         `;
         grid.appendChild(card);
-
+        console.log(p);
         card.addEventListener('mouseenter', function () {
           if(soundMode) {
             if (lastSpokenIdx === idx) return;
@@ -712,6 +712,20 @@
         }
       }
     });
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/product/names')
+          .then(res => res.json())
+          .then(names => {
+            // products는 이미 선언되어 있음 (하드코딩 데이터)
+            const filtered = products.filter(p => names.includes(p.name));
+            products.length = 0; // 기존 배열 비우기
+            filtered.forEach(p => products.push(p)); // 활성화 상품만 다시 채우기
+            renderProducts(); // 상품 다시 렌더링
+          })
+          .catch(err => {
+            console.error("상품명 불러오기 실패:", err);
+          });
+      });
   </script>
 </body>
 </html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>약관 파일 비교</title>
+<link rel="stylesheet" th:href="@{/css/terms.css}">
+<link rel="stylesheet" th:href="@{/css/compare.css}">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body class="compare-wrapper">
+	<div class="compare-header">
+		<h1>약관 파일 비교</h1>
+	</div><!-- compare-header -->
+
+	<div class="compare-container">
+		<div class="comparison-progress" id="comparisonProgress"
+			style="display: none;">
+			<div>파일 비교 중...</div>
+			<div class="progress-bar">
+				<div class="progress-fill" id="progressFill"></div>
+			</div>
+		</div>
+
+		<div class="comparison-stats" id="comparisonStats"
+			style="display: none;">
+			<div class="stat-item stat-added">
+				<span class="stat-number" id="addedCount">0</span>
+				<div class="stat-label">추가된 줄</div>
+			</div>
+			<div class="stat-item stat-removed">
+				<span class="stat-number" id="removedCount">0</span>
+				<div class="stat-label">삭제된 줄</div>
+			</div>
+		</div>
+
+		<div class="comparison-viewer">
+			<div class="pdf-headers">
+				<div class="pdf-header" id="header1">파일 1</div>
+				<div class="pdf-header" id="header2">파일 2</div>
+			</div><!-- pdf-headers -->
+
+			<div class="pdf-info-headers">
+				<div class="pdf-info-header" id="info-header1">로딩 중...</div>
+				<div class="pdf-info-header" id="info-header2">로딩 중...</div>
+			</div><!-- pdf-info-headers -->
+
+			<div class="pdf-content-wrapper">
+				<div class="pdf-content" id="pdfContainer">
+					<div class="pdf-panels-container">
+						<div class="pdf-panel" id="pdf1">
+							<div id="content1" class="loading-content">첫 번째 파일을 로딩 중...
+							</div><!-- content1 -->
+						</div><!-- pdf-panel -->
+						<div class="pdf-panel" id="pdf2">
+							<div id="content2" class="loading-content">두 번째 파일을 로딩 중...
+							</div><!-- content2 -->
+						</div><!-- pdf-panel -->
+					</div><!-- pdf-panels-container -->
+				</div><!-- pdf-content -->
+			</div><!-- pdf-content-wrapper -->
+		</div><!-- comparison-viewer -->
+	</div><!-- compare-container -->
+
+	<script th:src="@{/js/compare.js}"></script>
+</body>
+</html>

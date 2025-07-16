@@ -22,6 +22,9 @@ import com.example.bnk_project_01.service.AttributeService;
 import com.example.bnk_project_01.service.ProductService;
 import com.example.bnk_project_01.service.PropertyService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/admin")
 public class ProductController {
@@ -33,8 +36,15 @@ public class ProductController {
 	PropertyService propertyService;
 	
 	@GetMapping("/productPage")
-	public String productPage() {
-		return "admin/productPage";
+	public String productPage(HttpServletRequest req) {
+		HttpSession session = req.getSession(false);
+        String role = (session != null) ? (String) session.getAttribute("role") : null;
+        
+		if (role == null || role.equals("ROLE_USER")) {
+            return "redirect:/login";
+        } else {
+        	return "admin/productPage";
+        }
 	}
 	
 	//find
