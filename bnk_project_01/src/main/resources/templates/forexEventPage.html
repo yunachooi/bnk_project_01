@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=1000" />
   <title>BNK 환율 우대 쿠폰</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{/css/common.css}" />
+  <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
+  
   <style>
     :root {
       --bnk-red: #d7191f;
@@ -26,7 +29,7 @@
       line-height: 1.6;
     }
 
-    .container {
+    .container2 {
       width: 1000px;
       margin: 0 auto;
       padding: 0 20px;
@@ -233,11 +236,12 @@
   </style>
 </head>
 <body>
+	<div th:replace="~{fragments/header2 :: header}"></div>
   <header>
     <h1>BNK 부산은행 환율 우대 쿠폰 발급</h1>
   </header>
 
-  <div class="container">
+  <div class="container2">
     <section class="section">
       <div class="info-row">
         <!-- 왼쪽 설명 -->
@@ -293,7 +297,8 @@
       <button onclick="window.print()" class="print-btn">🖨️ 인쇄</button>
     </div>
   </div>
-
+<div th:replace="fragments/dictionary-button :: dictionary-button"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
   <script>
     function openCouponModal() {
       const name = document.getElementById('name').value;

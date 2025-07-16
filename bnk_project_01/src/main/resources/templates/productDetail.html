@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <title>꿈이룸 외화자유적금</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" th:href="@{/css/common.css}" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans+KR:wght@700;900&display=swap" rel="stylesheet" />
   <style>
     /* 기본 리셋 */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 18px; }
+    html { font-size: 16px; }
     body {
       font-family: 'Noto Sans KR','Montserrat',sans-serif;
       background: #fafafb;
@@ -243,8 +244,12 @@
       }
     }
   </style>
+<!-- --------------------------------- 사전CSS --------------------------------- -->    
+    <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
+    <!-- -------------------------------------------------------------------------- -->
 </head>
 <body>
+  <div th:replace="~{fragments/header2 :: header}"></div>
   <div class="main-wrap">
     <div class="main-title">꿈이룸 외화자유적금</div>
 
@@ -361,7 +366,10 @@
       </div>
     </div>
   </div>
-
+ <!-- --------------------------------- 사전버튼 --------------------------------- -->
+    <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
+    <!-- -------------------------------------------------------------------------- -->
+  <div th:replace="~{fragments/footer :: footer}"></div>
   <script>
     const slideData = [
       { first: true, title: "BNK 꿈이룸 외화자유적금" },

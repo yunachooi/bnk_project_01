@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>부산은행 외화예금</title>
+  <link rel="stylesheet" th:href="@{/css/common.css}" />
   <style>
     html { font-size: 16px; }
-    body { font-family: 'Noto Sans KR', sans-serif; background: #fff; color: #000; margin: 0; padding: 40px 0; transition: background-color 0.3s, color 0.3s;}
+    body { font-family: 'Noto Sans KR', sans-serif; background: #fff; color: #000; margin: 0; padding: 0 0; transition: background-color 0.3s, color 0.3s;}
     body.dark-mode { background: #111; color: #eee; }
     .container { width: 1000px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 0; }
     h2 {
@@ -368,8 +369,13 @@
     .product-name { text-decoration: none; }
     body.dark-mode a.product-name { color: #fff; text-decoration: none; }
   </style>
+<!-- --------------------------------- 사전CSS --------------------------------- -->    
+    <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
+    <!-- -------------------------------------------------------------------------- -->
+  
 </head>
 <body>
+  <div th:replace="~{fragments/header2 :: header}"></div>
   <div class="accessibility-controls">
     <button onclick="decreaseFontSize()" title="글자 축소"><span aria-hidden="true">A−</span><span class="accessibility-tooltip">글자 축소</span></button>
     <button onclick="increaseFontSize()" title="글자 확대"><span aria-hidden="true">A+</span><span class="accessibility-tooltip">글자 확대</span></button>
@@ -434,6 +440,10 @@
     <div class="product-grid" id="productGrid"></div>
     <div id="noProductsMsg" class="no-products-msg" style="display:none;">해당되는 상품이 없습니다.</div>
   </div>
+  <!-- --------------------------------- 사전버튼 --------------------------------- -->
+    <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
+    <!-- -------------------------------------------------------------------------- -->
+  <div th:replace="~{fragments/footer :: footer}"></div>
   <script>
     const products = [
       { pno: "P001", name: "꿈이룸 외화자유적금", type: "적금", description: "자동이체로 외화 목돈을 차곡차곡 모을 수 있는 적금", period: "12개월", currencies: ["USD"], join: ["영업점 가입"], categories: ["study"] },

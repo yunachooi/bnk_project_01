@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <title>BNK ONE 환전</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}" />
+	<link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
     <style>
         * { box-sizing: border-box; }
 
@@ -324,7 +326,7 @@
     </style>
 </head>
 <body>
-
+<div th:replace="~{fragments/header2 :: header}"></div>
 <!-- ✅ 헤더 -->
 <div class="page-header">
     <h1>BNK ONE 환전 서비스 Page</h1>
@@ -497,7 +499,8 @@
 <div class="footer">
     ⓒ 2025 BNK 부산은행. All rights reserved.
 </div>
-
+<div th:replace="fragments/dictionary-button :: dictionary-button"></div>
+<div th:replace="~{fragments/footer :: footer}"></div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const tabs = document.querySelectorAll(".js-tab");
