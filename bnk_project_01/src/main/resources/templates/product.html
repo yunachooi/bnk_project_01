@@ -23,6 +23,10 @@
       color: #ff7676;
       border-bottom: 2px solid #ff7676;
     }
+    
+    
+    
+    
     .deposit-protection-info {
       max-width: 1000px;
       margin: 0 auto 14px auto;
@@ -35,7 +39,42 @@
       font-weight: 600;
       letter-spacing: -0.01em;
       box-shadow: 0 2px 8px 0 rgba(33,45,73,0.06);
+      position: relative;
+  	overflow: hidden;
     }
+    
+    .deposit-protection-info .shine-bar {
+  position: absolute;
+  left: -60px;
+  top: 0; bottom: 0;
+  width: 60px;
+  background: linear-gradient(105deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 40%, rgba(255,255,255,0) 100%);
+  filter: blur(2.5px);
+  pointer-events: none;
+  animation: shineBarAnim 3.8s linear infinite;
+  opacity: 0.93;
+}
+@keyframes shineBarAnim {
+  0%, 77% { left: -60px; opacity: 0; }
+  80% { left: -60px; opacity: 0.05; }
+  87% { left: 101%; opacity: 1; }
+  89% { left: 101%; opacity: 0; }
+  100% { left: 101%; opacity: 0; }
+}
+/* 아이콘에만 살짝 glow */
+.deposit-protection-info .shield-ico {
+  filter: drop-shadow(0 0 6px #b8d6ffcc) drop-shadow(0 0 2px #fff);
+  transition: filter 0.5s;
+  animation: iconGlowAnim 3.8s linear infinite;
+}
+@keyframes iconGlowAnim {
+  0%, 77%, 100% { filter: drop-shadow(0 0 2px #b8d6ff80); }
+  80%, 87% { filter: drop-shadow(0 0 8px #91bbffcc) drop-shadow(0 0 2px #fff); }
+}
+    
+    
+    
+    
     body.dark-mode .deposit-protection-info {
       background: #1b243a;
       color: #fff;
@@ -141,7 +180,8 @@
       margin-bottom: 18px;
       table-layout: fixed;
     }
-    table.compare-table th, table.compare-table td {
+    table.compare-table th,
+    table.compare-table td {
       border: 1px solid #b4bfd7;
       padding: 11px 10px;
       text-align: center;
@@ -152,30 +192,40 @@
       font-size: 1.03em;
       vertical-align: middle;
       min-width: 80px;
+      transition: background 0.22s;
     }
-    table.compare-table th {
-      background-color: #dde4f1;
-      font-weight: 600;
-      color: #273964;
-      text-align: center;
-    }
+    /* 🔥 첫 열(항목명)만 120px 고정 */
     table.compare-table th:first-child,
     table.compare-table td:first-child {
       width: 120px !important;
-      min-width: 105px;
-      max-width: 160px;
+      min-width: 120px !important;
+      max-width: 120px !important;
+      white-space: normal !important;
+      word-break: break-all !important;
       background: #f1f6fb;
-      font-weight: 700;
-      color: #213050;
-      font-size: 1em;
       text-align: center;
+    }
+    
+    table.compare-table th:nth-child(2) {
+      background: #c7daf3 !important;
+    }
+    table.compare-table th:nth-child(4) {
+      background: #c7daf3 !important;
+    }
+    
+    /* 두 번째 상품 열 옅은 색 */
+    table.compare-table th:nth-child(3) {
+      background: #c7daf3 !important;
+    }
+    table.compare-table td:nth-child(3) {
+      background: #f8fbff !important;
     }
     table.compare-table th:not(:first-child), table.compare-table td:not(:first-child) {
       text-align: center;
       font-size: 1em;
     }
     table.compare-table colgroup col:not(:first-child) {
-      width: calc(80% / 3) !important;
+      width: auto !important;
     }
     @media (max-width: 1000px) {
       #compareArea, table.compare-table {
@@ -315,15 +365,8 @@
       border-style: solid;
       border-color: transparent transparent transparent #212d49;
     }
-    .product-name {
-  		text-decoration: none;
-	}
-	body.dark-mode a.product-name {
-  		color: #fff;
-  		text-decoration: none;
-	}
-    
-    
+    .product-name { text-decoration: none; }
+    body.dark-mode a.product-name { color: #fff; text-decoration: none; }
   </style>
 </head>
 <body>
@@ -393,14 +436,14 @@
   </div>
   <script>
     const products = [
-      { pno: "P001", name: "꿈이룸 외화자유적금", type: "적금", description: "자동이체로 외화 목돈을 차곡차곡 모으고 싶은 분께 추천", period: "12개월", currencies: ["USD"], join: ["영업점 가입"], categories: ["study"] },
-      { pno: "P002", name: "BNK모아드림외화적금", type: "적금", description: "짧은 기간에도 꾸준히 외화를 모으고 싶은 분께", period: "1~12개월", currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"], categories: ["study"] },
+      { pno: "P001", name: "꿈이룸 외화자유적금", type: "적금", description: "자동이체로 외화 목돈을 차곡차곡 모을 수 있는 적금", period: "12개월", currencies: ["USD"], join: ["영업점 가입"], categories: ["study"] },
+      { pno: "P002", name: "BNK모아드림외화적금", type: "적금", description: "짧은 기간에도 꾸준히 외화를 모을 수 있는 적금", period: "1~12개월", currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"], categories: ["study"] },
       { pno: "P003", name: "BNK UP & UP 외화정기예금", type: "정기예금", description: "예치기간 따라 금리가 올라가는 안정형 외화 예금", period: "1년", currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["investment"] },
-      { pno: "P006", name: "외화정기예금", type: "정기예금", description: "가장 높은 금리를 원하고 장기 예치가 가능한 분께", period: "1개월~3년", currencies: ["USD", "JPY", "GBP", "CHF", "EUR", "AUD", "CAD"], join: ["영업점 가입", "인터넷 가입"], categories: ["investment"] },
+      { pno: "P006", name: "외화정기예금", type: "정기예금", description: "가장 높은 금리를 원하고 장기 예치가 가능한 분께 적합", period: "1개월~3년", currencies: ["USD", "JPY", "GBP", "CHF", "EUR", "AUD", "CAD"], join: ["영업점 가입", "인터넷 가입"], categories: ["investment"] },
       { pno: "P004", name: "업앤업 외화MMDA", type: "입출금예금", description: "하루만 맡겨도 이자가 쌓이는 유동성 높은 외화예금", period: "제한 없음", currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["travel"] },
-      { pno: "P007", name: "외화당좌예금", type: "입출금예금", description: "외화수표 발행이 필요한 기업 고객에게 적합", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF"], join: ["영업점 가입"], categories: ["immigration"] },
-      { pno: "P008", name: "외화보통예금", type: "입출금예금", description: "외화를 자주 입출금하는 개인 고객에게 추천", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF", "CAD", "AUD", "CNY"], join: ["영업점 가입"], categories: ["immigration"] },
-      { pno: "P005", name: "EASY 환테크 듀얼통장", type: "복합형", description: "환율 시세 걱정 없이 자동으로 외화를 사고팔고 싶은 분께", period: "제한 없음", currencies: ["USD"], join: ["영업점 가입"], categories: ["travel"] }
+      { pno: "P007", name: "외화당좌예금", type: "입출금예금", description: "외화수표 발행이 필요한 기업 고객 맞춤 상품", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF"], join: ["영업점 가입"], categories: ["immigration"] },
+      { pno: "P008", name: "외화보통예금", type: "입출금예금", description: "외화를 자주 입출금하는 개인 고객 맞춤 상품", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF", "CAD", "AUD", "CNY"], join: ["영업점 가입"], categories: ["immigration"] },
+      { pno: "P005", name: "EASY 환테크 듀얼통장", type: "복합형", description: "환율 시세 걱정 없이 자동으로 외화를 사고팔고 싶은 고객 맞춤 상품", period: "제한 없음", currencies: ["USD"], join: ["영업점 가입"], categories: ["travel"] }
     ];
     let compareList = [];
     let currentType = 'all', currentCat = '';
@@ -471,7 +514,6 @@
           </div>
         `;
         grid.appendChild(card);
-        console.log(p);
         card.addEventListener('mouseenter', function () {
           if(soundMode) {
             if (lastSpokenIdx === idx) return;
@@ -544,9 +586,10 @@
         return;
       }
       area.classList.add('active');
+      // colgroup: 첫 번째 열 고정(120px), 나머지는 auto
       let html = `<colgroup>
-        <col style="width:120px;">
-        ${compareList.map(()=>'<col>').join('')}
+        <col style="width:210px; min-width:120px; max-width:120px;">
+        ${compareList.map(()=>'<col style="width:auto;">').join('')}
       </colgroup>`;
       html += `<tr><th></th>`;
       compareList.forEach((p,i)=>html+=`<th>상품 ${i+1}</th>`);
@@ -561,7 +604,7 @@
       ];
       fields.forEach(f=>{
         html += `<tr><th>${f.label}</th>`;
-        compareList.forEach(p=>{
+        compareList.forEach((p, idx)=>{
           let v = Array.isArray(p[f.key]) ? p[f.key].map(currencyLabel).join(', ') : p[f.key];
           html += `<td style="word-break: break-word; white-space: pre-line;">${v}</td>`;
         });
@@ -569,7 +612,6 @@
       });
       table.innerHTML = html;
 
-      // 상품 비교 제한 안내문구
       if (compareList.length >= 3) {
         limitMsg.style.display = 'block';
       } else {
@@ -722,19 +764,19 @@
       }
     });
     document.addEventListener('DOMContentLoaded', () => {
-        fetch('/product/names')
-          .then(res => res.json())
-          .then(names => {
-            // products는 이미 선언되어 있음 (하드코딩 데이터)
-            const filtered = products.filter(p => names.includes(p.name));
-            products.length = 0; // 기존 배열 비우기
-            filtered.forEach(p => products.push(p)); // 활성화 상품만 다시 채우기
-            renderProducts(); // 상품 다시 렌더링
-          })
-          .catch(err => {
-            console.error("상품명 불러오기 실패:", err);
-          });
-      });
+      fetch('/product/names')
+        .then(res => res.json())
+        .then(names => {
+          // products는 이미 선언되어 있음 (하드코딩 데이터)
+          const filtered = products.filter(p => names.includes(p.name));
+          products.length = 0; // 기존 배열 비우기
+          filtered.forEach(p => products.push(p)); // 활성화 상품만 다시 채우기
+          renderProducts(); // 상품 다시 렌더링
+        })
+        .catch(err => {
+          console.error("상품명 불러오기 실패:", err);
+        });
+    });
   </script>
 </body>
 </html>
