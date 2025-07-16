@@ -12,7 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.bnk_project_01.entity.Category;
 import com.example.bnk_project_01.entity.Import;
+import com.example.bnk_project_01.repository.CategoryRepository;
 import com.example.bnk_project_01.repository.ImportRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -22,12 +24,21 @@ public class UploadController {
 
     @Autowired
     private ImportRepository importRepository;
+    
+    //header
+    @Autowired
+    private CategoryRepository cateRepo;
+    //===============
 
     private final String UPLOAD_ROOT = "uploads/";
 
     // ============================ 업로드 폼 ============================
     @GetMapping("/user/uploadForm")
     public String uploadForm(HttpSession session, Model model) {
+    	
+        //header
+        List<Category> categories = cateRepo.findAll();
+    	
         String username = (String) session.getAttribute("username");
         String role = (String) session.getAttribute("role");
 
@@ -50,7 +61,10 @@ public class UploadController {
         model.addAttribute("hasInvoice", invoiceImport != null);
         model.addAttribute("hasPL", plImport != null);
         model.addAttribute("hasBL", blImport != null);
+        
 
+        model.addAttribute("categories", categories);
+        
         return "user/uploadForm";
     }
 
@@ -159,4 +173,11 @@ public class UploadController {
 
         importRepository.save(record);
     }
+    
+    // header
+    
+    
+    
+    
+    
 }

@@ -1,14 +1,5 @@
 package com.example.bnk_project_01.service;
 
-import com.example.bnk_project_01.dto.ForexRateDto;
-import com.example.bnk_project_01.entity.Rate;
-import com.example.bnk_project_01.repository.ForexMainRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -19,6 +10,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.example.bnk_project_01.dto.ForexRateDto;
+import com.example.bnk_project_01.entity.Rate;
+import com.example.bnk_project_01.repository.ForexMainRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class ForexMainService {
@@ -31,11 +32,20 @@ public class ForexMainService {
 
     public void fetch() throws Exception {
         LocalDate today = LocalDate.now();
-        String dateStr = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
+        // ✅ API는 '전날 기준' 데이터를 오늘 제공함 → 전날로 설정
+        LocalDate baseDate = today.minusDays(1);
+
+        // ✅ 전날이 주말이면 금요일로 이동
+        LocalDate targetDate = switch (baseDate.getDayOfWeek()) {
+            case SATURDAY -> baseDate.minusDays(1); // 금요일
+            case SUNDAY   -> baseDate.minusDays(2); // 금요일
+            default       -> baseDate;              // 평일 그대로
+        };
+
+        String dateStr = targetDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         String url = "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON?authkey=" +
                 authKey + "&searchdate=" + dateStr + "&data=AP01";
-
 
         HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
         conn.setRequestMethod("GET");
@@ -45,15 +55,14 @@ public class ForexMainService {
         br.close();
 
         ObjectMapper mapper = new ObjectMapper();
-        List<ForexRateDto> apiList = mapper.readValue(json, new TypeReference<>() {
-        });
+        List<ForexRateDto> apiList = mapper.readValue(json, new TypeReference<>() {});
 
         Set<String> choice = Set.of("USD", "JPY(100)", "EUR", "CNH", "GBP", "CHF");
 
         List<Rate> rates = apiList.stream()
                 .filter(r -> choice.contains(r.getRcode()))
                 .map(r -> Rate.builder()
-                        .rdate(today)
+                        .rdate(targetDate) // ✅ 정확한 기준일로 저장
                         .rseq(1)
                         .rcode(r.getRcode().replace("(100)", ""))
                         .rcurrency(r.getRcurrency())
@@ -61,9 +70,6 @@ public class ForexMainService {
                         .build())
                 .collect(Collectors.toList());
 
-
-                forexMainRepository.saveAll(rates);
-
+        forexMainRepository.saveAll(rates);
     }
-
 }
