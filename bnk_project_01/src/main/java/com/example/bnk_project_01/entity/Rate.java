@@ -7,12 +7,12 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "bnk_rate", uniqueConstraints = {@UniqueConstraint(columnNames = {"rdate", "rcode"})})
+@Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Entity
+@Table(name = "bnk_rate", uniqueConstraints = {@UniqueConstraint(columnNames = {"rdate", "rcode"})})
 public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
