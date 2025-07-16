@@ -85,7 +85,7 @@ nav {width: 100%; background: #fff; position: relative; border-bottom: 1px solid
 
 /* 2차 메뉴 바(서브메뉴) */
 .submenu-quick {
-  background: #635d53;  /* BNK Dark Gray */
+  background: #000000;
   width: 100vw;
   min-width: 1100px;
 }
