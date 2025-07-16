@@ -45,6 +45,11 @@ public class ForexMainController {
                 .sorted(Comparator.comparing(ForexCompareDto::getRdate))
                 .toList();
     }
+    @GetMapping("/forexEx")
+    public String roo1() {
+    	
+    	return "forexExPage";
+    }
 
     // ✅ 2. 메인 페이지
     @GetMapping("/forex")

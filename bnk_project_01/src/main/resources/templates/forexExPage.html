@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>BNK 외환 메인페이지</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        /* ───────────────────────────────
+           0. 스크롤바 & 스크롤 스냅 & 헤더 오프셋
+        ─────────────────────────────── */
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow-y: auto;       /* 오직 세로 스크롤만 */
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            scroll-padding-top: 200px;  /* 헤더 높이(px) 만큼 오프셋 */
+        }
+        section {
+            scroll-snap-align: start;
+            min-height: 100vh;       /* 뷰포트 전체 높이 채우기 */
+            box-sizing: border-box;  /* padding 포함 */
+        }
+        /* Firefox 스크롤바 */
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: red #f1f1f1;
+        }
+        /* WebKit 스크롤바 */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: red;
+            border-radius: 6px;
+            border: 3px solid #f1f1f1;
+        }
+
+        /* ───────────────────────────────
+           공통 최대 너비 컨테이너
+        ─────────────────────────────── */
+        .main-visual-area,
+        .main-service-menu,
+        .main-best-products,
+        .fx-slider,
+        .main-fx-ad-wrap {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ───────────────────────────────
+           1. 메인 비주얼 + 서비스 메뉴
+        ─────────────────────────────── */
+        .main-section1 {
+            background: #fff;
+            padding-bottom: 40px;
+        }
+        .main-visual-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding-top: 44px;
+            gap: 36px;
+        }
+        .main-visual-image {
+            flex: 2;
+            background: #5b7edc;
+            color: #fff;
+            font-size: 2.7rem;
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+            font-weight: 500;
+            box-shadow: 0 6px 24px rgba(90,110,170,0.09);
+            letter-spacing: -0.02em;
+        }
+        .main-visual-qr {
+            flex: 1;
+            background: #6f88d6;
+            color: #fff;
+            font-size: 2.15rem;
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 140px;
+            font-weight: 500;
+            box-shadow: 0 6px 24px rgba(90,110,170,0.08);
+        }
+
+        .main-service-menu {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 48px;
+        }
+        .main-service-item {
+            flex: 1;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 18px rgba(120,120,140,0.07);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 24px 0;
+            border: 1.5px solid #f2f2f2;
+            transition: transform 0.15s, box-shadow 0.15s;
+            cursor: pointer;
+        }
+        .main-service-item:hover {
+            box-shadow: 0 8px 32px rgba(120,120,140,0.13);
+            transform: translateY(-5px) scale(1.04);
+            background: #f3f7ff;
+            border-color: #c3d2f8;
+        }
+        .main-service-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            transition: transform .17s;
+        }
+        .main-service-item:hover .icon {
+            transform: scale(1.19) rotate(-4deg);
+        }
+        .main-service-item .text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2e3650;
+            letter-spacing: -0.01em;
+        }
+
+        /* ───────────────────────────────
+           2. 자주 찾는 상품
+        ─────────────────────────────── */
+        .main-section2 {
+            background: #fafafa;
+            padding: 72px 0;
+        }
+        .section-title {
+            font-size: 2.45rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 42px;
+            letter-spacing: -0.03em;
+        }
+        .main-best-products {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+        }
+        .main-best-products .card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(55,75,100,0.07);
+            flex: 1;
+            max-width: 340px;
+            padding: 38px 28px;
+            display: flex;
+            flex-direction: column;
+            font-size: 1.1rem;
+            min-height: 380px;
+            transition: box-shadow .15s;
+        }
+        .main-best-products .card:hover {
+            box-shadow: 0 8px 34px rgba(70,90,130,0.12);
+        }
+        .main-best-products .card .title-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .main-best-products .card .main-title {
+            font-size: 1.33rem;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.36;
+        }
+        .main-best-products .card .card-icon {
+            font-size: 2.25rem;
+            color: #4977cb;
+        }
+        .main-best-products .card .more-link {
+            color: #717171;
+            font-size: 0.99rem;
+            margin: 4px 0 18px;
+            display: inline-block;
+        }
+        .main-best-products .card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .main-best-products .card ul li {
+            border-top: 1px solid #f2f2f2;
+            padding: 18px 0 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.08rem;
+        }
+        .main-best-products .card ul li:first-child {
+            border-top: none;
+        }
+        .main-best-products .card ul li a {
+            color: #222;
+            text-decoration: none;
+            font-weight: 500;
+            flex: 1;
+            transition: color .13s;
+        }
+        .main-best-products .card ul li a:hover {
+            color: #4977cb;
+        }
+        .main-best-products .card ul li .arrow {
+            font-size: 1.15rem;
+            color: #b2b2b2;
+            margin-left: 10px;
+        }
+
+        /* ───────────────────────────────
+           3. 외환 서비스 (슬라이더 + 카드)
+        ─────────────────────────────── */
+        .main-section3 {
+            background: #fff;
+            padding: 54px 0 60px;
+        }
+        .main-section3 .section-title {
+            font-size: 2.45rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .fx-slider {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-bottom: 40px;
+        }
+        .fx-slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+        .fx-slide.active {
+            display: block;
+        }
+        .fx-slide.s1 { background: #3278c5; }
+        .fx-slide.s2 { background: #4a7866; }
+        .fx-slide.s3 { background: #6f5fed; }
+        .fx-slide.s4 { background: #fce2d0; }
+
+        .slider-prev,
+        .slider-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.4);
+            color: #fff;
+            border: none;
+            font-size: 1.5rem;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .slider-prev { left: 16px; }
+        .slider-next { right: 16px; }
+
+        .main-fx-ad-wrap {
+            display: flex;
+            justify-content: space-between;
+            gap: 28px;
+        }
+        .main-fx-ad {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+            font-weight: 700;
+            color: #222;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .main-fx-ad:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        .fx-color1 { background: linear-gradient(135deg, #fde4e4 0%, #e8f0ff 100%); }
+        .fx-color2 { background: linear-gradient(135deg, #e0f5e9 0%, #f0f5ff 100%); }
+        .fx-color3 { background: linear-gradient(135deg, #fff3e5 0%, #e5f3ff 100%); }
+
+        .main-fx-ad .fx-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .main-fx-ad .desc {
+            flex: 1;
+            font-size: 1.1rem;
+            line-height: 1.3;
+        }
+        .main-fx-ad .more-arrow {
+            font-size: 1.5rem;
+            opacity: .7;
+        }
+
+        /* ───────────────────────────────
+           반응형
+        ─────────────────────────────── */
+        @media (max-width: 768px) {
+            .main-visual-area,
+            .main-service-menu,
+            .main-best-products,
+            .fx-slider,
+            .main-fx-ad-wrap {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- 공통 헤더 -->
+<th:replace="~{user1/common/footer :: footer}"/>
+
+<!-- 1. 메인 비주얼 + 상담 메뉴 -->
+<section id="section1" class="main-section1">
+    <div class="main-visual-area">
+        <div class="main-visual-image">사진</div>
+        <div class="main-visual-qr">QR 사진</div>
+    </div>
+    <div class="main-service-menu">
+        <div class="main-service-item"><span class="icon">🏦</span><span class="text">영업점 찾기</span></div>
+        <div class="main-service-item"><span class="icon">📞</span><span class="text">전화 상담</span></div>
+        <div class="main-service-item"><span class="icon">💬</span><span class="text">채팅 상담</span></div>
+        <div class="main-service-item"><span class="icon">✉️</span><span class="text">이메일 상담</span></div>
+        <div class="main-service-item"><span class="icon">💻</span><span class="text">원격지원 상담</span></div>
+        <div class="main-service-item"><span class="icon">❓</span><span class="text">FAQ</span></div>
+    </div>
+</section>
+
+<!-- 2. 자주 찾는 상품 -->
+<section id="section2" class="main-section2">
+    <div class="section-title">자주 찾는 상품</div>
+    <div class="main-best-products">
+        <div class="card">
+            <div class="title-row"><span class="main-title">알뜰혜택<br>외화환전</span><span class="card-icon">💱</span></div>
+            <a href="#" class="more-link">바로가기 &gt;</a>
+            <ul>
+                <li><a href="#">환전안내</a><span class="arrow">&gt;</span></li>
+                <li><a href="#">환전신청/조회</a><span class="arrow">&gt;</span></li>
+                <li><a href="#">환율예약환전</a><span class="arrow">&gt;</span></li>
+                <li><a href="#">환전가능영업점</a><span class="arrow">&gt;</span></li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="title-row"><span class="main-title">신속&간편<br>외화송금</span><span class="card-icon">💸</span></div>
+            <a href="#" class="more-link">바로가기 &gt;</a>
+            <ul>
+                <li><a href="#">송금안내</a><span class="arrow">&gt;</span></li>
+                <li><a href="#">송금관련서비스</a><span class="arrow">&gt;</span></li>
+                <li><a href="#">국내송금</a><span class="arrow">&gt;</span></li>
+                <li><a href="#">해외송금</a><span class="arrow">&gt;</span></li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="title-row"><span class="main-title">차곡차곡<br>외화예금</span><span class="card-icon">💰</span></div>
+            <a href="#" class="more-link">바로가기 &gt;</a>
+            <ul>
+                <li><a href="#">외화예금조회/이체</a><span class="arrow">&gt;</span></li>
+                <li><a href="#">외화예금신규</a><span class="arrow">&gt;</span></li>
+                <li><a href="#">환율예약이체</a><span class="arrow">&gt;</span></li>
+                <li><a href="#">
+                    외화예금해지</a><span class="arrow">&gt;</span></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- 3. 외환 서비스 (슬라이더 + 카드) -->
+<section id="section3" class="main-section3">
+    <div class="section-title">외환 서비스</div>
+    <div class="fx-slider">
+        <div class="fx-slide s1 active"></div>
+        <div class="fx-slide s2"></div>
+        <div class="fx-slide s3"></div>
+        <div class="fx-slide s4"></div>
+        <button class="slider-prev">&lt;</button>
+        <button class="slider-next">&gt;</button>
+    </div>
+    <div class="main-fx-ad-wrap">
+        <a href="#" class="main-fx-ad fx-color1">
+            <div class="fx-icon">🎓</div>
+            <div class="desc"><strong>유학 서비스</strong><br>유학생 대상 외환 안내 및 지원</div>
+            <div class="more-arrow">→</div>
+        </a>
+        <a href="#" class="main-fx-ad fx-color2">
+            <div class="fx-icon">🌏</div>
+            <div class="desc"><strong>여행 서비스</strong><br>여행자 외환 환전/안내 서비스</div>
+            <div class="more-arrow">→</div>
+        </a>
+        <a href="#" class="main-fx-ad fx-color3">
+            <div class="fx-icon">🏠</div>
+            <div class="desc"><strong>이주 서비스</strong><br>해외 이주자 환전 및 자금이동 지원</div>
+            <div class="more-arrow">→</div>
+        </a>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const slides = document.querySelectorAll('.fx-slide');
+        let idx = 0;
+        function show(i) {
+            slides.forEach((s,j) => s.classList.toggle('active', j===i));
+        }
+        document.querySelector('.slider-prev').onclick = () => {
+            idx = (idx - 1 + slides.length) % slides.length;
+            show(idx);
+        };
+        document.querySelector('.slider-next').onclick = () => {
+            idx = (idx + 1) % slides.length;
+            show(idx);
+        };
+        setInterval(() => {
+            idx = (idx + 1) % slides.length;
+            show(idx);
+        }, 4000);
+    });
+</script>
+
+<!-- 공통 푸터 -->
+<div th:replace="~{user1/common/footer :: footer}"></div>
+</body>
+</html>
