@@ -48,8 +48,8 @@ public class ForexMainService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    } */
-	
+    } */  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@서버 끄면 주석처리해놓으세요@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
     @Value("${exim.api-key}")
     private String authKey;
 

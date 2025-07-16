@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<title>BNK 외환 정보</title>
 	<link rel="stylesheet" th:href="@{/css/common.css}" />
-
+	<link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
 	<style>
 		/* ================================
        ✅ 공통 설정 및 색상 변수
@@ -23,9 +23,11 @@
 			--bnk-gold: #896E4A;
 			--bnk-silver: #909394;
 		}
+		.bnk-font-area {
+ 		   font-family: 'BNKFont', 'Spoqa Han Sans Neo', sans-serif;
+		}
 
-		body {
-			font-family: 'Spoqa Han Sans Neo', 'BNKFont', sans-serif;
+		body {			
 			margin: 0;
 			padding: 0;
 			background-color: #ffffff;
@@ -609,7 +611,7 @@
 <body>
 
 	<div th:replace="~{fragments/header2 :: header}"></div>
-
+	<main class="bnk-font-area">
 	<div class="full-red-line"></div>
 
 	<!-- ✅ 환율 정보 -->
@@ -796,11 +798,10 @@
 
 
 	<div class="full-gray-line"></div>
-
+	</main>
 	<!-- ✅ 푸터 -->
-	<div class="footer">
-		© 2025 BNK Busan Bank. All rights reserved.
-	</div>
+	<div th:replace="fragments/dictionary-button :: dictionary-button"></div>
+	<div th:replace="~{fragments/footer :: footer}"></div>
 
 	<script>
 		document.addEventListener("DOMContentLoaded", () => {
