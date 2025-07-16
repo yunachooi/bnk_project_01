@@ -321,7 +321,7 @@
         
         .menu-grid {
 		  display: grid;
-		  grid-template-columns: repeat(4, 1fr); /* ✅ 유지 */
+		  grid-template-columns: repeat(3, 1fr); /* ✅ 유지 */
 		  gap: 12px;
 		}
 		
@@ -394,12 +394,6 @@
 		}
 		
 		/* 각 카드 배경/링크 색상 */
-		.pink-bg {
-		  background-color: #ffe4e1;
-		}
-		.pink-bg a {
-		  color: #d94e68;
-		}
 		
 		.yellow-bg {
 		  background-color: #fffacd;
@@ -421,6 +415,55 @@
 		.deep-blue-bg a {
 		  color: #0d47a1;
 		}
+		
+		
+		
+		/* ================================
+           ✅ 3-2. 서비스 메뉴
+        ================================ */
+		
+		
+		.main-service-menu {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 48px;
+        }
+        .main-service-item {
+            flex: 1;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 18px rgba(120,120,140,0.07);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            padding: 24px 0;
+            border: 1.5px solid #f2f2f2;
+            transition: transform 0.15s, box-shadow 0.15s;
+            cursor: pointer;
+        }
+        .main-service-item:hover {
+            box-shadow: 0 8px 32px rgba(120,120,140,0.13);
+            transform: translateY(-5px) scale(1.04);
+            background: #f3f7ff;
+            border-color: #c3d2f8;
+        }
+        .main-service-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            transition: transform .17s;
+        }
+        .main-service-item:hover .icon {
+            transform: scale(1.19) rotate(-4deg);
+        }
+        .main-service-item .text {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2e3650;
+            letter-spacing: -0.01em;
+        }
 
 
 
@@ -582,19 +625,6 @@
 		  <div class="container">
 		    <div class="menu-grid">
 		
-		      <!-- 자주 찾는 서비스 -->
-		      <div class="menu-card pink-bg">
-		        <div class="menu-header">
-		          <img src="/img/icon/서비스.png" alt="서비스 아이콘">
-		          <div class="menu-title">자주 찾는 서비스</div>
-		        </div>
-		        <ul>
-		          <li><a href="#" th:text="${cMap['FX071'].medium}">유학</a></li>
-		          <li><a href="#" th:text="${cMap['FX074'].medium}">이주</a></li>
-		          <li><a href="#" th:text="${cMap['FX076'].medium}">여행</a></li>
-		        </ul>
-		      </div>
-		
 		      <!-- 외환 예금 -->
 		      <div class="menu-card yellow-bg">
 		        <div class="menu-header">
@@ -634,6 +664,19 @@
 		      </div>
 		
 		    </div>
+		  </div>
+		</div>
+		
+		
+		<!-- ✅ 주요 고객 서비스 메뉴 -->
+		<div class="container">
+		  <div class="main-service-menu">
+		    <div class="main-service-item"><span class="icon">🏦</span><span class="text">영업점 찾기</span></div>
+		    <div class="main-service-item"><span class="icon">📞</span><span class="text">전화 상담</span></div>
+		    <div class="main-service-item"><span class="icon">💬</span><span class="text">채팅 상담</span></div>
+		    <div class="main-service-item"><span class="icon">✉️</span><span class="text">이메일 상담</span></div>
+		    <div class="main-service-item"><span class="icon">💻</span><span class="text">원격지원 상담</span></div>
+		    <div class="main-service-item"><span class="icon">❓</span><span class="text">FAQ</span></div>
 		  </div>
 		</div>
 
