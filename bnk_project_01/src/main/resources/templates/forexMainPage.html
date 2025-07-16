@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>BNK 외환 정보</title>
-    <link rel="stylesheet" th:href="@{/css/header.css}" />
+    <link rel="stylesheet" th:href="@{/css/common.css}" />
 
     <style>
         /* ================================
@@ -503,8 +503,7 @@
 
 <body>
 
-    <!-- ✅ 헤더 fragment -->
-    <div th:replace="fragments/header :: headerFragment"></div>
+    <div th:replace="~{fragments/header2 :: header}"></div>
 
     <div class="full-red-line"></div>
 
@@ -666,7 +665,7 @@
 		
 		    </div>
 		</div>
-		</div>
+		
 
 
 
