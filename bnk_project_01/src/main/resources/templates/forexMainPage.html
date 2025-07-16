@@ -396,25 +396,73 @@
 		/* 각 카드 배경/링크 색상 */
 		
 		.yellow-bg {
-		  background-color: #fffacd;
+		  background: linear-gradient(135deg, #fde4e4 0%, #e8f0ff 100%);
 		}
 		.yellow-bg a {
 		  color: #d4aa00;
 		}
 		
 		.blue-bg {
-		  background-color: #e0f7fa;
+		  background: linear-gradient(135deg, #e0f5e9 0%, #f0f5ff 100%);
 		}
 		.blue-bg a {
 		  color: #2196f3;
 		}
 		
 		.deep-blue-bg {
-		  background-color: #90caf9;
+		  background: linear-gradient(135deg, #fff3e5 0%, #e5f3ff 100%);
 		}
 		.deep-blue-bg a {
 		  color: #0d47a1;
 		}
+		
+		
+		.main-fx-ad-wrap {
+            display: flex;
+            justify-content: space-between;
+            gap: 28px;
+        }
+        .main-fx-ad {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+            font-weight: 700;
+            color: #222;
+            transition: transform .2s, box-shadow .2s;
+        }
+        .main-fx-ad:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        .fx-color1 { background: linear-gradient(135deg, #fde4e4 0%, #e8f0ff 100%); }
+        .fx-color2 { background: linear-gradient(135deg, #e0f5e9 0%, #f0f5ff 100%); }
+        .fx-color3 { background: linear-gradient(135deg, #fff3e5 0%, #e5f3ff 100%); }
+
+        .main-fx-ad .fx-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .main-fx-ad .desc {
+            flex: 1;
+            font-size: 1.1rem;
+            line-height: 1.3;
+        }
+        .main-fx-ad .more-arrow {
+            font-size: 1.5rem;
+            opacity: .7;
+        }
 		
 		
 		
@@ -475,62 +523,45 @@
            ✅ 4. 앱 QR 코드
         ================================ */
 
-        .account-section {
-            background-color: #fefefe;
-            padding: 60px 0;
-        }
+        .app-download-box {
+		  background: #fffef6;
+		  border-radius: 16px;
+		  border: 1px solid #eee;
+		  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+		  padding: 30px;
+		  width: 380px;
+		  margin: 0 auto;
+		  text-align: center;
+		}
+		
+		.app-info h3 {
+		  font-size: 22px;
+		  color: #d7191f;
+		  margin-bottom: 14px;
+		  font-weight: 800;
+		}
+		
+		.app-info .desc {
+		  font-size: 16px;
+		  color: #333;
+		  line-height: 1.6;
+		  margin-bottom: 20px;
+		  font-weight: 500;
+		}
+		
+		.qr-image {
+		  width: 160px;
+		  height: auto;
+		  border-radius: 12px;
+		  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+		  margin-bottom: 10px;
+		}
+		
+		.subtext {
+		  font-size: 14px;
+		  color: #555;
+		}
 
-        .account-flex {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 80px;
-            flex-wrap: wrap;
-        }
-
-        .account-left,
-        .account-right {
-            flex: 1 1 300px;
-            text-align: center;
-        }
-
-        .account-right {
-            background-color: #fffff1;
-            border: 1px solid #ddd;
-            padding: 30px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-        }
-
-
-        .account-subtitle {
-            font-size: 16px;
-            color: #444;
-            margin-bottom: 14px;
-            font-weight: 500;
-        }
-
-        .account-qr-img {
-
-            width: 200px;
-            height: 350px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .account-title {
-            font-size: 30px;
-            font-weight: bold;
-            color: var(--bnk-red);
-            margin-bottom: 16px;
-        }
-
-        .account-desc {
-            font-size: 20px;
-            font-weight: bold;
-            color: #555;
-            line-height: 1.6;
-        }
 
         /* ================================
            ✅ 5. 푸터 (footer)
@@ -598,9 +629,9 @@
 	  <div class="slider left-slider">
 	    <div class="slide-track-wrapper">
 	      <div class="slide-track">
-	        <div class="slide"><img src="/img/main/product01.png" alt="상품1"></div>
-	        <div class="slide"><img src="/img/main/product02.png" alt="상품2"></div>
-	        <div class="slide"><img src="/img/main/product03.png" alt="상품3"></div>
+	        <div class="slide"><img src="/img/coupon/이벤트1.png" alt="이벤트1"></div>
+	        <div class="slide"><img src="/img/coupon/이벤트2.png" alt="이벤트2"></div>
+	        <div class="slide"><img src="/img/coupon/이벤트4.png" alt="이벤트4"></div>
 	      </div>
 	    </div>
 	    <div class="dots"></div>
@@ -668,6 +699,39 @@
 		  </div>
 		</div>
 		
+		<div class="container" style="text-align: center; margin-top: 60px;">
+		  <h2 style="
+		    font-size: 28px;
+		    font-weight: 800;
+		    font-family: 'Spoqa Han Sans Neo', 'Noto Sans KR', sans-serif;
+		    color: #000;
+		    margin-bottom: 8px;
+		  ">자주 찾는 서비스</h2>
+		</div>
+
+
+		
+		<!-- ✅ 주요 외환 서비스 안내 -->
+		<div class="container">
+		  <div class="main-fx-ad-wrap">
+		    <a href="#" class="main-fx-ad fx-color1">
+		      <div class="fx-icon">🎓</div>
+		      <div class="desc"><strong>유학 서비스</strong><br>유학생 대상 외환 안내 및 지원</div>
+		      <div class="more-arrow">→</div>
+		    </a>
+		    <a href="#" class="main-fx-ad fx-color2">
+		      <div class="fx-icon">🌏</div>
+		      <div class="desc"><strong>여행 서비스</strong><br>여행자 외환 환전/안내 서비스</div>
+		      <div class="more-arrow">→</div>
+		    </a>
+		    <a href="#" class="main-fx-ad fx-color3">
+		      <div class="fx-icon">🏠</div>
+		      <div class="desc"><strong>이주 서비스</strong><br>해외 이주자 환전 및 자금이동 지원</div>
+		      <div class="more-arrow">→</div>
+		    </a>
+		  </div>
+		</div>
+		
 		
 		<!-- ✅ 주요 고객 서비스 메뉴 -->
 		<div class="container">
@@ -687,28 +751,16 @@
             
             
 
-        <!-- ✅ 스마트 계좌개설 안내 (좌우 배치) -->
-		<div class="account-section">
-		    <div class="container account-flex">
-		
-		        <!-- ✅ 왼쪽: QR 코드 -->
-		        <div class="account-left">
-		            <img src="/img/qr/app.png" alt="BNK 스마트 계좌개설 QR" class="account-qr-img">
-		            <p class="account-subtitle">BNK 앱 설치 및 계좌 개설</p>
-		        </div>
-		
-		        <!-- ✅ 오른쪽: 설명 텍스트 -->
-		        <div class="account-right">
-		            <h2 class="account-title">📱 스마트 계좌 개설</h2>
-		            <p class="account-desc">
-		                영업점 방문 없이 언제 어디서나<br>
-		                QR 코드를 스캔하여 BNK를 방문하고<br>
-		                계좌를 간편하게 개설할 수 있습니다.
-		            </p>
-		        </div>
-		
-		    </div>
+        <<!-- ✅ GO BANK 스타일의 BNK QR 안내 -->
+		<div class="app-download-box">
+		  <div class="app-info">
+		    <h3>📱 스마트 계좌 개설</h3>
+		    <p class="desc">영업점 방문 없이 언제 어디서나<br>QR 코드를 스캔하여 BNK를 방문하고<br>계좌를 간편하게 개설할 수 있습니다.</p>
+		    <img src="/img/qr/app.png" alt="BNK 앱 QR" class="qr-image" />
+		    <p class="subtext">BNK 앱 설치 및 계좌 개설</p>
+		  </div>
 		</div>
+
 		</div>
 
 
