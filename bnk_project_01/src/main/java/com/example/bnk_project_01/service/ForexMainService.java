@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ForexMainService {
 	
-	/* static {
+	 /* static {
         try {
             // ✅ 개발‑전용 : 모든 인증서를 신뢰
             SSLContext sc = SSLContext.getInstance("TLS");
@@ -49,6 +49,7 @@ public class ForexMainService {
             e.printStackTrace();
         }
     } */
+	
     @Value("${exim.api-key}")
     private String authKey;
 
