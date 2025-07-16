@@ -1,45 +1,43 @@
 @keyframes glowScale {
   0%, 100% {
-    box-shadow: 0 0 6px rgba(255, 150, 50, 0.3);
+    filter: drop-shadow(0 0 4px rgba(255, 180, 0, 0.3));
     transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 14px rgba(255, 160, 60, 0.8);
-    transform: scale(1.08);
+    filter: drop-shadow(0 0 10px rgba(255, 160, 60, 0.8));
+    transform: scale(1.05);
   }
 }
 
 #dictionaryBtn {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
-  width: 68px;
-  height: 68px;
-  background: linear-gradient(135deg, #fff5e6, #ffb366);
-  border-radius: 18px;
+  bottom: 70px;
+  right: 65px;
+  width: 64px;
+  height: 64px;
+  background: none;
+  border: none;
+  padding: 0;
+  z-index: 999;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
   animation: glowScale 2.5s infinite;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  transition: background-color 0.3s ease;
+  cursor: pointer;
 }
 
 #dictionaryBtn:hover {
-  background: linear-gradient(135deg, #ffe0b3, #ffa64d);
+  filter: drop-shadow(0 0 8px rgba(255, 140, 0, 0.7));
 }
 
 #dictionaryBtn img {
-  width: 65px;
-  height: 65px;
+  width: 180px;
+  height: 180px;
   object-fit: contain;
   background: transparent;
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.4));
 }
 
-/* 모달 */
+/* 모달 영역 */
 #dictionaryModal {
   display: none;
   position: fixed;
@@ -51,7 +49,6 @@
   background-color: rgba(0,0,0,0.5);
 }
 
-/* 모달 콘텐츠 박스 */
 #dictionaryModalContent {
   background-color: #fff;
   margin: 5% auto;
@@ -60,17 +57,14 @@
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
   overflow: hidden;
-  position: relative;
   animation: fadeIn 0.3s ease;
 }
 
-/* fade-in 애니메이션 */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* 모달 헤더 */
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -82,16 +76,13 @@
   font-weight: bold;
 }
 
-/* 닫기 버튼 */
 .modal-close {
   font-size: 24px;
   cursor: pointer;
 }
 
-/* 모달 본문 */
 .modal-body {
   background: #f8f9fc;
-  padding: 0;
   height: 500px;
 }
 
