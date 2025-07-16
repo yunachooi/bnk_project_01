@@ -4,9 +4,10 @@
   <meta charset="UTF-8">
   <title>BNK 부산은행</title>
   <link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; scroll-behavior: smooth; }
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    html, body {height: 100%; scroll-behavior: smooth;}
     body {
       font-family: 'Noto Sans KR', Arial, sans-serif;
       color: #232222;
@@ -15,9 +16,9 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-    a { text-decoration: none; color: inherit; }
-    /* 헤더 및 네비 (생략X) */
-    .topbar { width: 100%; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.1);}
+    a {text-decoration: none; color: inherit;}
+    /* 헤더 */
+    .topbar {width: 100%; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.1);}
     .topbar-container {width: 1000px; margin: 0 auto; display: flex; justify-content: flex-end; align-items: center; padding: 8px 0; font-size: 0.95rem;}
     .topbar-container a {color: #666; margin-left: 12px; font-weight: 500;}
     .topbar-container .separator {margin: 0 6px; color: #ccc;}
@@ -37,178 +38,62 @@
     .user-actions a:hover {color: #000;}
     .user-actions .search-toggle {margin-left: 16px; font-size: 1rem; color: #666; cursor: pointer; transition: color .2s;}
     .user-actions .search-toggle:hover {color: #000;}
-    .navbar-submenu {display: flex; justify-content: space-between; list-style: none;}
-    .navbar-submenu li {margin-right: 24px;}
-    .navbar-submenu li:last-child {margin-right: 0;}
-    .navbar-submenu a {font-size: 1.05rem; font-weight: 500; color: #212d49;}
-    .navbar-submenu a:hover {color: #c92026;}
-    .dropdown {display: none; position: fixed; top: 147px; left: 50%; transform: translateX(-50%); width: 100vw; background: #fff; z-index: 100; animation: dropdownFade .22s cubic-bezier(.33,1,.68,1); border-bottom: 1px solid rgba(0,0,0,0.05);}
-    @keyframes dropdownFade {from {opacity: 0; transform: translateX(-50%) translateY(-8px);} to {opacity: 1; transform: translateX(-50%) translateY(0);}}
-    .navbar-submenu li:hover .dropdown, .navbar-submenu li:focus-within .dropdown, .navbar-submenu li .dropdown:hover {display: block;}
-    .dropdown-inner {width: 1000px; margin: 0 auto; padding: 28px 0 36px;}
-    .dropdown.placeholder .dropdown-inner {text-align: center; color: #666; font-size: 1rem;}
-    .dropdown.forex-menu .mega-menu {display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); column-gap: 40px;}
-    .dropdown.forex-menu .mega-column h4 {font-size: 1.2rem; font-weight: 600; margin-bottom: 12px;}
-    .dropdown.foreex-menu .mega-column li {margin-bottom: 13px; line-height: 1.7;}
-    .dropdown.forex-menu .mega-column ul {list-style: none; padding: 0; margin: 0;}
-    .dropdown.forex-menu .mega-column li a {font-size: 1rem; color: #212d49;}
-    .dropdown.forex-menu .mega-column li a:hover {color: #c92026;}
-    .search-dropdown {display: none; position: fixed; top: 147px; left: 50%; transform: translateX(-50%); width: 100vw; background: #fff; z-index: 110; animation: dropdownFade .22s cubic-bezier(.33,1,.68,1); border-bottom: 1px solid rgba(0,0,0,0.05);}
-    .search-dropdown.open {display: block;}
-    .search-dropdown .dropdown-inner {width: 1000px; margin: 0 auto; padding: 28px 0 36px;}
-    .search-dropdown .search-title {text-align: center; font-family: 'Gowun Batang', serif; font-size: 1.5rem; font-weight: 700; color: #343522; letter-spacing: 0.05em; margin-bottom: 16px;}
-    .search-dropdown .search-box {display: flex; justify-content: center; align-items: center; gap: 8px; margin-bottom: 24px;}
-    .search-dropdown .search-box input {flex: 1; padding: 8px 12px; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px;}
-    .search-dropdown .search-box button {background: #212d49; color: #fff; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 1rem;}
-    .search-dropdown .suggestions-title {text-align: center; font-size: 1rem; font-weight: 600; color: #68665b; margin-bottom: 12px;}
-    .search-dropdown .search-suggestions {display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;}
-    .search-dropdown .search-suggestions li {list-style: none;}
-    .search-dropdown .search-suggestions a {font-size: 0.95rem; color: #666;}
-    .search-dropdown .search-suggestions a:hover {color: #000;}
-    @media (max-width: 1024px) {.primary-nav, .navbar-submenu {display: none;}}
-    /* ---------- 메인 슬라이더 중앙 & 확대 ---------- */
-    .snap-container {min-height: calc(100vh - 70px); display: flex; flex-direction: column;}
-    .section {flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 600px;}
-    .slider-wrap {width: 100vw; min-height: 500px; display: flex; align-items: center; justify-content: center;}
-    .slider-section {
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
-      width: 900px; max-width: 92vw; min-height: 380px;
-      margin: 0 auto; background: linear-gradient(135deg, #fffbea 40%, #ffe4e1 100%);
-      border-radius: 46px; box-shadow: 0 8px 40px #f3a57415, 0 2px 8px #ffdbb8;
-      z-index: 2;
-      /* 중앙정렬 + 박스 쉐도우 강조 */
+    /* 메인/섹션 공통 */
+    main {scroll-snap-type: y mandatory; overflow-y:auto; min-height:100vh;}
+    section {scroll-snap-align: start;}
+    /* 1섹션 슬라이더 */
+    .main-slide-wrap {position:relative; display:flex; flex-direction:column; align-items:center; width:520px; max-width:92vw;}
+    .main-slide-img {width:100%; height:auto; border-radius:22px; box-shadow:0 4px 24px #0002;}
+    .main-arrow {position:absolute; top:50%; transform:translateY(-50%); background:none; border:none; font-size:2.6rem; color:#232222; cursor:pointer; z-index:2;}
+    .main-arrow.left {left:0;}
+    .main-arrow.right {right:0;}
+    .main-caption {margin:28px 0 0 0; text-align:center;}
+    .main-caption-title {font-family:'Gowun Batang',serif; font-size:2rem; font-weight:700;}
+    .main-caption-desc {font-size:1.05rem; color:#343522; margin:8px 0 0;}
+    .main-caption-date {font-size:1.01rem; color:#888; margin-top:5px;}
+    /* 서비스 아이콘 */
+    .service-icons {display:flex; justify-content:center; gap:40px; margin:45px 0 24px;}
+    .service-icon {display:flex; flex-direction:column; align-items:center; font-size:1rem; color:#232222;}
+    .service-icon .icon {font-size:2rem; margin-bottom:6px;}
+    /* 2섹션 12카드 슬라이더 */
+    .section-products { max-width: 1200px; margin: 70px auto 0 auto; }
+    .products-title { font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 30px;}
+    .products-slider-wrap { position: relative; }
+    .products-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 2.3rem; color: #232222; cursor: pointer; z-index: 2;}
+    .products-arrow.left { left: -55px;}
+    .products-arrow.right { right: -55px;}
+    .products-cards { display: flex; gap: 36px; overflow: hidden;}
+    .product-card {
+      width: 370px; background: #fff; border-radius: 14px; box-shadow: 0 3px 16px #0001;
+      display: flex; flex-direction: column; align-items: flex-start; padding: 28px 20px 18px 24px;
+      transition: box-shadow 0.15s;
     }
-    .slider-title-area {
-      min-width: 315px; max-width: 350px; padding: 55px 34px 44px 36px;
-      display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
-      border-radius: 46px 0 0 46px;
-      background: linear-gradient(110deg, #fffdf7 85%, #fff2e0 100%);
-      box-shadow: 0 2px 18px #ffe1b820;
+    .product-badge {display:inline-block; background:#eee; color:#232222; font-weight:600; border-radius:4px; font-size:0.97rem; margin-bottom:8px; padding:3px 13px;}
+    .product-emoji {font-size:2.1rem; margin-bottom: 8px;}
+    .product-title {font-weight:700; font-size:1.09rem; margin-bottom: 4px;}
+    .product-desc {color: #232222; font-size:1rem;}
+    .product-date {font-size: 0.96rem; color: #666; margin-top: 8px;}
+    @media (max-width:1200px) {
+      .section-products { max-width: 98vw;}
+      .products-arrow.left { left: 2px;}
+      .products-arrow.right { right: 2px;}
+      .main-slide-wrap { width: 290px;}
+      .product-card { width: 270px;}
     }
-    .slider-cat-badge {
-      font-size: 1.09rem; color: #fff; background: #ffb56b;
-      border-radius: 20px; padding: 7px 26px 8px; font-weight: 800;
-      margin-bottom: 23px; letter-spacing: 0.03em; box-shadow: 0 2px 9px #ffe5a355;
+    @media (max-width:900px) {
+      .main-slide-wrap, .product-card { width: 170px;}
+      .products-title { font-size:1.4rem;}
+      .products-cards { gap: 12px;}
+      .service-icons { gap: 16px;}
     }
-    .slider-main-title {
-      font-family: 'Gowun Batang', serif; font-size: 2.55rem; color: #f6982c; font-weight: 800;
-      margin: 2px 0 17px; line-height: 1.17; word-break: keep-all; text-shadow: 0 1px 0 #ffe8b6, 0 2px 10px #fffbe9;
-      white-space: pre-line; /* 줄바꿈 지원 */
+    @media (max-width:600px) {
+      .main-slide-wrap, .product-card { width: 98vw;}
+      .section-products {margin-top:24px;}
     }
-    .slider-desc {
-      color: #b97c34; font-size: 1.16rem; font-weight: 500;
-      margin-bottom: 8px; letter-spacing: -0.01em; max-width: 100%; word-break: keep-all; white-space: pre-line;
-    }
-    .cards-area {
-      flex: 1; display: flex; justify-content: center; align-items: center;
-      padding: 0 30px; position: relative; z-index: 2;
-    }
-    .cards-row {
-      display: flex; gap: 46px; align-items: center; justify-content: center;
-      width: 100%; min-height: 190px; z-index: 3;
-    }
-    .prod-card {
-      width: 175px; min-height: 205px; max-height: 290px;
-      border-radius: 34px;
-      background: linear-gradient(135deg, #fff5ef 72%, #ffe0e2 100%);
-      border: 2.5px solid #ffe8cd;
-      box-shadow: 0 8px 28px #ffdaaf20, 0 4px 12px #ffcbb2;
-      display: flex; flex-direction: column; align-items: center;
-      padding: 32px 16px 22px 16px; transition: box-shadow .18s, transform .14s, border-color .16s;
-      overflow: hidden; border: none; position: relative; cursor: pointer;
-    }
-    .prod-card.center {
-      width: 210px; min-height: 250px; max-height: 320px; padding: 38px 12px 31px 12px;
-      background: linear-gradient(110deg, #fffbe7 60%, #fff0a3 100%, #ffec9a 100%);
-      border: 2.5px solid #ffe6ad;
-      box-shadow: 0 11px 45px #ffe3b430, 0 4px 15px #e0a52c2c;
-      animation: goldshine 2.6s linear infinite; z-index: 2;
-    }
-    .prod-card.center::after {
-      content: ''; position: absolute; left: -60px; top: -36px;
-      width: 190px; height: 44px;
-      background: linear-gradient(112deg, rgba(255,255,255,0.18) 45%, rgba(255,245,210,0.29) 100%);
-      filter: blur(3.5px); transform: rotate(8deg);
-      animation: cardshine 2.6s linear infinite; pointer-events: none;
-    }
-    @keyframes goldshine {0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;}}
-    @keyframes cardshine {0% {left: -90px; opacity: 0.11;} 55% {left: 35px; opacity: 0.21;} 100% {left: 110px; opacity: 0.11;}}
-    .prod-card:hover, .prod-card:focus-within {
-      box-shadow: 0 15px 65px #ffdaae60, 0 5px 20px #ffa97644;
-      border-color: #ffe7c7; transform: scale(1.06) translateY(-6px);
-      z-index: 10;
-    }
-    .prod-emoji {
-      font-size: 2.15rem; margin-bottom: 9px;
-      text-shadow: 0 1px 7px #fff7dc, 0 2px 8px #ffede0;
-      filter: drop-shadow(0 2px 8px #ffead2aa);
-    }
-    .pc-title {
-      font-size: 1.16rem; font-weight: 800; color: #d06e1e;
-      text-align: center; margin: 5px 0 9px; line-height: 1.22;
-      letter-spacing: -0.01em; word-break: keep-all; white-space: pre-line;
-    }
-    .pc-desc {
-      font-size: 1.01rem; color: #ff8a65; font-weight: 700;
-      text-align: center; margin-bottom: 12px; line-height: 1.19; word-break: keep-all; white-space: pre-line;
-    }
-    .pc-rate {
-      font-size: 1.15rem; color: #ffbe42; font-weight: 900;
-      text-align: center; margin-bottom: 3px;
-      text-shadow: 0 1px 7px #fffbe8, 0 0px 4px #ffd36d60;
-    }
-    .pc-foot {
-      font-size: 0.97rem; color: #efb774; text-align: center; margin-top: 7px;
-      word-break: keep-all; white-space: pre-line;
-    }
-    .slider-controls-wrap {
-      position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
-      display: flex; align-items: center; gap: 35px; z-index: 2;
-    }
-    .slider-arrow-btn, .slider-pause-btn {
-      background: #fff8f3;
-      border: none; border-radius: 50%;
-      width: 46px; height: 46px; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; box-shadow: 0 2px 10px #ffedd04c;
-      transition: background .17s, color .11s, box-shadow .13s;
-      font-size: 1.55rem;
-    }
-    .slider-arrow-btn:hover, .slider-pause-btn:hover {background: #ffe7c1; color: #ffb150; box-shadow: 0 4px 18px #ffdaae77;}
-    .slider-progress-bar-wrap {
-      display: flex; align-items: center; gap: 11px; width: 240px;
-    }
-    .slider-progress-num {
-      width: 28px; text-align: center;
-      font-family: 'Gowun Batang', serif; font-weight: 700; color: #e99b35;
-      text-shadow: 0 1px 8px #fff2e0;
-    }
-    .slider-progress-bg {
-      flex: 1; height: 4.3px; background: #ffeccf;
-      border-radius: 2px; position: relative; overflow: hidden;
-      box-shadow: 0 1px 5px #ffe7ce9c;
-    }
-    .slider-progress-bar {
-      position: absolute; left: 0; top: -1px;
-      height: 6px; background: linear-gradient(90deg, #ffcd80 10%, #ffd788 100%);
-      border-radius: 2px; transition: width .41s cubic-bezier(.33,1.5,.48,1);
-      z-index: 2;
-      box-shadow: 0 1px 8px #ffe59c50;
-    }
-    .slider-pause-btn { font-size: 1.21rem; }
-    @media (max-width:1200px) {.slider-section{width:99vw;}}
-    @media (max-width:950px) {.slider-section{flex-direction:column;width:100vw; min-width:unset; padding-bottom:20px;}.slider-title-area,.cards-area{width:100%;}.cards-row{gap:18px;}}
-    /* --- 2,3 섹션 스타일 그대로 --- */
-    .dummy2 {background: linear-gradient(115deg, #fff8ef 50%, #ffdbe8 100%); color: #b97c34; display: flex; align-items: center; justify-content: center; font-family: 'Gowun Batang', serif; font-size: 1.82rem; text-align: center; padding: 0 20px; position: relative; overflow: hidden;}
-    .dummy2::before {content: ''; position: absolute; right: -90px; top: 40px; width: 260px; height: 260px; background: radial-gradient(circle, #ffe4d4 0%, #fff8e5 70%, transparent 100%); z-index: 0; opacity: 0.27; pointer-events: none; filter: blur(5px);}
-    .dark-section {background: linear-gradient(110deg, #23222b 60%, #ffa684 150%); color: #ffe7c1; flex: 1; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;}
-    .dark-section::before {content: ''; position: absolute; left: 2vw; top: 10vh; width: 150px; height: 150px; background: radial-gradient(circle, #ffd7b8 0%, transparent 90%); opacity: 0.13; pointer-events: none;}
-    .dark-content {flex: 1; display: flex; align-items: center; justify-content: center; font-family: 'Gowun Batang', serif; font-size: 1.86rem; text-align: center; padding: 0 20px; z-index: 1;}
-    .footer-inner {padding: 36px 8vw; text-align: right; font-size: 1.01rem; color: #ffe9c6; z-index: 2;}
   </style>
 </head>
 <body>
-  <!-- HEADER -->
+  <!-- 헤더(그대로) -->
   <div class="topbar">
     <div class="topbar-container">
       <a href="#">KR</a><span class="separator">·</span>
@@ -231,245 +116,167 @@
         <div class="user-actions">
           <a href="#">로그인</a>
           <a href="#">인증센터</a>
-          <!-- 검색하기 토글 -->
           <a href="#" class="search-toggle" id="searchToggle">검색하기</a>
         </div>
       </div>
-      <!-- 검색 드롭다운 -->
-      <div class="search-dropdown" id="searchDropdown">
-        <div class="dropdown-inner">
-          <div class="search-title">SEARCH</div>
-          <div class="search-box">
-            <input type="text" id="searchInput" placeholder="검색할 내용을 입력해 주세요">
-            <button id="searchBtn">검색하기</button>
-          </div>
-          <div class="suggestions-title">추천 검색어</div>
-          <ul class="search-suggestions">
-            <li><a href="#">예금</a></li>
-            <li><a href="#">대출</a></li>
-            <li><a href="#">외환</a></li>
-            <li><a href="#">펀드</a></li>
-            <li><a href="#">카드</a></li>
-          </ul>
-        </div>
-      </div>
-      <!-- 기존 서브메뉴 동일 -->
-      <ul class="navbar-submenu">
-        <li><a href="#">예금</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-        <li><a href="#">골드바</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-        <li><a href="#">신탁</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-        <li><a href="#">웰스타로보B</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-        <li><a href="#">펀드</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-        <li><a href="#">대출</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-        <li><a href="#">카드</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-        <li><a href="#">보험/공제</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-        <li>
-          <a href="#">외환</a>
-          <div class="dropdown forex-menu">
-            <div class="dropdown-inner">
-              <div class="mega-menu">
-                <div class="mega-column"><h4>외화예금</h4><ul><li><a href="#">외화예금상품</a></li><li><a href="#">외화예금안내</a></li><li><a href="#">외화예금우대서비스</a></li></ul></div>
-                <div class="mega-column"><h4>외화송금</h4><ul><li><a href="#">외화송금서비스</a></li><li><a href="#">외화송금보내기</a></li><li><a href="#">외화송금받기</a></li></ul></div>
-                <div class="mega-column"><h4>수출입금융</h4><ul><li><a href="#">수출업무</a></li><li><a href="#">수입업무</a></li><li><a href="#">내국신용장/무역금융</a></li><li><a href="#">전자무역</a></li><li><a href="#">수출입통관 상담 서비스 안내</a></li></ul></div>
-                <div class="mega-column"><h4>국내외투자</h4><ul><li><a href="#">해외직접투자</a></li><li><a href="#">해외사무소(지사)설치</a></li><li><a href="#">해외부동산투자</a></li><li><a href="#">외국인국내투자</a></li><li><a href="#">외국인국내부동산투자</a></li></ul></div>
-                <div class="mega-column"><h4>환전</h4><ul><li><a href="#">환전안내</a></li><li><a href="#">환전서비스안내</a></li><li><a href="#">환율우대</a></li><li><a href="#">환전계산기</a></li><li><a href="#">동북아허브영업점</a></li><li><a href="#">외화수표매입안내</a></li></ul></div>
-                <div class="mega-column"><h4>환율</h4><ul><li><a href="#">환율제공서비스</a></li><li><a href="#">외환시장동향</a></li><li><a href="#">환리스크관리</a></li><li><a href="#">환율우대쿠폰</a></li></ul></div>
-                <div class="mega-column"><h4>유학/이주/여행</h4><ul><li><a href="#">유학</a></li><li><a href="#">이주</a></li><li><a href="#">여행</a></li></ul></div>
-                <div class="mega-column"><h4>부가서비스</h4><ul><li><a href="#">환율/이율조회</a></li><li><a href="#">외환서식 프로그램</a></li></ul></div>
-                <div class="mega-column"><h4>글로벌파워셀러 특화서비스</h4><ul><li><a href="#">서비스 안내</a></li></ul></div>
-                <div class="mega-column"><h4>외환이용가이드</h4><ul><li><a href="#">외환상담안내</a></li><li><a href="#">법규/규정</a></li><li><a href="#">수수료</a></li><li><a href="#">외환FAQ</a></li></ul></div>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li><a href="#">퇴직연금</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-        <li><a href="#">서민금융</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-        <li><a href="#">국민주택채권</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
-      </ul>
     </div>
   </nav>
-  <div class="snap-container">
-    <!-- 1섹션: 메인 슬라이더 (중앙 크게) -->
-    <section class="section">
-      <div class="slider-wrap">
-        <div class="slider-section">
-          <div class="slider-title-area">
-            <span class="slider-cat-badge" id="categoryName">예금</span>
-            <div class="slider-main-title" id="categoryTitle">
-              예금<br>인기상품 TOP 3
-            </div>
-            <div class="slider-desc" id="categoryDesc">
-              다양한 예금 상품을 한눈에,<br>고객님의 자산을 안전하게 불려보세요.
-            </div>
-          </div>
-          <div class="cards-area">
-            <div class="cards-row" id="cardsRow"></div>
-            <div class="slider-controls-wrap">
-              <button class="slider-arrow-btn" id="prevBtn" aria-label="이전">&#8592;</button>
-              <div class="slider-progress-bar-wrap">
-                <span class="slider-progress-num" id="currentNum">01</span>
-                <div class="slider-progress-bg"><div class="slider-progress-bar" id="progressBar"></div></div>
-                <span class="slider-progress-num" id="totalNum">12</span>
-              </div>
-              <button class="slider-arrow-btn" id="nextBtn" aria-label="다음">&#8594;</button>
-              <button class="slider-pause-btn" id="pauseBtn" aria-label="일시정지"><span id="pauseIcon">❚❚</span></button>
-            </div>
-          </div>
+
+  <main>
+    <!-- 1섹션: 메인 한장 슬라이더 + 서비스 아이콘 -->
+    <section id="section1" style="scroll-snap-align:start; min-height:700px; display:flex; flex-direction:column; justify-content:center; align-items:center; padding-top:80px;">
+      <div class="main-slide-wrap">
+        <button class="main-arrow left" id="mainPrevBtn">&#60;</button>
+        <img id="mainSliderImg" class="main-slide-img" src="" alt="메인 이벤트">
+        <button class="main-arrow right" id="mainNextBtn">&#62;</button>
+      </div>
+      <div class="main-caption" id="mainCaption"></div>
+      <div class="service-icons">
+        <div class="service-icon"><span class="icon">🏦</span><span>영업점 찾기</span></div>
+        <div class="service-icon"><span class="icon">📞</span><span>전화상담</span></div>
+        <div class="service-icon"><span class="icon">💬</span><span>채팅상담</span></div>
+        <div class="service-icon"><span class="icon">✉️</span><span>이메일상담</span></div>
+        <div class="service-icon"><span class="icon">🛠️</span><span>원격지원상담</span></div>
+        <div class="service-icon"><span class="icon">❓</span><span>FAQ</span></div>
+      </div>
+    </section>
+    <!-- 2섹션: 12개 카드 슬라이더(3개씩) -->
+    <section id="section2" class="section-products" style="scroll-snap-align:start;">
+      <div class="products-title">BNK 금융상품 둘러보기</div>
+      <div class="products-slider-wrap">
+        <button class="products-arrow left" id="prodPrevBtn">&#60;</button>
+        <div class="products-cards" id="productsCards">
+          <!-- JS로 3개씩 랜더링 -->
+        </div>
+        <button class="products-arrow right" id="prodNextBtn">&#62;</button>
+      </div>
+    </section>
+  <!-- 푸터 (그대로) -->
+  <footer class="footer-bnk">
+    <div class="container">
+      <div class="footer-bnk-logo">
+        <img src="img/main/logo.PNG" alt="BNK 부산은행 로고">
+      </div>
+      <nav class="footer-bnk-menus">
+        <div class="footer-bnk-menu-group">
+          <span class="title">금융네트워크</span>
+          <a href="#">BNK금융그룹</a>
+          <a href="#">부산은행</a>
+          <a href="#">경남은행</a>
+          <a href="#">BNK캐피탈</a>
+        </div>
+        <div class="footer-bnk-menu-group">
+          <span class="title">고객센터</span>
+          <a href="#">고객상담 1588-6200</a>
+          <a href="#">해외 82-2-1588-6200</a>
+          <a href="#">자주 묻는 질문</a>
+        </div>
+        <div class="footer-bnk-menu-group">
+          <span class="title">이용안내</span>
+          <a href="#">개인정보처리방침</a>
+          <a href="#">위치기반서비스 이용약관</a>
+          <a href="#">전자금융사기예방</a>
+          <a href="#">상품공시실</a>
+        </div>
+        <div class="footer-bnk-menu-group">
+          <span class="title">사회공헌</span>
+          <a href="#">윤리경영</a>
+          <a href="#">사회공헌활동</a>
+        </div>
+      </nav>
+      <div class="footer-bnk-right">
+        <select class="footer-bnk-family">
+          <option>FAMILY SITE</option>
+          <option>BNK금융그룹</option>
+          <option>부산은행</option>
+          <option>경남은행</option>
+          <option>BNK캐피탈</option>
+        </select>
+        <div class="footer-bnk-lang-social">
+          <select class="footer-bnk-lang">
+            <option>KR</option>
+            <option>EN</option>
+            <option>CN</option>
+            <option>JP</option>
+          </select>
         </div>
       </div>
-    </section>
-    <!-- 2섹션/3섹션 (기존 유지) -->
-    <section class="section dummy2">
-      여기에 원하는 두 번째 콘텐츠 추가!<br>EX. 인기상품, 외화예금, 각종 프로모션 등
-    </section>
-    <section class="section dark-section">
-      <div class="dark-content">
-        여기에 원하는 세 번째 콘텐츠 추가!<br>다크 모드 배경에 어울리게 디자인하세요.
-      </div>
-      <div class="footer-inner">
-        © 2025 BNK 부산은행 | 모든 권리 보유.
-      </div>
-    </section>
-  </div>
+    </div>
+    <div class="footer-bnk-copy">
+      주소: 부산광역시 남구 문현금융로 30 | 사업자등록번호: 607-81-02749 | 대표자: 안감찬 | 개인정보보호책임자: 박근호<br>
+      COPYRIGHT &copy; 2014 BUSANBANK ALL RIGHTS RESERVED.
+    </div>
+  </footer>
+
+  <!-- 슬라이더 및 카드 JS -->
   <script>
-    // 검색 드롭다운
-    const searchToggle = document.getElementById('searchToggle');
-    const searchDropdown = document.getElementById('searchDropdown');
-    searchToggle.addEventListener('click', e => {
-      e.preventDefault();
-      searchDropdown.classList.toggle('open');
-    });
-    document.addEventListener('click', e => {
-      if (!searchDropdown.contains(e.target) && e.target !== searchToggle) {
-        searchDropdown.classList.remove('open');
-      }
-    });
-    // 슬라이더 데이터
-    const CATEGORIES = [
-      { name: "예금", title: "예금\n인기상품 TOP 3", desc: "다양한 예금 상품을 한눈에,\n고객님의 자산을 안전하게 불려보세요.", items: [
-        { emoji: "💰", title: "정기예금", desc: "안정적 이자", rate: "연 4.0%", foot: "만기지급" },
-        { emoji: "🏆", title: "자유예금", desc: "수시입출금", rate: "연 2.1%", foot: "즉시이체" },
-        { emoji: "📈", title: "외화예금", desc: "달러·엔·유로", rate: "환차익 기회", foot: "다통화 지원" }
-      ]},
-      { name: "골드바", title: "골드바\n인기상품 TOP 3", desc: "진짜 금의 가치를 직접 느껴보세요.\nBNK 골드바로 프리미엄 자산을 시작하세요.", items: [
-        { emoji: "🪙", title: "골드바 10g", desc: "고순도 99.99%", rate: "실시간시세", foot: "소액투자" },
-        { emoji: "🥇", title: "골드바 100g", desc: "고객 인기", rate: "프리미엄", foot: "선물용" },
-        { emoji: "👑", title: "골드바 1kg", desc: "최고급", rate: "대량투자", foot: "자산증식" }
-      ]},
-      { name: "신탁", title: "신탁\n인기상품 TOP 3", desc: "맞춤형 자산관리를 위한 신탁상품,\n미래의 꿈을 신탁하세요.", items: [
-        { emoji: "🤝", title: "자산관리신탁", desc: "다양한 운용방식", rate: "고객맞춤", foot: "종합자산관리" },
-        { emoji: "📈", title: "퇴직연금신탁", desc: "안정적 연금관리", rate: "금리 우대", foot: "은퇴설계" },
-        { emoji: "💎", title: "수익증권신탁", desc: "펀드 연계", rate: "유연한 운용", foot: "분산투자" }
-      ]},
-      { name: "웰스타로보B", title: "웰스타로보B\n인기상품 TOP 3", desc: "AI 로보어드바이저가\n스마트하게 자산을 관리해드립니다.", items: [
-        { emoji: "🤖", title: "웰스타AI적립", desc: "자동포트폴리오", rate: "최적화", foot: "정기리밸런싱" },
-        { emoji: "📊", title: "AI펀드", desc: "빅데이터 분석", rate: "수익성", foot: "투자추천" },
-        { emoji: "🔮", title: "AI연금", desc: "미래설계", rate: "지속성장", foot: "저위험" }
-      ]},
-      { name: "펀드", title: "펀드\n인기상품 TOP 3", desc: "다양한 국내외 펀드 상품으로\n투자의 기회를 넓혀보세요.", items: [
-        { emoji: "📦", title: "주식형펀드", desc: "성장주 투자", rate: "연 7.5%", foot: "다양한 섹터" },
-        { emoji: "🌏", title: "글로벌펀드", desc: "해외주식", rate: "환헤지", foot: "분산투자" },
-        { emoji: "📉", title: "채권형펀드", desc: "안정성", rate: "연 3.2%", foot: "저위험" }
-      ]},
-      { name: "대출", title: "대출\n인기상품 TOP 3", desc: "필요할 때 빠르게, BNK 대출 상품으로\n든든한 금융을 경험하세요.", items: [
-        { emoji: "💳", title: "ONE신용대출", desc: "온라인 간편", rate: "최저 연 4.0%", foot: "서류無" },
-        { emoji: "🏠", title: "주택담보대출\n내집마련", desc: "최저 연 3.1%", rate: "고정·변동", foot: "고정·변동" },
-        { emoji: "🚗", title: "자동차대출", desc: "신차·중고차", rate: "최저 연 4.5%", foot: "빠른승인" }
-      ]},
-      { name: "카드", title: "카드\n인기상품 TOP 3", desc: "혜택 가득한 BNK 카드로\n현명한 소비를 시작하세요.", items: [
-        { emoji: "💳", title: "BNK 체크카드", desc: "현명한 소비", rate: "캐시백", foot: "국내외 사용" },
-        { emoji: "💎", title: "프리미엄카드", desc: "VIP 혜택", rate: "라운지/호텔", foot: "포인트 적립" },
-        { emoji: "🍔", title: "외식카드", desc: "외식 할인", rate: "최대 20%", foot: "가맹점" }
-      ]},
-      { name: "보험/공제", title: "보험/공제\n인기상품 TOP 3", desc: "든든한 보험으로\n예기치 못한 위험에 대비하세요.", items: [
-        { emoji: "🩺", title: "건강보험", desc: "진단·수술비", rate: "보장확대", foot: "간편청구" },
-        { emoji: "🚴", title: "상해보험", desc: "여행·레저", rate: "최대 3억", foot: "즉시가입" },
-        { emoji: "🏥", title: "실손보험", desc: "입원·통원", rate: "실손보장", foot: "비급여포함" }
-      ]},
-      { name: "외환", title: "외환\n인기상품 TOP 3", desc: "해외 송금과 환전,\nBNK 외환으로 쉽고 빠르게!", items: [
-        { emoji: "💱", title: "해외송금", desc: "실시간", rate: "수수료우대", foot: "다국어지원" },
-        { emoji: "💵", title: "외화환전", desc: "20여 통화", rate: "최대 90%", foot: "환율우대" },
-        { emoji: "💶", title: "유학생송금", desc: "안심서비스", rate: "안전/신속", foot: "해외대학" }
-      ]},
-      { name: "퇴직연금", title: "퇴직연금\n인기상품 TOP 3", desc: "든든한 노후 준비를 위한\n퇴직연금 상품을 만나보세요.", items: [
-        { emoji: "👴", title: "DB형 연금", desc: "확정급여", rate: "안정성", foot: "지급보장" },
-        { emoji: "🧓", title: "DC형 연금", desc: "확정기여", rate: "운용자율", foot: "수익성" },
-        { emoji: "👶", title: "IRP", desc: "개인형 퇴직연금", rate: "세액공제", foot: "자유입금" }
-      ]},
-      { name: "서민금융", title: "서민금융\n인기상품 TOP 3", desc: "BNK 서민금융으로\n더 많은 고객에게 금융의 기회를!", items: [
-        { emoji: "🍀", title: "햇살론", desc: "서민전용", rate: "저금리", foot: "간편심사" },
-        { emoji: "🤗", title: "새희망홀씨", desc: "중저신용자", rate: "소득증빙 無", foot: "신속승인" },
-        { emoji: "🏦", title: "바꿔드림론", desc: "고금리 대환", rate: "부담↓", foot: "서류簡化" }
-      ]},
-      { name: "국민주택채권", title: "국민주택채권\n인기상품 TOP 3", desc: "주택마련의 든든한 파트너\n국민주택채권을 만나보세요.", items: [
-        { emoji: "🏠", title: "국민주택채권Ⅰ", desc: "주택청약", rate: "금리 고정", foot: "정부지원" },
-        { emoji: "🏡", title: "국민주택채권Ⅱ", desc: "청년/신혼부부", rate: "우대금리", foot: "추첨제도" },
-        { emoji: "🏢", title: "국민주택채권Ⅲ", desc: "주거안정", rate: "안정성", foot: "장기운용" }
-      ]}
+    // 1섹션: 이미지 1장씩 4초마다 슬라이드
+    const mainSlides = [
+      { img: "/mnt/data/b9c78ce5-9000-42f9-a49a-3418c853d06e.png", title: "돈키호테 x GS25", desc: "돈키호테XGS 콜라보 상품 최초 공개", date: "2025.07.08 - 2025.08.01" },
+      { img: "img/event2.jpg", title: "배럴 x 이나피스퀘어", desc: "배럴, 이나피스퀘어와의 감각적인 콜라보", date: "2025.06.27 - 2025.08.28" },
+      { img: "img/event3.jpg", title: "류학생 어남선", desc: "시칠리아 류학식 메뉴를 만나보세요.", date: "2025.07.12 - 2025.07.20" }
     ];
-    let currentIdx = 0, autoTimer = null, isPaused = false;
-    const nameEl = document.getElementById('categoryName'),
-          titleEl = document.getElementById('categoryTitle'),
-          descEl = document.getElementById('categoryDesc'),
-          cardsRowEl = document.getElementById('cardsRow'),
-          progBarEl = document.getElementById('progressBar'),
-          currNumEl = document.getElementById('currentNum'),
-          totNumEl = document.getElementById('totalNum'),
-          prevBtnEl = document.getElementById('prevBtn'),
-          nextBtnEl = document.getElementById('nextBtn'),
-          pauseBtnEl = document.getElementById('pauseBtn'),
-          pauseIconEl = document.getElementById('pauseIcon');
-    function renderSlider(i) {
-      const cat = CATEGORIES[i];
-      nameEl.innerText = cat.name;
-      titleEl.innerHTML = cat.title.replace(/\n/g,"<br>");
-      descEl.innerHTML = cat.desc.replace(/\n/g,"<br>");
-      cardsRowEl.innerHTML = '';
-      cat.items.forEach((it,j)=>{
-        const card = document.createElement('div');
-        card.className = 'prod-card' + (j===1?' center':'');
-        card.innerHTML = `
-          <div class="prod-emoji">${it.emoji}</div>
-          <div class="pc-title">${it.title.replace(/\n/g,"<br>")}</div>
-          <div class="pc-desc">${it.desc.replace(/\n/g,"<br>")}</div>
-          <div class="pc-rate">${it.rate}</div>
-          <div class="pc-foot">${it.foot.replace(/\n/g,"<br>")}</div>`;
-        cardsRowEl.appendChild(card);
-      });
-      currNumEl.innerText = String(i+1).padStart(2,'0');
-      totNumEl.innerText  = String(CATEGORIES.length).padStart(2,'0');
-      progBarEl.style.width = `${(i+1)/CATEGORIES.length*100}%`;
+    let mainIdx = 0, mainTimer = null;
+    function showMainSlide(idx) {
+      const d = mainSlides[idx];
+      document.getElementById('mainSliderImg').src = d.img;
+      document.getElementById('mainCaption').innerHTML =
+        `<div class="main-caption-title">${d.title}</div>
+         <div class="main-caption-desc">${d.desc}</div>
+         <div class="main-caption-date">${d.date}</div>`;
+      mainIdx = idx;
     }
-    function goTo(i){ currentIdx = (i + CATEGORIES.length) % CATEGORIES.length; renderSlider(currentIdx);}
-    function next(){ goTo(currentIdx+1);}
-    function prev(){ goTo(currentIdx-1);}
-    function startAuto(){
-      clearInterval(autoTimer);
-      autoTimer = setInterval(()=>{ if(!isPaused) next(); }, 3600);
+    function nextMainSlide() { showMainSlide((mainIdx+1)%mainSlides.length); }
+    function prevMainSlide() { showMainSlide((mainIdx-1+mainSlides.length)%mainSlides.length); }
+    document.getElementById('mainPrevBtn').onclick = ()=>{ prevMainSlide(); restartMainAuto(); }
+    document.getElementById('mainNextBtn').onclick = ()=>{ nextMainSlide(); restartMainAuto(); }
+    function mainAuto() { mainTimer = setInterval(nextMainSlide, 4000); }
+    function restartMainAuto() { clearInterval(mainTimer); mainAuto(); }
+    showMainSlide(mainIdx); mainAuto();
+    document.getElementById('mainSliderImg').onmouseenter = ()=>clearInterval(mainTimer);
+    document.getElementById('mainSliderImg').onmouseleave = restartMainAuto;
+
+    // 2섹션: 12개 카드 3개씩 슬라이드
+    const productData = [
+      { emoji:"💰", badge:"예금", title:"BNK 정기예금", desc:"안전하게 목돈 마련" },
+      { emoji:"🏅", badge:"골드바", title:"BNK 골드바", desc:"실물 금 투자, 프리미엄 자산" },
+      { emoji:"📜", badge:"신탁", title:"BNK 신탁상품", desc:"맞춤형 자산관리 신탁" },
+      { emoji:"🤖", badge:"로보B", title:"BNK 웰스타로보B", desc:"AI가 추천하는 로보어드바이저" },
+      { emoji:"📈", badge:"펀드", title:"BNK 펀드상품", desc:"국내외 펀드 투자기회" },
+      { emoji:"💳", badge:"대출", title:"BNK 대출상품", desc:"신용·주택·자동차 대출" },
+      { emoji:"💳", badge:"카드", title:"BNK 카드상품", desc:"체크·프리미엄·외식카드" },
+      { emoji:"🛡️", badge:"보험", title:"BNK 보험/공제", desc:"든든한 보험, 위험 대비" },
+      { emoji:"💱", badge:"외환", title:"BNK 외환서비스", desc:"해외 송금·환전" },
+      { emoji:"🎓", badge:"연금", title:"BNK 퇴직연금", desc:"든든한 노후 준비" },
+      { emoji:"🤝", badge:"서민금융", title:"BNK 서민금융", desc:"금융의 기회 확대" },
+      { emoji:"🏠", badge:"주택채권", title:"BNK 국민주택채권", desc:"주택마련 파트너" }
+    ];
+    let prodIndex = 0;
+    function renderProductCards() {
+      let html = "";
+      for(let i=0;i<3;i++) {
+        const d = productData[(prodIndex + i)%productData.length];
+        html += `
+        <div class="product-card">
+          <div class="product-badge">${d.badge}</div>
+          <div class="product-emoji">${d.emoji}</div>
+          <div class="product-title">${d.title}</div>
+          <div class="product-desc">${d.desc}</div>
+        </div>
+        `;
+      }
+      document.getElementById('productsCards').innerHTML = html;
     }
-    function pauseAuto(){
-      isPaused = !isPaused;
-      pauseIconEl.innerText = isPaused ? '▶' : '❚❚';
+    document.getElementById('prodPrevBtn').onclick = function() {
+      prodIndex = (prodIndex - 1 + productData.length) % productData.length;
+      renderProductCards();
     }
-    prevBtnEl.onclick  = ()=>{ prev(); if(!isPaused) startAuto(); };
-    nextBtnEl.onclick  = ()=>{ next(); if(!isPaused) startAuto(); };
-    pauseBtnEl.onclick = pauseAuto;
-    renderSlider(0); startAuto();
-    // 터치, 키보드 스와이프
-    let startX = null;
-    cardsRowEl.addEventListener('touchstart', e=>{
-      if(e.touches.length===1) startX = e.touches[0].clientX;
-    });
-    cardsRowEl.addEventListener('touchend', e=>{
-      if(startX===null) return;
-      const dx = e.changedTouches[0].clientX - startX;
-      if(Math.abs(dx)>40) dx<0? next() : prev();
-      startX = null;
-    });
-    document.addEventListener('keydown', e=>{
-      if(e.key==='ArrowRight') next();
-      if(e.key==='ArrowLeft') prev();
-    });
+    document.getElementById('prodNextBtn').onclick = function() {
+      prodIndex = (prodIndex + 1) % productData.length;
+      renderProductCards();
+    }
+    renderProductCards();
   </script>
 </body>
 </html>
+    
