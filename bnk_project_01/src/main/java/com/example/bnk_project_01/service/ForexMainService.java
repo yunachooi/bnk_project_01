@@ -97,5 +97,6 @@ public class ForexMainService {
                 .collect(Collectors.toList());
 
         forexMainRepository.saveAll(rates);
+        
     }
 }
