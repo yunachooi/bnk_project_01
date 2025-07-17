@@ -9,311 +9,491 @@
   <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
   
   <style>
-    :root {
-      --bnk-red: #d7191f;
-      --bnk-yellow: #fff4cf;
-      --bg: #fffaf2;
-      --deep-red: #aa1010;
-    }
+	  :root {
+	    --bnk-red: #d7191f;
+	    --bnk-yellow: #fff4cf;
+	    --bg: #fffaf2;
+	    --deep-red: #aa1010;
+	  }
+	
+	  * {
+	    box-sizing: border-box;
+	    margin: 0;
+	    padding: 0;
+	  }
+	
+	  body {
+	    font-family: 'Noto Sans KR', sans-serif;
+	    color: #333;
+	    line-height: 1.6;
+	  }
+	
+	  .coupon-banner-box {
+	    display: flex;
+	    justify-content: space-between;
+	    align-items: flex-start;
+	    background: linear-gradient(to bottom, #ffeede 0%, #d6e9ff 100%);
+	    border: 2px solid #ddd;
+	    border-radius: 16px;
+	    padding: 40px 32px;
+	    gap: 40px;
+	    margin: 40px auto;
+	    max-width: 1000px;
+	  }
+	
+	  .coupon-desc {
+	    flex: 1;
+	  }
+	
+	  .coupon-desc h1 {
+	    font-size: 1.8rem;
+	    color: var(--bnk-red);
+	    margin-bottom: 16px;
+	    font-weight: bold;
+	  }
+	
+	  .coupon-desc p {
+	    font-size: 1.1rem;
+	    color: #555;
+	    line-height: 1.6;
+	  }
+	
+	  .coupon-desc p:last-of-type {
+	    margin-bottom: 24px;
+	  }
+	
+	  .bnk-red-btn {
+	    background-color: var(--bnk-red);
+	    color: white;
+	    padding: 12px 20px;
+	    font-size: 1rem;
+	    font-weight: bold;
+	    border: none;
+	    border-radius: 12px;
+	    cursor: pointer;
+	    transition: background-color 0.3s;
+	  }
+	
+	  .bnk-red-btn:hover {
+	    background-color: var(--deep-red);
+	  }
+	
+	  .image-box {
+	    flex: 1;
+	    background-color: #fafafa;
+	    padding: 20px;
+	    border-radius: 12px;
+	    text-align: center;
+	    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+	    max-width: 400px;
+	    position: relative;
+	  }
+	
+	  .image-box h3 {
+	    margin-bottom: 12px;
+	    font-size: 1.1rem;
+	    color: #333;
+	  }
+	
+	  .image-box img {
+	    width: 100%;
+	    max-height: 220px;
+	    object-fit: contain;
+	    border-radius: 8px;
+	    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+	  }
+	
+	  .image-overlay {
+	    position: absolute;
+	    top: 48px;
+	    left: 0;
+	    width: 100%;
+	    height: calc(100% - 48px);
+	    background: rgba(255, 255, 255, 0.95);
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    z-index: 10;
+	    border-radius: 12px;
+	    cursor: pointer;
+	  }
+	
+	  .intro-message {
+	    font-size: 1.2rem;
+	    font-weight: bold;
+	    color: var(--bnk-red);
+	    animation: blink 1s infinite;
+	    text-align: center;
+	  }
+	
+	  @keyframes blink {
+	    0%, 100% { opacity: 1; }
+	    50% { opacity: 0.3; }
+	  }
+	
+	  .container2 {
+	    width: 1000px;
+	    margin: 0 auto;
+	    padding: 0 20px;
+	    margin-bottom: 30px;
+	  }
+	
+	  header {
+	    font-size: 1.2rem;
+	    color: var(--bnk-red);
+	    padding: 20px 15px 15px;
+	    text-align: center;
+	    background-color: #ffffff;
+	    margin-bottom: 10px;
+	  }
+	
+	  .section {
+	    background: linear-gradient(to bottom, #e4f2ff 0%, #cde4ff 100%);
+	    padding: 60px 32px;
+	    border-radius: 20px;
+	    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+	  }
+	
+	  .info-row {
+	    display: flex;
+	    flex-wrap: wrap;
+	    gap: 24px;
+	    justify-content: space-between;
+	    align-items: stretch;
+	  }
+	
+	  .exchange-fallback {
+	    flex: 1 1 35%;
+	    background-color: #fffefc;
+	    border: 1.5px solid #ddd;
+	    padding: 24px 28px;
+	    border-radius: 16px;
+	    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+	    text-align: center;
+	    align-self: stretch;
+	  }
+	
+	  .exchange-fallback h3 {
+	    font-size: 1.3rem;
+	    color: var(--bnk-red);
+	    margin-bottom: 12px;
+	    text-align: left;
+	  }
+	
+	  .exchange-fallback p {
+	    font-size: 1rem;
+	    color: #555;
+	    margin-bottom: 20px;
+	    text-align: left;
+	  }
+	
+	  .desc-box {
+	    flex: 1 1 60%;
+	    background: #ffffff;
+	    padding: 24px 28px;
+	    border-radius: 16px;
+	    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+	  }
+	
+	  .desc-box h3 {
+	    color: var(--bnk-red);
+	    font-size: 1.3rem;
+	    margin-bottom: 20px;
+	    text-align: left;
+	  }
+	
+	  .desc-text p {
+	    margin-bottom: 14px;
+	    font-size: 1rem;
+	    text-align: left;
+	  }
+	
+	  .desc-text .highlight {
+	    background-color: var(--bnk-yellow);
+	    padding: 12px;
+	    border-left: 4px solid var(--bnk-red);
+	    border-radius: 6px;
+	    font-weight: bold;
+	    color: var(--deep-red);
+	  }
+	
+	  /* ===== 🧾 모달 스타일 ===== */
+	
+	  .modal {
+	    display: none;
+	    position: fixed;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    background-color: rgba(0, 0, 0, 0.6);
+	    justify-content: center;
+	    align-items: center;
+	    z-index: 999;
+	  }
+	
+	  .modal-content {
+	    background: #fff;
+	    padding: 30px 40px;
+	    border-radius: 14px;
+	    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+	    max-width: 600px;
+	    width: 90%;
+	    position: relative;
+	    text-align: left;
+	  }
+	
+	  .close-btn {
+	    position: absolute;
+	    top: 18px;
+	    right: 22px;
+	    cursor: pointer;
+	    font-size: 1.5rem;
+	    font-weight: bold;
+	    color: #999;
+	  }
+	
+	  .close-btn:hover {
+	    color: #333;
+	  }
+	
+	  .modal-content form label {
+	    display: block;
+	    margin-top: 15px;
+	    font-weight: bold;
+	    color: #333;
+	  }
+	
+	  .modal-content form input,
+	  .modal-content form select {
+	    width: 100%;
+	    padding: 10px;
+	    margin-top: 6px;
+	    border: 1px solid #ccc;
+	    border-radius: 6px;
+	    font-size: 1rem;
+	  }
+	
+	  .modal-content .submit-btn {
+	    display: block;
+	    margin: 30px auto 0;
+	    padding: 12px 28px;
+	    background-color: var(--bnk-red);
+	    color: white;
+	    font-size: 1.1rem;
+	    font-weight: bold;
+	    border: none;
+	    border-radius: 30px;
+	    cursor: pointer;
+	    transition: background-color 0.3s;
+	  }
+	
+	  .modal-content .submit-btn:hover {
+	    background-color: var(--deep-red);
+	  }
+	
+	  .coupon-preview {
+	    position: relative;
+	    display: inline-block;
+	    margin-top: 16px;
+	  }
+	
+	  .coupon-preview img {
+	    width: 100%;
+	    max-width: 500px;
+	    border-radius: 10px;
+	    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+	  }
+	
+	  .name-tag {
+	    position: absolute;
+	    top: 10%;
+	    left: 5%;
+	    font-size: 1.2rem;
+	    font-weight: bold;
+	    background: rgba(255, 255, 255, 0.85);
+	    padding: 4px 12px;
+	    border-radius: 6px;
+	    color: #000;
+	  }
+	
+	  .print-btn {
+	    display: block;
+	    margin: 20px auto 0;
+	    padding: 10px 24px;
+	    background-color: var(--bnk-red);
+	    color: white;
+	    font-size: 1rem;
+	    border: none;
+	    border-radius: 6px;
+	    cursor: pointer;
+	  }
+	
+	  .print-btn:hover {
+	    background-color: var(--deep-red);
+	  }
+	  /* 기존 스타일들 사이에 아래 추가 */
+	  .bnk-btn {
+	    display: inline-block;
+	    background-color: var(--bnk-red);
+	    color: #fff;
+	    padding: 12px 20px;
+	    border-radius: 8px;
+	    font-weight: bold;
+	    text-align: center;
+	    text-decoration: none;
+	    transition: background-color 0.3s;
+	  }
+	
+	  .bnk-btn:hover {
+	    background-color: var(--deep-red);
+	  }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background-color: var(--bg);
-      color: #333;
-      line-height: 1.6;
-    }
-
-    .container2 {
-      width: 1000px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    header {
-      font-size: 1.2rem;
-      color: var(--bnk-red);
-      padding: 20px 15px 15px;
-      text-align: center;
-      background-color: #ffffff;
-      margin-bottom: 10px;
-    }
-
-    .section {
-      padding: 60px 0;
-      text-align: center;
-    }
-
-    .info-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 30px;
-      margin-bottom: 50px;
-    }
-
-    .desc-box {
-      flex: 1 1 500px;
-      background-color: #fefefe;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-      line-height: 1.7;
-    }
-
-    .desc-box h3 {
-      color: var(--bnk-red);
-      font-size: 1.3rem;
-      margin-bottom: 20px;
-      text-align: left;
-    }
-
-    .desc-text p {
-      margin-bottom: 14px;
-      font-size: 1rem;
-      text-align: left;
-    }
-
-    .desc-text .highlight {
-      background-color: var(--bnk-yellow);
-      padding: 12px;
-      border-left: 4px solid var(--bnk-red);
-      border-radius: 6px;
-      font-weight: bold;
-      color: var(--deep-red);
-    }
-
-    .image-box {
-      flex: 1 1 400px;
-      background-color: #fafafa;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-    }
-
-    .image-box h3 {
-      margin-bottom: 15px;
-      font-size: 1.2rem;
-      color: #333;
-    }
-
-    .image-box img {
-      width: 100%;
-      max-height: 220px;
-      object-fit: contain;
-      border-radius: 8px;
-      box-shadow: 0 0 4px rgba(0,0,0,0.1);
-    }
-
-    .form-box {
-      background: #fff;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      text-align: left;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .form-box h2 {
-      color: var(--bnk-red);
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .form-box label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-
-    .form-box input, .form-box select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
-
-    .submit-btn {
-      display: block;
-      margin: 30px auto 0;
-      padding: 12px 30px;
-      font-size: 1.1rem;
-      background-color: var(--bnk-red);
-      color: #fff;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .submit-btn:hover {
-      background-color: var(--deep-red);
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .modal-content {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-      position: relative;
-      max-width: 600px;
-      width: 90%;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      cursor: pointer;
-      font-size: 1.5rem;
-    }
-
-    .coupon-preview {
-      position: relative;
-      display: inline-block;
-    }
-
-    .coupon-preview img {
-      width: 100%;
-      max-width: 500px;
-    }
-
-    .name-tag {
-      position: absolute;
-      top: 10%;
-      left: 5%;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #000;
-      background-color: rgba(255, 255, 255, 0.85);
-      padding: 4px 10px;
-      border-radius: 6px;
-    }
-
-    .print-btn {
-      display: block;
-      margin: 20px auto 0;
-      padding: 10px 24px;
-      background: var(--bnk-red);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
-    }
-
-    .modal-content h3 {
-      color: var(--bnk-red);
-      margin-bottom: 5px;
-    }
-
-    .modal-content p {
-      margin-bottom: 15px;
-      font-size: 0.95rem;
-    }
+	
+	
   </style>
 </head>
 <body>
 	<div th:replace="~{fragments/header2 :: header}"></div>
   <header>
-    <h1>BNK 부산은행 환율 우대 쿠폰 발급</h1>
+    <h1>BNK 부산은행 환율 우대 쿠폰</h1>
   </header>
+  
+  
+  
+  <div class="coupon-banner-box">
+	  <!-- 왼쪽 설명 텍스트 -->
+	  <div class="coupon-desc">
+	    <h1>사고 팔 때 30% 환율 우대<br>당일수령가능</h1>
+	    <p>신청 정보 작성 후<br>영업점 창구에 제시해주세요</p>
+	    
+	    <button class="bnk-red-btn" onclick="openFormModal()">📝 정보 입력하기</button>
+	  </div>
+	  
 
-  <div class="container2">
-    <section class="section">
-      <div class="info-row">
-        <!-- 왼쪽 설명 -->
-        <div class="desc-box">
-          <h3>📢 환율우대쿠폰 신청 안내</h3>
-          <div class="desc-text">
-            <p>BNK 부산은행에서는 환율우대 서비스를 제공하기 위해<br><strong>환율우대 쿠폰</strong>을 발급해 드리고 있습니다.</p>
-            <p>아래 신청 정보를 작성 후 <strong>출력 또는 사진 촬영</strong>하여<br><strong>영업점 창구에 제시</strong>해 주세요.</p>
-            <p class="highlight">💱 외국통화를 사고 파실 때 <strong>환전수수료의 30%</strong>를 우대 받으실 수 있습니다.</p>
-          </div>
+	
+	  <!-- 오른쪽 쿠폰 이미지 + 오버레이 -->
+	  <div class="image-box" style="position: relative;">
+	    <h3>🖼️ 쿠폰 이미지</h3>
+	    <div class="image-overlay" onclick="hideOverlay()">
+	      <div class="intro-message">🎉 쿠폰이 도착했습니다 🎉</div>
+	    </div>
+	    <img src="/img/coupon/환율우대쿠폰.jpg" alt="환율 쿠폰 이미지" />
+	  </div>
+	</div>
+  
+ 
+
+ <div class="container2">
+  <section class="section">
+    <div class="info-row">
+    
+      <!-- 왼쪽 안내 박스 -->
+      <div class="desc-box">
+        <h3>📢 환율우대쿠폰 신청 안내</h3>
+        <div class="desc-text">
+          <p>
+            BNK 부산은행에서는 환율우대 서비스를 제공하기 위해<br>
+            <strong>환율우대 쿠폰</strong>을 발급해 드리고 있습니다.
+          </p>
+          <p>
+            아래 신청 정보를 작성 후 <strong>출력 또는 사진 촬영</strong>하여<br>
+            <strong>영업점 창구에 제시</strong>해 주세요.
+          </p>
+          <p class="highlight">
+            💱 외국통화를 사고 파실 때 <strong>환전수수료의 30%</strong>를 우대 받으실 수 있습니다.
+          </p>
         </div>
-
-        <!-- 오른쪽 쿠폰 이미지 -->
-        <div class="image-box">
-          <h3>🖼️ 쿠폰 이미지</h3>
-          <img src="/img/coupon/환율우대쿠폰.jpg" alt="환율 쿠폰 이미지" />
-        </div>
       </div>
 
-      <!-- 입력 폼 -->
-      <div class="form-box">
-        <h2>📝 본인 정보 입력</h2>
-        <form id="couponForm">
-          <label for="name">이름</label>
-          <input type="text" id="name" name="name" required />
-
-          <label for="purpose">목적</label>
-          <select id="purpose" name="purpose">
-            <option value="여행">여행</option>
-            <option value="이주">이주</option>
-            <option value="유학">유학</option>
-          </select>
-
-          <label for="rate">우대율 (%)</label>
-          <input type="text" id="rate" name="rate" value="30%" readonly />
-
-          <button type="submit" class="submit-btn">✅ 환율 우대 쿠폰 발행</button>
-        </form>
+      <!-- 오른쪽 환율표 안내 박스 -->
+      <div class="exchange-fallback">
+        <h3>💱 실시간 환율표</h3>
+        <p>실시간 환율은 BNK 부산은행 외환 페이지에서 확인하실 수 있습니다.</p>
+        <a href="https://www.busanbank.co.kr/ib20/mnu/FPMFRX206001001"
+           target="_blank" class="bnk-btn">환율표 바로가기 →</a>
       </div>
-    </section>
-  </div>
-
-  <!-- 쿠폰 미리보기 모달 -->
-  <div id="couponModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn" onclick="closeModal()">×</span>
-      <h3>환율우대쿠폰</h3>
-      <p>본 쿠폰을 출력하거나 사진 촬영 후 창구에 제시해 주세요.</p>
-      <div class="coupon-preview">
-        <img src="/img/coupon/환율우대쿠폰.jpg" alt="환율 쿠폰 이미지">
-        <div class="name-tag">성명: <span id="previewName">고객명</span></div>
-      </div>
-      <button onclick="window.print()" class="print-btn">🖨️ 인쇄</button>
+      
     </div>
-  </div>
+  </section>
+</div>
+
+      
+     
+
+
+     <!-- 입력 폼 모달 -->
+	<div id="formModal" class="modal">
+	  <div class="modal-content">
+	    <span class="close-btn" onclick="closeFormModal()">×</span>
+	    <h2>📝 본인 정보 입력</h2>
+	    <form id="couponForm">
+	      <label for="name">이름</label>
+	      <input type="text" id="name" name="name" required />
+	
+	      <label for="purpose">목적</label>
+	      <select id="purpose" name="purpose">
+	        <option value="여행">여행</option>
+	        <option value="이주">이주</option>
+	        <option value="유학">유학</option>
+	      </select>
+	
+	      <label for="rate">우대율 (%)</label>
+	      <input type="text" id="rate" name="rate" value="30%" readonly />
+	
+	      <button type="submit" class="submit-btn">✅ 환율 우대 쿠폰 발행</button>
+	    </form>
+	  </div>
+	</div>
+	
+	<!-- 쿠폰 미리보기 모달 -->
+	<div id="couponModal" class="modal">
+	  <div class="modal-content">
+	    <span class="close-btn" onclick="closeModal()">×</span>
+	    <h3>환율우대쿠폰</h3>
+	    <p>본 쿠폰을 출력하거나 사진 촬영 후 창구에 제시해 주세요.</p>
+	    <div class="coupon-preview">
+	      <img src="/img/coupon/환율우대쿠폰.jpg" alt="환율 쿠폰 이미지">
+	      <div class="name-tag">성명: <span id="previewName">고객명</span></div>
+	    </div>
+	    <button onclick="window.print()" class="print-btn">🖨️ 인쇄</button>
+	  </div>
+	</div>
+
+  
 <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
 <div th:replace="~{fragments/footer :: footer}"></div>
   <script>
-    function openCouponModal() {
-      const name = document.getElementById('name').value;
-      document.getElementById('previewName').textContent = name || '고객명';
-      document.getElementById('couponModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('couponModal').style.display = 'none';
-    }
-
-    document.getElementById("couponForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      openCouponModal();
-    });
-  </script>
+	  function openFormModal() {
+	    document.getElementById("formModal").style.display = "flex";
+	  }
+	
+	  function closeFormModal() {
+	    document.getElementById("formModal").style.display = "none";
+	  }
+	
+	  function openCouponModal(name) {
+	    document.getElementById("previewName").textContent = name;
+	    document.getElementById("couponModal").style.display = "flex";
+	  }
+	  
+	// ✅ [추가] 오버레이 제거 함수
+	  function hideOverlay() {
+	    const overlay = document.querySelector('.image-overlay');
+	    if (overlay) overlay.style.display = 'none';
+	  }
+	
+	  function closeModal() {
+	    document.getElementById("couponModal").style.display = "none";
+	  }
+	
+	  // 폼 제출 처리
+	  document.getElementById("couponForm").addEventListener("submit", function (e) {
+	    e.preventDefault();
+	    const name = document.getElementById("name").value;
+	    closeFormModal();
+	    openCouponModal(name);
+	  });
+	</script>
 </body>
 </html>
