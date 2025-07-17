@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* ─────────────────────────┐
 │  0. Color Variables       │
 └───────────────────────── */
@@ -14,12 +15,18 @@
 /* ─────────────────────────┐
 │  1. 기본 세팅             │
 └───────────────────────── */
-*{box-sizing:border-box;margin:0;padding:0;}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 html,body{height:100%;}
 body{
   background:#f5f5f5;
   color:#333;
-  font-family:'Malgun Gothic','맑은 고딕',Arial,sans-serif;
+  font-family:'Spoqa', 'noto', '돋움', Dotum, Helvetica, AppleGothic, Sans-serif !important;
   font-size:14px;line-height:1.5;
 }
 
@@ -50,6 +57,10 @@ header.admin-top{
 │  3. 사이드바 & 레이아웃   │
 └───────────────────────── */
 .layout, .main-container{display:flex;height:calc(100vh - 56px);}
+.wrapper{ 
+    display: flex !important;
+}
+
 aside{
   width:220px;flex:none;background:#fff;
   border-right:1px solid #dee2e6;padding:24px 0;
@@ -67,41 +78,338 @@ aside button.active{
 
 main, #main{flex:1;min-width:0;overflow-y:auto;padding:32px;background:#fff;}
 .page-inner{width:100%;max-width:1400px;margin:0 auto;}
-.category-inner{max-width:1370px; margin-top:25px;}
-h2{margin-top:0;padding:15px 0;margin-bottom:30px;font-size:24px;font-weight:bold;border-bottom:3px solid #dc3545;background:#f8f9fa;color:#2c2c2c;}
+
+/* 상품관리 스타일 적용한 컨테이너 */
+.container {
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
+    min-height: 100vh;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* 🔥 카테고리 관리 전용 - category-inner를 container처럼 */
+.category-inner{
+  flex: 1;
+  padding: 20px;
+  background-color: #ffffff;
+  min-height: 100vh;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  max-width: none !important;
+  margin-top: 0 !important;
+  width: 100% !important;
+}
+
+.full-width-container {
+    width: 100% !important;
+    max-width: none !important;
+}
 
 /* ─────────────────────────┐
-│  4. 테이블                │
+│  4. 제목 스타일           │
 └───────────────────────── */
-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px;table-layout:fixed;background:#fff;border:2px solid #6c757d;}
-th,td{border:1px solid #dee2e6;padding:10px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;color:#495057;}
-th{background:#495057;color:#fff;font-weight:bold;}
-td[contenteditable]{background:#fff3cd;}
-tbody tr:nth-child(even){background:#f8f9fa;}
-tbody tr:hover{background:#e9ecef;}
+h2 {
+    color: #2c2c2c;
+    text-align: left;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 15px 0;
+    border-bottom: 3px solid #dc3545;
+    background-color: #f8f9fa;
+}
+
+h3 {
+    color: #495057;
+    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* ─────────────────────────┐
+│  5. 검색 박스 스타일      │
+└───────────────────────── */
+.search-box {
+    background: #fefefe;
+    border: 2px solid #6c757d;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.search-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 10px;
+}
+
+.search-row:last-child {
+    margin-bottom: 0;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+label {
+    font-weight: bold;
+    color: #495057;
+    min-width: 120px;
+    font-size: 14px;
+}
+
+input[type="text"], select {
+    padding: 8px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 2px;
+    font-size: 14px;
+    background-color: white;
+    font-family: inherit;
+    color: #495057;
+    transition: all 0.2s ease-in-out;
+}
+
+input[type="text"]:focus, select:focus {
+    outline: none;
+    border-color: #dc3545;
+    background-color: #fff;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.25);
+}
+
+/* ─────────────────────────┐
+│  6. 버튼 스타일           │
+└───────────────────────── */
+
+/* 카테고리 관리 등록 버튼 오른쪽 정렬 */
+.category-inner #btnAdd {
+    float: right;
+    margin-bottom: 15px;
+}
+
+.search-btn, .save-btn, #registerBtn, #deleteSelectedBtn, #btnAdd {
+    padding: 8px 16px;
+    border: 1px solid;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.search-btn {
+    background-color: #6c757d;
+    color: white;
+    border-color: #6c757d;
+    min-width: 80px;
+}
+
+.search-btn:hover {
+    background-color: #5a6268;
+    border-color: #5a6268;
+}
+
+.button-container {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+    justify-content: flex-end;
+}
+
+#registerBtn, #btnAdd {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
+}
+
+#registerBtn:hover, #btnAdd:hover {
+    background-color: #c82333;
+    border-color: #c82333;
+}
+
+#deleteSelectedBtn {
+    background-color: #6c757d;
+    color: white;
+    border-color: #6c757d;
+}
+
+#deleteSelectedBtn:hover {
+    background-color: #5a6268;
+    border-color: #5a6268;
+}
+
+.save-btn {
+    background-color: #6c757d;
+    color: white;
+    border-color: #6c757d;
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.save-btn:hover {
+    background-color: #5a6268;
+    border-color: #5a6268;
+}
+
+.save-btn:disabled {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    cursor: not-allowed;
+}
+
+button.small{padding:2px 6px;font-size:.85rem;}
+
+/* ─────────────────────────┐
+│  승인 관리 전용 버튼      │
+└───────────────────────── */
+/* 게시/미게시 버튼 기본 스타일 */
+button[data-to] {
+    padding: 4px 8px;
+    margin: 0 2px;
+    border: 1px solid #6c757d;
+    background-color: #6c757d;
+    color: white;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+/* 🔥 호버 시 빨간색으로 변경 */
+button[data-to]:hover {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    transform: scale(1.05);
+}
+
+/* 클릭 시 더 진한 빨간색 */
+button[data-to]:active {
+    background-color: #c82333 !important;
+    border-color: #bd2130 !important;
+    transform: scale(1.02);
+}
+
+/* ─────────────────────────┐
+│  7. 결과 박스 & 테이블    │
+└───────────────────────── */
+.result-box {
+    background: #fefefe;
+    border: 2px solid #6c757d;
+    border-radius: 4px;
+    padding: 20px;
+}
+
+.table-container {
+    overflow-x: auto;
+    border: 1px solid #dee2e6;
+    background: white;
+    width: 100%;
+}
+
+/* 기본 테이블 스타일 */
+table, #resultTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    table-layout: fixed;
+    background: #fff;
+    min-width: 1000px;
+    clear: both; /* float 된 버튼 아래로 테이블 배치 */
+}
+
+th, td, #resultTable th, #resultTable td {
+    border: 1px solid #dee2e6;
+    padding: 12px 8px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    color: #495057;
+}
+
+th, #resultTable th {
+    background: #495057;
+    color: #fff;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+#resultTable thead {
+    background-color: #495057;
+    color: white;
+}
+
+tbody tr:nth-child(even), #resultTable tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+tbody tr:hover, #resultTable tbody tr:hover {
+    background-color: #e9ecef;
+}
+
 tr.selected{background:#e7f1ff;}
 
-/* ─────────────────────────┐
-│  5. 공통 버튼             │
-└───────────────────────── */
-button.small{padding:2px 6px;font-size:.85rem;}
-button.save-btn{
-  background:#dc3545;color:#fff;border:1px solid #dc3545;
-  padding:4px 8px;font-size:12px;font-weight:bold;border-radius:2px;cursor:pointer;
+/* 카테고리 테이블 전용 컬럼 너비 */
+.category-inner table th:nth-child(1), 
+.category-inner table td:nth-child(1) {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
 }
-button.save-btn:hover{background:#c82333;border-color:#c82333;}
-button.save-btn:disabled{background:#6c757d;border-color:#6c757d;cursor:not-allowed;}
 
-#btnAdd{
-  padding:.45rem .8rem;border:none;border-radius:.35rem;
-  background:var(--primary);color:#fff;font-size:.95rem;font-weight:600;
-  cursor:pointer;transition:background .15s;
+.category-inner table th:nth-child(2), 
+.category-inner table td:nth-child(2) {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
 }
-#btnAdd:hover{background:var(--primary-dark);}#btnAdd:active{transform:translateY(1px);}
-#btnAdd:focus-visible{outline:2px solid #83b3ef;outline-offset:2px;}
+
+.category-inner table th:nth-child(3), 
+.category-inner table td:nth-child(3) {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.category-inner table th:nth-child(4), 
+.category-inner table td:nth-child(4) {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.category-inner table th:nth-child(5), 
+.category-inner table td:nth-child(5) {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+}
+
+td[contenteditable], .editable {
+    background: #fff3cd;
+    cursor: pointer;
+}
+
+.editable:hover {
+    background-color: #ffeaa7;
+    font-weight: bold;
+    border: 1px solid #dc3545;
+}
+
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #dc3545;
+}
 
 /* ─────────────────────────┐
-│  6. 모달                  │
+│  8. 모달                  │
 └───────────────────────── */
 #modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.55);z-index:500;padding:16px;}
 #modal.hidden{display:none;}
@@ -123,14 +431,52 @@ button.save-btn:disabled{background:#6c757d;border-color:#6c757d;cursor:not-allo
 #btnClose{background:#e4e7ec;color:#333;}#btnClose:hover{background:#d4d8de;}
 
 /* ─────────────────────────┐
-│  7. 페이지네이션          │
+│  9. 페이지네이션          │
 └───────────────────────── */
-#pagination{display:flex;justify-content:center;gap:.4rem;margin-top:1.5rem;font-family:sans-serif;}
-.page-btn{min-width:2rem;padding:.35rem .6rem;border:1px solid #ccc;border-radius:.3rem;background:#fff;cursor:pointer;transition:background .15s;}
-.page-btn:hover:not(:disabled){background:#f4f4f4;}.page-btn:disabled{cursor:not-allowed;opacity:.4;}.page-btn.active{background:var(--primary);color:#fff;border-color:var(--primary);font-weight:600;}
+.pagination-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination, #pagination {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.page-btn {
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    background-color: #fff;
+    color: #495057;
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 14px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.page-btn:hover:not(:disabled) {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.page-btn.active {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: #fff;
+}
+
+.page-btn:disabled {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    color: #6c757d;
+    cursor: not-allowed;
+}
 
 /* ─────────────────────────┐
-│  8. Dashboard 예시        │
+│  10. Dashboard 예시       │
 └───────────────────────── */
 .dashboard{display:flex;flex-wrap:wrap;gap:24px;}
 .chart-card{flex:1 1 45%;min-width:340px;background:#fff;padding:16px;border:1px solid #dee2e6;border-radius:6px;}
@@ -139,7 +485,7 @@ button.save-btn:disabled{background:#6c757d;border-color:#6c757d;cursor:not-allo
 @media(max-width:1024px){.chart-card{flex:1 1 100%;}}
 
 /* ─────────────────────────┐
-│  9. Mega 메뉴 (관리용)    │
+│  11. Mega 메뉴 (관리용)   │
 └───────────────────────── */
 .mega-toggle{
   background:transparent;color:var(--mega-base);
@@ -160,3 +506,53 @@ button.save-btn:disabled{background:#6c757d;border-color:#6c757d;cursor:not-allo
 .mega li::marker,.mega ul ul li::marker{content:none;}
 .hidden{display:none!important;}
 .wrap{white-space:normal;word-break:break-all;}
+
+/* ─────────────────────────┐
+│  12. 반응형 디자인        │
+└───────────────────────── */
+
+@media (max-width: 1200px) {
+    table, #resultTable {
+        min-width: 900px;
+    }
+    
+    .category-inner table th:nth-child(2), 
+    .category-inner table td:nth-child(2),
+    .category-inner table th:nth-child(3), 
+    .category-inner table td:nth-child(3),
+    .category-inner table th:nth-child(4), 
+    .category-inner table td:nth-child(4) {
+        width: 180px;
+        min-width: 180px;
+        max-width: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    aside {
+        display: none;
+    }
+    
+    main, #main {
+        padding: 16px;
+    }
+    
+    .container, .category-inner {
+        padding: 10px;
+    }
+    
+    table, #resultTable {
+        min-width: 800px;
+    }
+    
+    .category-inner table th:nth-child(2), 
+    .category-inner table td:nth-child(2),
+    .category-inner table th:nth-child(3), 
+    .category-inner table td:nth-child(3),
+    .category-inner table th:nth-child(4), 
+    .category-inner table td:nth-child(4) {
+        width: 150px;
+        min-width: 150px;
+        max-width: 150px;
+    }
+}
