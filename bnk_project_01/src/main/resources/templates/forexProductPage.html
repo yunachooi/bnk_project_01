@@ -1,519 +1,102 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <title>BNK ONE 환전</title>
-    <link rel="stylesheet" th:href="@{/css/common.css}" />
+  <meta charset="UTF-8" />
+  <title>BNK ONE 환전</title>
 <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
-    
-    <style>
-        * { box-sizing: border-box; }
-
-        :root {
-            --bnk-red: #D7191F;
-            --bnk-light-gray: #f7f7f7;
-            --bnk-border: #ddd;
-        }
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #ffffff;
-            color: #333;
-            scroll-behavior: smooth;
-        }
-
-        /* ✅ 헤더 영역 */
-        .page-header {
-            text-align: center;
-            padding: 20px 15px 15px;
-            background-color: #ffffff;
-        }
-
-        .page-header h1 {
-            font-size: 3rem;
-            color: #D7191F;
-            margin-bottom: 10px;
-        }
-
-        .page-header hr {
-            width: 80px;
-            height: 4px;
-            background-color: #D7191F;
-            border: none;
-            margin: 0 auto;
-        }
-
-        /* 🎥 영상 영역 */
-        .video-section {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .video-section video {
-            width: 55vw;
-            height: auto;
-            object-fit: contain;
-            z-index: 0;
-            border-radius: 12px;
-        }
-
-        .video-overlay {
-            position: absolute;
-            bottom: 5%;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
-            color: white;
-            padding: 12px 30px 24px 30px;
-            text-align: center;
-            border-radius: 14px;
-            max-width: 75%;
-        }
-
-        .video-overlay h1 {
-            font-size: 3.8rem;
-            font-weight: 700;
-            margin: 0 0 10px;
-            letter-spacing: -0.5px;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-        }
-
-        .video-overlay p {
-            font-size: 1.6rem;
-            font-weight: 600;
-            line-height: 1.6;
-            margin: 0 0 16px;
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
-        }
-
-        .video-overlay .cta-button {
-            font-size: 1.4rem;
-            padding: 12px 24px;
-            background-color: #ffffff;
-            color: #D7191F;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            transition: background 0.3s, transform 0.2s;
-        }
-
-        .video-overlay .cta-button:hover {
-            background-color: #f5f5f5;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        /* 🔽 설명 섹션들 */
-        .section {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 3rem;
-            padding: 80px 40px;
-        }
-
-        .section:nth-child(even) {
-            flex-direction: row-reverse;
-            background-color: #f9f9f9;
-        }
-
-        .section img {
-            width: 280px;
-            height: auto;
-            border-radius: 50%;
-        }
-
-        .text-area {
-            max-width: 500px;
-        }
-
-        .title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #D7191F;
-            margin-bottom: 0.6rem;
-        }
-
-        .desc {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #555;
-            line-height: 1.8;
-        }
-        
-        
-        /* 우대내용 표 전용 스타일 */
-        .rate-discount-title {
-            color: #d7191f;
-            font-size: 10px;
-            font-weight: 600;
-            line-height: 1.6;
-        }
-
-        .rate-discount-title span {
-            display: inline-block;
-            font-weight: 500;
-            font-size: 13px;
-        }
-
-        .table-scroll-x {
-            overflow-x: auto;
-        }
-
-        .rate-discount-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-            text-align: center;
-            border: 1px solid #ccc;
-        }
-
-        .rate-discount-table th,
-        .rate-discount-table td {
-            border: 1px solid #ccc;
-            padding: 8px;
-        }
-
-        .rate-discount-table thead th {
-            background-color: #f9f9f9;
-            font-weight: bold;
-        }
-
-        .rate-discount-table thead tr:first-child {
-            border-bottom: 2px solid #d7191f;
-        }
-
-        .rate-discount-table .not-supported {
-            text-align: center;
-            font-style: italic;
-            color: #888;
-        }
-
-        
-
-       
-
-        /* 📱 반응형
-        @media (max-width: 1024px) {
-         	html{ font-size:16px !important; }
-            .video-section video {
-                width: 95vw;
-                
-            }
-
-            .video-overlay {
-                padding: 16px 20px;
-                bottom: 3%;
-            }
-
-            .video-overlay h1 {
-                font-size: 2.4rem;
-            }
-
-            .video-overlay p {
-                font-size: 1.4rem;
-            }
-
-            .video-overlay .cta-button {
-                font-size: 1.2rem;
-                padding: 12px 24px;
-            }
-
-            .section {
-                flex-direction: column !important;
-                text-align: center;
-            }
-
-            .section img {
-                width: 180px;
-            }
-
-            .text-area {
-                max-width: 100%;
-            }
-
-            .page-header h1 {
-                font-size: 2rem;
-            }
-        } */
-
-        /* 상품 상세 정보 
-        .tab-type2 {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-
-        .js-tabA {
-            display: flex;
-            border-bottom: 2px solid var(--bnk-red);
-            margin-bottom: 20px;
-            list-style: none;
-            padding: 0;
-        }
-
-        .js-tabA li {
-            margin-right: 10px;
-        }
-
-        .js-tabA a {
-            display: inline-block;
-            padding: 12px 20px;
-            border: 1px solid var(--bnk-red);
-            border-bottom: none;
-            background: white;
-            color: var(--bnk-red);
-            font-weight: bold;
-            border-radius: 8px 8px 0 0;
-            text-decoration: none;
-            transition: background 0.3s, color 0.3s;
-        }
-
-        .js-tabA a:hover {
-            background: var(--bnk-red);
-            color: white;
-        }
-
-        .con {
-            display: none;
-            background: #fff;
-            border: 1px solid var(--bnk-red);
-            border-radius: 0 0 10px 10px;
-            padding: 30px;
-            line-height: 1.8;
-        }
-
-        .con.active {
-            display: block;
-        }
-
-        h6.hd-t {
-            font-size: 1.5rem;
-            color: var(--bnk-red);
-            margin-top: 40px;
-            margin-bottom: 20px;
-        }
-
-        ul {
-            margin: 10px 0 20px;
-            padding-left: 20px;
-        }
-
-        ul li {
-            margin-bottom: 8px;
-        }
-
-        img {
-            display: block;
-            max-width: 100%;
-            height: auto;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-        }*/
-		
-    </style>
+  <link rel="stylesheet" th:href="@{/css/common.css}" />
+  <link rel="stylesheet" th:href="@{/css/forexProductPage.css}" />
 </head>
 <body>
 <div th:replace="~{fragments/header2 :: header}"></div>
 
-<!-- 🎥 배경 영상 -->
+<!-- 🎥 비디오 영역 -->
 <section class="video-section">
-    <video src="/videos/ONE%20환전.mp4" autoplay muted loop playsinline></video>
-
-   <!--   <div class="video-overlay">
-        <h1>BNK One 환전</h1>
-        <p>최대 90% 우대 혜택</p>
-        <button class="cta-button" onclick="location.href='#'">지금 환전하기</button>
-    </div> -->
+  <video class="background-video" src="/videos/ONE%20환전.mp4" autoplay muted loop playsinline></video>
+  <div class="video-overlay">
+    <video class="foreground-video" src="/videos/ONE%20환전.mp4" autoplay muted loop playsinline></video>
+  </div>
 </section>
 
-<!-- 🔽 콘텐츠 섹션 -->
-<div class="section">
-    <img src="/img/service/ONE%20환전%201.png" alt="ONE 하는 날에">
-    <div class="text-area">
-        <div class="title">ONE 하는 날에</div>
-        <div class="desc">365일 24시간<br>외화를 수령하고, 배달하며 금고보관까지 가능한 서비스</div>
-    </div>
-</div>
+<!-- ✅ 혜택 소개 -->
+<section class="one-benefit-section">
+  <div class="benefit-box">
+    <p class="benefit-sub">ONE 하는 날에</p>
+    <h2 class="benefit-title">365일 24시간</h2>
+    <p class="benefit-desc">외화를 수령하고, 배달하며 금고보관까지 가능한 서비스</p>
+  </div>
 
-<div class="section">
-    <img src="/img/service/ONE%20환전%202.png" alt="ONE 하는 분께">
-    <div class="text-area">
-        <div class="title">ONE 하는 분께</div>
-        <div class="desc">국내 거주 중인 개인 고객부터 기업 고객까지 <br> 누구나 이용 가능</div>
+  <div class="gray-section">
+    <div class="benefit-box">
+      <p class="benefit-sub">ONE 하는 분께</p>
+      <h2 class="benefit-title">누구나 이용 가능</h2>
+      <p class="benefit-desc">국내 거주 중인 개인 고객부터 기업 고객까지</p>
     </div>
-</div>
+  </div>
 
-<div class="section">
-    <img src="/img/service/ONE%20환전%203.png" alt="ONE 하는 곳에">
-    <div class="text-area">
-        <div class="title">ONE 하는 곳에</div>
-        <div class="desc">해외여행이든 출장지든, 언제 어디서나<br>외화를 손쉽게 신청하고 수령 가능</div>
+  <div class="benefit-box">
+    <p class="benefit-sub">ONE 하는 곳에</p>
+    <h2 class="benefit-title">언제 어디서나</h2>
+    <p class="benefit-desc">해외여행이든 출장지든 외화를 손쉽게 신청하고 수령 가능</p>
+  </div>
+
+  <div class="gray-section">
+    <div class="benefit-box">
+      <p class="benefit-sub">여행을 ONE할 때</p>
+      <h2 class="benefit-title">간편한 환전</h2>
+      <p class="benefit-desc">USD, JPY, EUR, CNY 등 원하는 통화로</p>
     </div>
-</div>
+  </div>
+</section>
 
-<div class="section">
-    <img src="/img/service/ONE%20환전%204.png" alt="여행을 ONE할 때">
-    <div class="text-area">
-        <div class="title">여행을 ONE할 때</div>
-        <div class="desc">주 통화: USD(달러), JPY(엔화), EUR(유로), CNY(위안) <br>원하는 통화로 간편하게 환전 가능</div>
-    </div>
-</div>
-
-<!-- 상세 정보 -->
+<!-- 📑 탭 메뉴 -->
 <div class="tab-type2">
-    <ul class="js-tabA" title="탭 항목">
-        <li><a href="#conA1" class="js-tab">이용안내</a></li>
-        <li><a href="#conB1" class="js-tab">우대내용</a></li>
-        <li class="last"><a href="#conC1" class="js-tab">유의사항</a></li>
-    </ul>
-
-    <!-- conA1 - 이용안내 -->
-    <div class="con" id="conA1">
-        <h6 class="hd-t">환전 가능 한도</h6>
-        <ul>
-            <li>로그인 환전 : USD 100 ~ USD 10,000 이하</li>
-            <li>비로그인 환전 : 원화 1백만원 이하</li>
-            <li>환전 수령 방법 (환전 수령, 현찰 배달, 금고 보관)</li>
-        </ul>
-
-        <h6 class="hd-t">개인</h6>
-        <div style="overflow-x:auto">
-            <table border="1" cellspacing="0" cellpadding="10" style="width:100%; border-collapse: collapse; text-align: center;">
-                <thead style="background-color: #f5f5f5;">
-                    <tr>
-                        <th>구분</th>
-                        <th>부산은행 회원(로그인)</th>
-                        <th>부산은행 비회원(비로그인)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>수령대상</td><td>본인 및 대리인 수령 가능</td><td>본인만 수령 가능</td></tr>
-                    <tr><td>외화 인수</td><td colspan="2">환전신청일로부터 30일 이내</td></tr>
-                    <tr><td>유효기간</td><td colspan="2">인수예정일 포함 7영업일 이내</td></tr>
-                    <tr><td>재환전 (자동환매)</td><td>현찰매입율 + 환율우대 50% 적용 후 원화 입금</td><td>이용불가</td></tr>
-                    <tr><td>유효기간 경과 후</td><td>금고 자동 보관 → 지정계좌 자동환매</td><td>현찰매입율 + 환율우대 50% 적용 후 자동환매</td></tr>
-                    <tr><td>외화 수령 - 영업점</td><td colspan="2">해당 외화 보유 영업점</td></tr>
-                    <tr><td>외화 ATM</td><td>김해공항(USD, JPY)<br>국제여객터미널(JPY)</td><td>이용불가</td></tr>
-                    <tr><td>현찰 배달</td><td>USD 100 이상 ~ 원화 150만원 이하<br>총 11개 통화, 전국 배송<br>배송시간: 평일 9~18시, 배송비: 10,000원</td><td>이용불가</td></tr>
-                    <tr><td>금고 보관</td><td>환전수령, 재환전(원화계좌), 외화계좌 모두 가능</td><td>이용불가</td></tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h6 class="hd-t">기업</h6>
-        <table style="width:100%; border-collapse: collapse; font-size: 15px;">
-            <thead style="background-color: #f2f2f2;">
-                <tr><th style="border: 1px solid #ccc; padding: 10px;">구분</th><th style="border: 1px solid #ccc; padding: 10px;">내용</th></tr>
-            </thead>
-            <tbody>
-                <tr><td style="border: 1px solid #ccc; padding: 10px;">환전 수령 - 수령대상</td><td style="border: 1px solid #ccc; padding: 10px;">환전신청인 또는 지정 인수인 수령 가능</td></tr>
-                <tr><td style="border: 1px solid #ccc; padding: 10px;">외화인수</td><td style="border: 1px solid #ccc; padding: 10px;">환전신청일로부터 30일 이내</td></tr>
-                <tr><td style="border: 1px solid #ccc; padding: 10px;">유효기간</td><td style="border: 1px solid #ccc; padding: 10px;">인수예정일을 포함하여 7영업일까지</td></tr>
-                <tr><td style="border: 1px solid #ccc; padding: 10px;">재환전 (자동환매)<br>유효기간 경과 전</td><td style="border: 1px solid #ccc; padding: 10px;">재환전 시점의 현찰매입율에<br>환율우대 50% 적용하여 지정계좌에 원화 입금</td></tr>
-                <tr><td style="border: 1px solid #ccc; padding: 10px;">재환전 (자동환매)<br>유효기간 경과 후</td><td style="border: 1px solid #ccc; padding: 10px;">금고 자동 보관</td></tr>
-                <tr><td style="border: 1px solid #ccc; padding: 10px;">외화수령 - 영업점</td><td style="border: 1px solid #ccc; padding: 10px;">신청 시점의 해당 외화 보유 영업점</td></tr>
-                <tr><td style="border: 1px solid #ccc; padding: 10px;">외화 ATM</td><td style="border: 1px solid #ccc; padding: 10px;">이용불가</td></tr>
-                <tr><td style="border: 1px solid #ccc; padding: 10px;">현찰 배달</td><td style="border: 1px solid #ccc; padding: 10px;">이용불가</td></tr>
-                <tr><td style="border: 1px solid #ccc; padding: 10px;">금고 보관</td><td style="border: 1px solid #ccc; padding: 10px;">환전수령, 원화계좌 입금(재환전) 또는 외화계좌 입금 가능</td></tr>
-            </tbody>
-        </table>
-    </div>
-
-	<div class="con" id="conB1">
-	    <h6 class="hd-t rate-discount-title">
-	    <span>※ 외화를 사실 때 적용받는 우대율이며 환전한 외화를 원화로 재환전 시에는 현찰매입율(환율우대 50%)이 적용됩니다.<br></span>
-	    <span>(비로그인 고객 또는 로그인 고객의 현찰배달서비스의 재환전(반송) 시에는 현찰매입율(환율우대 50%) 적용)</span>
-		</h6>
-	
-		<div class="table-scroll-x">
-		  <table class="rate-discount-table">
-		    <thead>
-		      <tr>
-		        <th rowspan="2">통화</th>
-		        <th rowspan="2">기본 우대율</th>
-		        <th colspan="2">이벤트 우대율</th>
-		        <th rowspan="2">현찰배달<br>(로그인)</th>
-		      </tr>
-		      <tr>
-		        <th>로그인환전<br>(개인/기업)</th>
-		        <th>비로그인환전</th>
-		      </tr>
-		    </thead>
-		    <tbody>
-		      <tr><td>미국 USD</td><td>50</td><td>90</td><td>80</td><td>90</td></tr>
-		      <tr><td>일본 JPY</td><td>50</td><td>90</td><td>80</td><td>90</td></tr>
-		      <tr><td>유럽 EUR</td><td>50</td><td>80</td><td>70</td><td>80</td></tr>
-		      <tr><td>영국 GBP</td><td>20</td><td>30</td><td>20</td><td>80</td></tr>
-		      <tr><td>캐나다 CAD</td><td>20</td><td>30</td><td>20</td><td>80</td></tr>
-		      <tr><td>호주 AUD</td><td>20</td><td>30</td><td>20</td><td>80</td></tr>
-		      <tr><td>싱가포르 SGD</td><td>20</td><td>30</td><td>20</td><td>80</td></tr>
-		      <tr><td>중국 CNY</td><td>30</td><td>50</td><td>40</td><td>50</td></tr>
-		      <tr><td>홍콩 HKD</td><td>20</td><td>30</td><td>20</td><td>30</td></tr>
-		      <tr><td>태국 THB</td><td>20</td><td>30</td><td>20</td><td>30</td></tr>
-		      <tr><td>스위스 CHF</td><td>20</td><td>30</td><td>20</td><td>미지원</td></tr>
-		      <tr><td>뉴질랜드 NZD</td><td>20</td><td>30</td><td>20</td><td>미지원</td></tr>
-		      <tr><td>베트남 VND</td><td>0</td><td>20</td><td>0</td><td>미지원</td></tr>
-		      <tr><td>인도네시아 IDR</td><td>0</td><td>20</td><td>0</td><td>미지원</td></tr>
-		      <tr><td>필리핀 PHP</td><td>0</td><td>0</td><td>0</td><td>미지원</td></tr>
-		      <tr><td>말레이시아 MYR</td><td colspan="4" class="not-supported">미지원</td></tr>
-		    </tbody>
-		  </table>
-		</div>
-	</div>
-
-
-
-	    <!-- conC1 - 유의사항 -->
-	    <div class="con" id="conC1">
-	        <h6 class="hd-t">유의사항</h6>
-	        <ul>
-	            <li>거래 후 취소 및 내용 변경은 불가능하므로 신청 시 주의하시기 바랍니다.</li>
-	            <li>신청 시 환율이 고시되지 않은 경우 직전 고시 환율이 적용됩니다.</li>
-	            <li>우대율이란 현찰 사실 때 환율과 기준환율의 차이에 대한 할인율을 말합니다.</li>
-	            <li>같은 날짜에 미화 1만불 상당액을 초과하여 환전할 경우에는 외국환거래법에 따라 국세청으로 통보됩니다.</li>
-	            <li>미화 1만불 상당액을 초과하는 외화를 휴대하여 출국할 경우에는 출국 시 관할 세관에 신고하셔야 합니다.</li>
-	        </ul>
-	    </div>
+  <ul class="js-tabA">
+    <li><a href="#" class="js-tab" data-target="tab-guide">이용안내</a></li>
+    <li><a href="#" class="js-tab" data-target="tab-discount">우대내용</a></li>
+    <li><a href="#" class="js-tab" data-target="tab-notice">유의사항</a></li>
+  </ul>
+  <div id="tabContentArea" class="tab-content"></div>
 </div>
-
-
 
 <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
 <div th:replace="~{fragments/footer :: footer}"></div>
 
+
+<!-- ✅ 탭 토글 스크립트 -->
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tabs = document.querySelectorAll(".js-tab");
-        const contents = document.querySelectorAll(".con");
+document.addEventListener("DOMContentLoaded", function () {
+  const tabs = document.querySelectorAll(".js-tab");
+  const tabContentArea = document.getElementById("tabContentArea");
+  let activeTab = null;
 
-        tabs.forEach(tab => {
-            tab.addEventListener("click", function (e) {
-                e.preventDefault();
-                tabs.forEach(t => t.classList.remove("active")); //.active 클래스를 제거 즉, 탭 선택 초기화
-                contents.forEach(c => c.classList.remove("active")); //이전에 열려있던 콘텐츠도 닫기
+  tabs.forEach(tab => {
+    tab.addEventListener("click", function (e) {
+      e.preventDefault();
+      const target = tab.getAttribute("data-target");
 
-                tab.classList.add("active");
-                const target = document.querySelector(tab.getAttribute("href"));
-                if (target) target.classList.add("active");
-            });
-        });
+      if (activeTab === target) {
+        tab.classList.remove("active");
+        tabContentArea.innerHTML = "";
+        activeTab = null;
+      } else {
+        tabs.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
 
-        if (tabs.length) {
-            tabs[0].classList.add("active"); //초기된 상태에서 탭 열기 (첫번째 탭)
-            contents[0].classList.add("active");
-        }
+        fetch(`/forex/${target}`)
+          .then(res => res.text())
+          .then(html => {
+            tabContentArea.innerHTML = html;
+            activeTab = target;
+          })
+          .catch(err => {
+            console.error("탭 로딩 실패:", err);
+            tabContentArea.innerHTML = "<p>내용을 불러오지 못했습니다.</p>";
+          });
+      }
     });
+  });
+});
 </script>
 
 </body>

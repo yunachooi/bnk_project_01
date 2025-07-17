@@ -1,0 +1,275 @@
+:root {
+  --bnk-red: #D7191F;
+  --bnk-light-gray: #f7f7f7;
+  --bnk-border: #ddd;
+}
+
+/* 🎥 비디오 영역: 블러 + 중앙 콘텐츠 비디오 */
+.video-section {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* ✅ 전체 화면 꽉 차게 */
+  overflow: hidden;
+}
+
+.background-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(10px) brightness(0.6);
+  z-index: 1;
+}
+
+.video-overlay {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.foreground-video {
+  height: 100%;        /* ✅ 높이 동일하게 */
+  width: auto;         /* ✅ 비율 유지 */
+  max-width: 80vw;     /* ✅ 전체 화면의 80% 너비까지만 */
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  object-fit: contain;
+}
+
+/* ✅ ONE 주요 혜택 섹션 */
+.one-benefit-section {
+  max-width: 1000px;
+  margin: 60px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.benefit-box {
+  background-color: #fff;
+  padding: 50px 30px;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.benefit-sub {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.benefit-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #212d49;
+  margin-bottom: 10px;
+}
+
+.benefit-desc {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* ✅ 회색 박스 섹션 (1000px 제한) */
+.gray-section {
+  width: 100%;
+  background-color: #f5f5f5;
+  padding: 60px 0;
+}
+
+.gray-section .benefit-box {
+  background-color: transparent;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 50px 30px;
+  text-align: center;
+}
+
+/* 🎞 슬라이더 */
+.slider-container {
+  overflow: hidden;
+  width: 100%;
+  background-color: var(--bnk-light-gray);
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.slide {
+  min-width: 100%;
+  box-sizing: border-box;
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slide-box {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 700px;
+}
+
+.slide-box h3 {
+  color: var(--bnk-red);
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.slide-box p {
+  font-size: 1.1rem;
+  color: #333;
+}
+
+/* 📑 탭 메뉴 */
+.tab-type2 {
+  max-width: 1000px;
+  margin: 60px auto;
+}
+
+.js-tabA {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.js-tabA li a {
+  display: block;
+  width: 160px;
+  padding: 16px 20px;
+  border: 1px solid var(--bnk-border);
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  background-color: white;
+  color: black;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.js-tabA li a.active {
+  background-color: var(--bnk-red);
+  color: white;
+}
+
+/* 📄 탭 콘텐츠 */
+.tab-content,
+#tabContentArea {
+  background-color: #fafafa;
+  border-top: 1px solid var(--bnk-border);
+  padding: 30px;
+}
+
+/* ✅ 탭 내부 콘텐츠 스타일 */
+#tabContentArea h3 {
+  font-size: 1.3rem;
+  color: var(--bnk-red);
+  margin-top: 30px;
+  margin-bottom: 12px;
+}
+
+#tabContentArea p,
+#tabContentArea li {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+#tabContentArea ul {
+  margin-left: 20px;
+  padding-left: 0;
+  list-style-type: disc;
+}
+
+#tabContentArea strong {
+  color: #212d49;
+}
+
+/* ✅ 테이블 스타일 */
+.guide-table,
+.discount-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 0.95rem;
+}
+
+.guide-table th,
+.guide-table td,
+.discount-table th,
+.discount-table td {
+  border: 1px solid var(--bnk-border);
+  padding: 12px 16px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.guide-table th,
+.discount-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.discount-table-wrapper {
+  overflow-x: auto;
+}
+
+/* ✅ 메모 */
+#tabContentArea .note {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 20px;
+}
+
+/* 📱 반응형 */
+@media (max-width: 768px) {
+  .js-tabA {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .js-tabA li a {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .guide-table,
+  .discount-table {
+    font-size: 0.85rem;
+  }
+
+  .guide-table th,
+  .guide-table td,
+  .discount-table th,
+  .discount-table td {
+    padding: 8px;
+  }
+
+  .benefit-title {
+    font-size: 1.6rem;
+  }
+
+  .benefit-sub {
+    font-size: 1.1rem;
+  }
+}
