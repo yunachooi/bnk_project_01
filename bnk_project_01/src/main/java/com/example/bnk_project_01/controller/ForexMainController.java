@@ -21,6 +21,8 @@ import com.example.bnk_project_01.entity.Rate;
 import com.example.bnk_project_01.repository.CategoryRepository;
 import com.example.bnk_project_01.repository.ForexMainRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 @Controller
 public class ForexMainController {
 
@@ -114,15 +116,15 @@ public class ForexMainController {
         return "forexMainPage";
     }
 
-    // ✅ 상품 페이지
     @GetMapping("/forexProduct")
-    public String forexProductPage() {
+    public String forexProductPage(HttpServletRequest request, Model model) {
+        model.addAttribute("requestURI", request.getRequestURI()); // ✅ 꼭 필요
         return "forexProductPage";
     }
 
-    // ✅ 이벤트 페이지
     @GetMapping("/forexEvent")
-    public String forexEventPage() {
+    public String forexEventPage(HttpServletRequest request, Model model) {
+        model.addAttribute("requestURI", request.getRequestURI()); // ✅ 꼭 필요
         return "forexEventPage";
     }
 }
