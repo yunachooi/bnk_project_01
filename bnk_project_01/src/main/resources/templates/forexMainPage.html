@@ -228,11 +228,7 @@
             flex-wrap: nowrap;
         }
 
-        .slider-section-bg {
-            background: linear-gradient(to bottom, #fffdf8 0%, #f3f7ff 100%);
-            padding: 10px 0;              /* 상하 여백 추가 */
-        }
-
+        
 
         /* ✅ 슬라이더 공통 스타일 */
         .slider {
@@ -338,7 +334,7 @@
 
         .app-info h3 {
             font-size: 22px;
-            color: #d7191f;
+            color: #000000;
             margin-bottom: 14px;
             font-weight: 800;
         }
@@ -556,31 +552,33 @@
 
 
         .main-service-menu {
-            display: flex;
-            justify-content: space-between;
-            gap: 30px;
-            margin-top: 48px;
-            background-color: #fdfdfd;           /* 은은한 흰 배경 */
-            padding: 32px;                        /* 안쪽 여백 */
-            border-radius: 20px;                  /* 부드러운 라운드 */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04); /* 부드러운 음영 */
-            border: 1px solid #f2f2f2;
-        }
+		    display: flex;
+		    justify-content: center; /* space-between → center */
+		    gap: 30px;
+		    margin-top: 48px;
+		    margin-bottom: 80px;      /* ✅ 푸터와의 여백 추가 */
+		    background-color: #fdfdfd;
+		    padding: 32px;
+		    border-radius: 20px;
+		    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+		    border: 1px solid #f2f2f2;
+		    flex-wrap: wrap; /* ✅ 반응형 대응 */
+		}
         .main-service-item {
-            flex: 1;
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 4px 18px rgba(120,120,140,0.07);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 180px;
-            padding: 24px 0;
-            border: 1.5px solid #f2f2f2;
-            transition: transform 0.15s, box-shadow 0.15s;
-            cursor: pointer;
-        }
+		    width: 120px;              /* ✅ 정사각형 설정 */
+		    height: 120px;
+		    background: #fff;
+		    border-radius: 18px;
+		    box-shadow: 0 4px 18px rgba(120,120,140,0.07);
+		    display: flex;
+		    flex-direction: column;
+		    align-items: center;
+		    justify-content: center;
+		    padding: 12px;             /* 안쪽 여백 줄임 */
+		    border: 1.5px solid #f2f2f2;
+		    transition: transform 0.15s, box-shadow 0.15s;
+		    cursor: pointer;
+		}
         .main-service-item:hover {
             box-shadow: 0 8px 32px rgba(120,120,140,0.13);
             transform: translateY(-5px) scale(1.04);
@@ -596,11 +594,12 @@
             transform: scale(1.19) rotate(-4deg);
         }
         .main-service-item .text {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #2e3650;
-            letter-spacing: -0.01em;
-        }
+		            font-size: 1rem;
+		    font-weight: 700;
+		    color: #2e3650;
+		    letter-spacing: -0.01em;
+		    text-align: center;
+		}
 
         /* ================================
            ✅ 5. 푸터 (footer)
@@ -662,7 +661,7 @@
     </div>
 </div>
 
-<div class="slider-section-bg">
+
     <div class="dual-slider-wrapper">
         <!-- 🎈 왼쪽: 상품 슬라이더만 유지 -->
         <div class="slider left-slider">
@@ -689,7 +688,7 @@
             </div>
         </div>
     </div>
-</div>
+
 
 
 <div class="menu-bg-wrapper">
