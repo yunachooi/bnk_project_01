@@ -226,6 +226,7 @@
             align-items: flex-start;
             padding: 10px 0;
             flex-wrap: nowrap;
+            margin-bottom: 20px;
         }
 
         
@@ -233,8 +234,8 @@
         /* ✅ 슬라이더 공통 스타일 */
         .slider {
             position: relative;
-            width: 680px;
-            height: 300px;
+            width: 750px;
+            height: 460px;
             overflow: hidden;
             border-radius: 16px;
             background: transparent;
@@ -259,27 +260,27 @@
             position: relative;
         }
 
-        .slide img {
-            width: 100%;
-            /* height: auto; */
-            height: 100%;
-            object-fit: cover;
-            border-radius: 16px;
-            display: block;
-            box-shadow:
-                    0 6px 12px rgba(0, 0, 0, 0.15),
-                    0 0 20px rgba(215, 25, 31, 0.05);
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 2;
-        }
-
-        .slide img:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow:
-                    0 12px 24px rgba(0, 0, 0, 0.2),
-                    0 0 30px rgba(215, 25, 31, 0.15);
-        }
+       .slide img {
+	    width: auto;
+	    height: 100%; /* 부모(slider)의 높이 460px에 맞춤 */
+	    max-width: 100%;
+	    object-fit: contain;  /* 잘리지 않게 비율 유지 */
+	    border-radius: 16px;
+	    display: block;
+	    box-shadow:
+	        0 6px 12px rgba(0, 0, 0, 0.15),
+	        0 0 20px rgba(215, 25, 31, 0.05);
+	    transition: all 0.3s ease;
+	    position: relative;
+	    z-index: 2;
+	}
+		
+		.slide img:hover {
+		    transform: translateY(-5px) scale(1.02);
+		    box-shadow:
+		        0 12px 24px rgba(0, 0, 0, 0.2),
+		        0 0 30px rgba(215, 25, 31, 0.15);
+		}
 
         .slide::before {
             content: '';
@@ -330,6 +331,24 @@
             flex-shrink: 0;
 
         }
+        .qr-toggle {
+		    cursor: pointer;
+		    font-size: 15px;
+		    color: var(--bnk-red);
+		    margin-top: 8px;
+		    margin-bottom: 10px;
+		    font-weight: 600;
+		    transition: color 0.2s;
+		    user-select: none;
+		}
+		
+		.qr-toggle:hover {
+		    color: #b31313;
+		}
+		
+		.qr-toggle-box.hidden {
+		    display: none;
+		}
 
 
         .app-info h3 {
@@ -368,7 +387,7 @@
  
 		 .menu-bg-wrapper {
 		  background: linear-gradient(to bottom, #fffaf4 0%, #f1f8ff 100%);
-		  padding: 80px 0;
+		  padding: 30px 0;
 		  border-radius: 0 0 24px 24px;
 		}
 
@@ -397,17 +416,39 @@
             gap: 16px;
             margin-bottom: 12px;
         }
+        
+        .menu-card {
+		    position: relative;
+		    padding-top: 50px; /* 상단 공간 확보 */
+		}
+		
+		.pin-icon {
+		    position: absolute;
+		    top: 10px;
+		    left: 50%;
+		    transform: translateX(-50%);
+		    width: 40px;
+		    height: 40px;
+		    z-index: 10;
+		}
+		
+		.pin-icon img {
+		    width: 100%;
+		    height: 100%;
+		    object-fit: cover;
+		    border-radius: 30%; /* 🎯 핀셋 느낌의 살짝 둥근 사각형 */
+		    background-color: #fff;
+		    padding: 2px;
+		    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); /* 🎯 입체감 */
+		}
+        
 
-        .menu-header img {
-            width: 52px;
-            height: 52px;
-            border-radius: 20%; /* 🎯 완전 동그랗게 */
-        }
+        
 
 
         .menu-title {
-            font-size: 23px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 500;
             color : #000000;
         }
 
@@ -672,9 +713,9 @@
         <div class="slider left-slider">
             <div class="slide-track-wrapper">
                 <div class="slide-track">
-                    <div class="slide"><img src="/img/main/product01.png" alt="상품1"></div>
-                    <div class="slide"><img src="/img/main/product02.png" alt="상품2"></div>
-                    <div class="slide"><img src="/img/main/product03.png" alt="상품3"></div>
+                    <div class="slide"><img src="/img/main/슬라이더10.png" alt="상품1"></div>
+                    <div class="slide"><img src="/img/main/슬라이더11.png" alt="상품2"></div>
+                    <div class="slide"><img src="/img/main/슬라이더12.png" alt="상품3"></div>
                 </div>
             </div>
             <div class="dots"></div>
@@ -696,14 +737,18 @@
 
 
 
+
 <div class="menu-bg-wrapper">
     <div class="menu-section">
         <div class="container">
             <div class="menu-grid">
                 <!-- 외환 예금 -->
                 <div class="menu-card yellow-bg">
+                <!-- ✅ 핀셋 느낌 아이콘 3개 -->
+			    <div class="pin-icon">
+			        <img src="/img/icon/예금 상품.png" alt="핀1">
+			    </div>
                     <div class="menu-header">
-                        <img src="/img/icon/예금 상품.png" alt="예금 아이콘">
                         <div class="menu-title">외환 예금</div>
                     </div>
                     <ul>
@@ -715,8 +760,10 @@
 
                 <!-- 환전:환율 -->
                 <div class="menu-card blue-bg">
+                <div class="pin-icon">
+                	<img src="/img/icon/환전.png" alt="핀셋 아이콘">
+                </div>
                     <div class="menu-header">
-                        <img src="/img/icon/환전.png" alt="환전 아이콘">
                         <div class="menu-title" th:text="${cMap['FX091'].large}">환전:환율</div>
                     </div>
                     <ul>
@@ -728,8 +775,10 @@
 
                 <!-- 수출입 금융 -->
                 <div class="menu-card deep-blue-bg">
+                <div class="pin-icon">
+			        <img src="/img/icon/수출입금융.png" alt="핀셋 아이콘">
+			    </div>
                     <div class="menu-header">
-                        <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
                         <div class="menu-title" th:text="${cMap['FX090'].large}">수출입 금융</div>
                     </div>
                     <ul>
@@ -802,6 +851,8 @@
 	<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script>
+
+
     document.addEventListener("DOMContentLoaded", () => {
         const modal = document.getElementById('rateModal');
         const modalRateBody = document.getElementById('modalRateBody');
