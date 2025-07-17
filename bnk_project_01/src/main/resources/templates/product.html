@@ -98,6 +98,10 @@
       width:100%;
       margin: 0 auto;
     }
+    .badge + .badge {         /* 두 번째 배지 */
+ 	 left: auto;
+  	right: 5px;           /* 필요에 따라 조정 */
+	}
     @media (max-width: 1200px) {
       .container-main { width:97vw;}
       .side-banner-fixed { display: none !important;}
@@ -384,14 +388,14 @@
   <script>
     // 상품 데이터
     const products = [
-      {  pno: "P001", name: "꿈이룸 외화자유적금", type: "적금", description: "외화 자동이체로\n목돈 마련을 시작하세요!", tags: ["#자동이체", "#목돈 마련"], currencies: ["USD"], join: ["영업점 가입"], categories: ["study"], img: "img/main/m1.png" },
-      {  pno: "P002", name: "BNK모아드림외화적금", type: "적금", description: "짧은 기간에도\n꾸준히 외화를 모으세요.", tags: ["#환테크", "#단기저축"], currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"], categories: ["study"], img: "img/main/m5.png" },
-      {  pno: "P003", name: "BNK UP & UP 외화정기예금", type: "정기예금", description: "예치기간이 늘수록\n금리도 UP!", tags: ["#정기예금", "#금리상승"], currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["investment"], img: "img/main/m4.png" },
-      {  pno: "P004", name: "업앤업 외화MMDA", type: "입출금예금", description: "하루만 맡겨도\n이자가 쌓여요.", tags: ["#입출금", "#유동성"], currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["travel"], img: "img/main/m2.png" },
-      {  pno: "P006", name: "외화정기예금", type: "정기예금", description: "최고 금리, 장기 예치에 적합!", tags: ["#장기예치", "#최고금리"], currencies: ["USD", "JPY", "GBP", "CHF", "EUR", "AUD", "CAD"], join: ["영업점 가입", "인터넷 가입"], categories: ["investment"], img: "img/main/m6.png" },
-      {  pno: "P008", name: "외화보통예금", type: "입출금예금", description: "외화를 자주\n입출금하는 고객을 위해!", tags: ["#자유입출금", "#개인맞춤"], currencies: ["USD", "JPY", "EUR", "GBP", "CHF", "CAD", "AUD", "CNY"], join: ["영업점 가입"], categories: ["immigration"], img: "img/main/m8.png" },
-      {  pno: "P005", name: "EASY 환테크 듀얼통장", type: "복합형", description: "환율 걱정 없이\n자동환전/매매까지!", tags: ["#환테크", "#자동매매"], currencies: ["USD"], join: ["영업점 가입"], categories: ["travel"], img: "img/main/m3.png" },
-      {  pno: "P007", name: "외화당좌예금", type: "적금", description: "원하는 기간에 맞춰\n차곡차곡 목돈 준비!", tags: ["#목돈모으기", "#정기적금"], currencies: ["USD"], join: ["영업점 가입"], categories: ["investment"], img: "img/main/m7.png" }
+      {  pno: "P001", name: "꿈이룸 외화자유적금", type: "적금", description: "외화도 차곡차곡! 원하는 방식으로 자동이체하고\n 1년마다 재예치로 목돈 마련까지!", tags: ["#자동이체", "#목돈 마련"], currencies: ["USD"], join: ["영업점 가입"], categories: ["study"], img: "img/main/m1.png" },
+      {  pno: "P002", name: "BNK모아드림외화적금", type: "적금", description: "원하는 기간만큼\n 자유롭게 모으는 외화저축", tags: ["#자유적립", "#맞춤예치"], currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"], categories: ["study"], img: "img/main/m5.png" },
+      {  pno: "P003", name: "BNK UP & UP 외화정기예금", type: "정기예금", description: "기간이 길수록 금리도 쑥쑥!\n 알찬 외화 정기예금", tags: ["#단계금리", "#중도해지안심"], currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["investment"], img: "img/main/m4.png" },
+      {  pno: "P004", name: "업앤업 외화MMDA", type: "입출금예금", description: "입출금 자유롭게!\n 하루만 맡겨도 이자 쌓이는 외화 예금", tags: ["#입출금", "#유동성"], currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["travel"], img: "img/main/m2.png" },
+      {  pno: "P006", name: "외화정기예금", type: "정기예금", description: "자유롭게 넣고, 원하는 시점에 만기 설정까지!", tags: ["#맞춤만기", "#자유적립예금"], currencies: ["USD", "JPY", "GBP", "CHF", "EUR", "AUD", "CAD"], join: ["영업점 가입", "인터넷 가입"], categories: ["investment"], img: "img/main/m6.png" },
+      {  pno: "P008", name: "외화보통예금", type: "입출금예금", description: "제한 없이 자유롭게! 누구나 이용 가능한 외화예금", tags: ["#무제한가입", "#자유입출금"], currencies: ["USD", "JPY", "EUR", "GBP", "CHF", "CAD", "AUD", "CNY"], join: ["영업점 가입"], categories: ["immigration"], img: "img/main/m8.png" },
+      {  pno: "P005", name: "EASY 환테크 듀얼통장", type: "복합형", description: "원하는 환율에 자동 매매까지!\n 똑똑한 환테크 듀얼통장", tags: ["#스마트환테크", "#자동환전"], currencies: ["KRW(원화예금)","USD", "JPY", "EUR", "GNY"], join: ["영업점 가입"], categories: ["travel"], img: "img/main/m3.png" },
+      {  pno: "P007", name: "외화당좌예금", type: "적금", description: "필요할 때 바로 꺼내 쓰는 외화자금\n 유연한 운용 OK!", tags: ["#단기자금", "#수시입출금"], currencies: ["USD", "JPY", "EUR", "GBP", "CHF"], join: ["영업점 가입"], categories: ["investment"], img: "img/main/m7.png" }
     ];
 
     // 접근성/상태 변수
@@ -469,20 +473,35 @@
         let checked = compareList.findIndex(x=>x.name===p.name)!==-1;
         card.className = 'product-card'+(checked?' selected':'');
         card.tabIndex = 0;
+        /* ✅ 배지(들) 만들기 */
+        const badges = `
+		  <div class="badge-wrap">
+		    <span class="badge">${p.join[0]}</span>
+		    ${p.join.length > 1 ? `<span class="badge">${p.join[1]}</span>` : ''}
+		  </div>
+		`;
+
         // 카드 본문
         card.innerHTML = `
-          <div class="product-img-wrapper">
-            <img src="${p.img}" class="product-img" alt="${p.name}">
-            <div class="card-hover-overlay">${p.description.replace(/\n/g,'<br>')}</div>
-            <span class="badge">${p.join[0]}</span>
-            <input type="checkbox" class="compare-checkbox${checked ? ' animated' : ''}" title="비교함에 추가" ${checked?'checked':''} tabindex="0">
-          </div>
-          <div class="product-info">
-            <div class="product-name">${p.name} <span class="shield-icon" title="예금자보호 대상">🛡️</span></div>
-            <div class="product-tags">${p.tags.map(t=>`<span>${t}</span>`).join('')}</div>
-            <div class="product-currency">${formatCurrencyList(p.currencies)}</div>
-          </div>
-        `;
+      <div class="product-img-wrapper">
+        <img src="${p.img}" class="product-img" alt="${p.name}">
+        <div class="card-hover-overlay">${p.description.replace(/\\n/g, '<br>')}</div>
+        ${badges}
+        <input type="checkbox"
+               class="compare-checkbox${checked ? ' animated' : ''}"
+               title="비교함에 추가" ${checked ? 'checked' : ''} tabindex="0">
+      </div>
+      <div class="product-info">
+        <div class="product-name">
+          ${p.name}
+          <span class="shield-icon" title="예금자보호 대상">🛡️</span>
+        </div>
+        <div class="product-tags">
+          ${p.tags.map(t => `<span>${t}</span>`).join('')}
+        </div>
+        <div class="product-currency">${formatCurrencyList(p.currencies)}</div>
+      </div>
+    `;
         /* ① 신규 추가: 카드 클릭 시 상세 페이지로 이동 */
         card.addEventListener('click', e => {
           // 비교 체크박스를 누를 때는 이동하지 않음
