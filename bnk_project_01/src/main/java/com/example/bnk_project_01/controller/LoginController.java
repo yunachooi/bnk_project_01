@@ -22,9 +22,23 @@ public class LoginController {
 
 	// 로그인 페이지
 	@GetMapping("/login")
-	public String loginPage(Model model) {
-		model.addAttribute("userDto", new UserDto());
-		return "login";
+	public String loginPage(HttpSession session, Model model) {
+	    String username = (String) session.getAttribute("username");
+	    String role = (String) session.getAttribute("role");
+
+	    if (username != null && role != null) {
+	        // 로그인된 상태 → 역할에 맞게 홈 리다이렉트
+	        if ("ROLE_ADMIN".equals(role) || "ROLE_SUP".equals(role)) {
+	            return "redirect:/admin";
+	        } else if ("ROLE_CEO".equals(role)) {
+	            return "redirect:/user/import";
+	        } else {
+	            return "redirect:/forex";
+	        }
+	    }
+
+	    model.addAttribute("userDto", new UserDto());
+	    return "login"; // 로그인 안 된 경우만 로그인 폼 반환
 	}
 
 	// 로그인 처리
@@ -66,8 +80,14 @@ public class LoginController {
 
 	// CEO용 문서 업로드 진입
 	@GetMapping("/user/import")
-	public String importPage() {
-		return "user/import";
+	public String importPage(HttpSession session, Model model) {
+	    String username = (String) session.getAttribute("username");
+	    String role = (String) session.getAttribute("role");
+
+	    model.addAttribute("username", username); // 로그인 안 했으면 null
+	    model.addAttribute("role", role);         // 로그인 안 했으면 null
+
+	    return "user/import";
 	}
 
 	// FIND 시스템 - CEO만
