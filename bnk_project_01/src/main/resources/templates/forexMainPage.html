@@ -6,64 +6,50 @@
 	<title>BNK 외환 정보</title>
 	<link rel="stylesheet" th:href="@{/css/common.css}" />
 	<link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
+	
 	<style>
-		/* ================================
+        /* ================================
        ✅ 공통 설정 및 색상 변수
         ================================ */
-		@font-face {
-			font-family: 'BNKFont';
-			src: url('/fonts/BNKGothic-Bold.ttf') format('truetype');
-		}
+        @font-face {
+            font-family: 'BNKFont';
+            src: url('/fonts/BNKGothic-Bold.ttf') format('truetype');
+        }
 
-		:root {
-			--bnk-red: #D7191F;
-			--bnk-dark-red: #8B032E;
-			--bnk-dark-gray: #655C4F;
-			--bnk-light-gray: #B7A997;
-			--bnk-gold: #896E4A;
-			--bnk-silver: #909394;
-		}
-		.bnk-font-area {
- 		   font-family: 'BNKFont', 'Spoqa Han Sans Neo', sans-serif;
-		}
+        :root {
+            --bnk-red: #D7191F;
+            --bnk-dark-red: #8B032E;
+            --bnk-dark-gray: #655C4F;
+            --bnk-light-gray: #B7A997;
+            --bnk-gold: #896E4A;
+            --bnk-silver: #909394;
+        }
 
-		body {			
-			margin: 0;
-			padding: 0;
-			background-color: #ffffff;
-			color: var(--bnk-dark-gray);
-		}
+        body {
+            font-family: 'Spoqa Han Sans Neo', 'BNKFont', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: var(--bnk-dark-gray);
+        }
 
-		.container {
-			width: 1000px;
-			margin: 0 auto;
-		}
+        .container {
+            width: 1000px;
+            margin: 0 auto;
+        }
 
 
-		/* 화면 전체에 걸친 그레이 라인 */
-		.full-gray-line {
-			width: 100%;
-			height: 1px;
-			background-color: var(--bnk-silver);
-		}
+        /* 화면 전체에 걸친 그레이 라인 */
+        .full-gray-line {
+            width: 100%;
+            height: 1px;
+            background-color: var(--bnk-silver);
+        }
 
 
-		/* ================================
+        /* ================================
            ✅ 1. 환율 정보 (rate-section)
         ================================ */
-
-		.rate-section {
-			background-color: #ffffff;
-			text-align: center;
-			padding: 20px 0;
-		}
-
-		.rate-section h1 {
-			color: var(--bnk-red);
-			font-size: 28px;
-			margin-bottom: 16px;
-		}
-
         .rate-section {
             background-color: #ffffff;
             text-align: center;
@@ -76,19 +62,11 @@
             margin-bottom: 8px;
         }
 
-
-		.rate-container {
-			width: 100%;
-			overflow: hidden;
-			position: relative;
-		}
-
-
-		.rate-track {
-			display: flex;
-			gap: 60px;
-			animation: scroll-slide 60s linear infinite;
-		}
+        .rate-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
 
         .rate-track {
             display: flex;
@@ -96,37 +74,19 @@
             animation: scroll-slide 60s linear infinite;
         }
 
+        .rate-container:hover .rate-track {
+            animation-play-state: paused;
+        }
 
-		.rate-container:hover .rate-track {
-			animation-play-state: paused;
-		}
+        @keyframes scroll-slide {
+            2% {
+                transform: translateX(-2%);
+            }
 
-		@keyframes scroll-slide {
-			2% {
-				transform: translateX(-2%);
-			}
-
-			100% {
-				transform: translateX(-100%);
-			}
-		}
-
-
-		.rate-box {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			border: 1px solid var(--bnk-silver);
-			padding: 10px 30px 10px 30px;
-			border-radius: 6px;
-			background: white;
-			min-width: 190px;
-			font-size: 18px;
-			font-weight: bold;
-			margin-right: 16px;
-			white-space: nowrap;
-			line-height: 1;
-		}
+            100% {
+                transform: translateX(-100%);
+            }
+        }
 
         .rate-box {
             display: flex;
@@ -143,29 +103,19 @@
             line-height: 1;
         }
 
+        .flag-icon {
+            width: 26px;
+            height: 18px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
 
-		.flag-icon {
-			width: 26px;
-			height: 18px;
-			margin-right: 10px;
-			flex-shrink: 0;
-		}
-
-		.rate-text {
-			display: inline-flex;
-			align-items: center;
-			gap: 4px;
-			line-height: 1;
-		}
-
-
-		.rate-date-label {
-			text-align: right;
-			margin-top: 8px;
-			font-size: 14px;
-			color: #555;
-			padding-right: 4px;
-		}
+        .rate-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            line-height: 1;
+        }
 
         .rate-date-label {
             text-align: right;
@@ -176,634 +126,376 @@
         }
 
 
+        .rcode {
+            color: var(--bnk-dark-red);
+        }
 
-		.rcode {
-			color: var(--bnk-dark-red);
-		}
+        .rvalue {
+            color: #665c4d;
+        }
 
-		.rvalue {
-			color: #665c4d;
-		}
-
-		/* ================================
+        /* ================================
            ✅ 1-1 환율 정보 비교 모달창
         ================================ */
-		.modal.hidden {
-			display: none;
-		}
+        .modal.hidden {
+            display: none;
+        }
 
-		.modal {
-			position: fixed;
-			top: 0;
-			left: 0;
-			z-index: 9999;
-			width: 100vw;
-			height: 100vh;
-			background: rgba(0, 0, 0, 0.6);
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-		.modal-content {
-			background: #fff;
-			padding: 24px;
-			border-radius: 14px;
-			width: 460px;
-			position: relative;
-		}
+        .modal-content {
+            background: #fff;
+            padding: 24px;
+            border-radius: 14px;
+            width: 460px;
+            position: relative;
+        }
 
-		.close-button {
-			position: absolute;
-			top: 12px;
-			right: 18px;
-			font-size: 22px;
-			cursor: pointer;
-		}
+        .close-button {
+            position: absolute;
+            top: 12px;
+            right: 18px;
+            font-size: 22px;
+            cursor: pointer;
+        }
 
-		.modal-title {
-			text-align: center;
-			color: var(--bnk-red);
-			margin-bottom: 10px;
-		}
+        .modal-title {
+            text-align: center;
+            color: var(--bnk-red);
+            margin-bottom: 10px;
+        }
 
-		.modal-date {
-			text-align: center;
-			margin-bottom: 14px;
-			font-weight: bold;
-			color: #333;
-		}
+        .modal-date {
+            text-align: center;
+            margin-bottom: 14px;
+            font-weight: bold;
+            color: #333;
+        }
 
-		.rate-table {
-			width: 100%;
-			border-collapse: collapse;
-			text-align: center;
-		}
+        .rate-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
 
-		.rate-table th,
-		.rate-table td {
-			padding: 10px;
-			border: 1px solid #ccc;
-		}
+        .rate-table th,
+        .rate-table td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
 
-		.change-up {
-			color: #d7191f;
-			/* 🔺 빨간색: 상승 */
-			font-weight: bold;
-		}
+        .change-up {
+            color: #d7191f;
+            /* 🔺 빨간색: 상승 */
+            font-weight: bold;
+        }
 
-		.change-down {
-			color: #0070c0;
-			/* 🔻 파란색: 하락 */
-			font-weight: bold;
-		}
+        .change-down {
+            color: #0070c0;
+            /* 🔻 파란색: 하락 */
+            font-weight: bold;
+        }
 
-		.change-same {
-			color: #888888;
-			/* 보합 또는 '-' */
-		}
+        .change-same {
+            color: #888888;
+            /* 보합 또는 '-' */
+        }
 
 
-		/* ================================
+        /* ================================
            ✅ 2. 배너 (banner-section)
         ================================ */
 
-
-		.dual-slider-wrapper {
-			display: flex;
-			justify-content: center;
-			gap: 20px;
-			padding: 40px 0;
-		}
-
-		/* 공통 슬라이더 스타일 */
-		.slider {
-			position: relative;
-			width: 500px;
-			height: 300px;
-			overflow: hidden;
-			border-radius: 16px;
-			background: transparent;
-		}
-
-		/* 트랙 구조 */
-		.slide-track-wrapper {
-			overflow: hidden;
-			width: 100%;
-			height: 100%;
-		}
-
-		.slide-track {
-			display: flex;
-			transition: transform 0.5s ease;
-		}
-
-		.slide {
-			flex: 0 0 100%;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			position: relative;
-		}
-
-		/* 🔹 1. 기본 입체감: box-shadow */
-		.slide img {
-			width: 100%;
-			height: auto;
-			border-radius: 16px;
-			display: block;
-			box-shadow:
-				0 6px 12px rgba(0, 0, 0, 0.15),
-				/* 기본 그림자 */
-				0 0 20px rgba(215, 25, 31, 0.05);
-			/* 🔹 3. 글로우 효과 */
-			transition: all 0.3s ease;
-			position: relative;
-			z-index: 2;
-		}
-
-		/* 🔹 2. hover 효과 */
-		.slide img:hover {
-			transform: translateY(-5px) scale(1.02);
-			box-shadow:
-				0 12px 24px rgba(0, 0, 0, 0.2),
-				0 0 30px rgba(215, 25, 31, 0.15);
-			/* 더 강한 글로우 */
-		}
-
-		/* 🔹 4. 블러된 배경 카드 */
-		.slide::before {
-			content: '';
-			position: absolute;
-			top: 20px;
-			left: 20px;
-			width: 90%;
-			height: 90%;
-			background-color: rgba(255, 255, 255, 0.3);
-			filter: blur(12px);
-			border-radius: 20px;
-			z-index: 1;
-		}
-
-		/* dot 스타일 */
-		.dots {
-			position: absolute;
-			bottom: 10px;
-			left: 50%;
-			transform: translateX(-50%);
-			display: flex;
-			gap: 8px;
-			z-index: 3;
-		}
-
-		.dots button {
-			width: 10px;
-			height: 10px;
-			border-radius: 50%;
-			border: none;
-			background: #ccc;
-			cursor: pointer;
-		}
-
-		.dots button.active {
-			background: #d7191f;
-
-        
         /* ✅ 공통 슬라이더 & QR 섹션 wrapper */
-		.dual-slider-wrapper {
-		  width: 1000px; /* ✅ container와 동일하게 고정 */
-		  margin: 0 auto; /* ✅ 가운데 정렬 */
-		  display: flex;
-		  justify-content: space-between; /* ✅ 좌우 정렬 */
-		  align-items: flex-start;
-		  padding: 10px 0;
-		  flex-wrap: nowrap;
-		}
-		
-		.slider-section-bg {
-		  background: linear-gradient(to bottom, #fffdf8 0%, #f3f7ff 100%);
-		  padding: 10px 0;              /* 상하 여백 추가 */
-		}
+        .dual-slider-wrapper {
+            width: 1000px; /* ✅ container와 동일하게 고정 */
+            margin: 0 auto; /* ✅ 가운데 정렬 */
+            display: flex;
+            justify-content: space-between; /* ✅ 좌우 정렬 */
+            align-items: flex-start;
+            padding: 10px 0;
+            flex-wrap: nowrap;
+        }
 
-		
-		/* ✅ 슬라이더 공통 스타일 */
-		.slider {
-		  position: relative;
-		  width: 680px;
-		  height: 300px;
-		  overflow: hidden;
-		  border-radius: 16px;
-		  background: transparent;
-		}
-		
-		.slide-track-wrapper {
-		  width: 100%;
-		  height: 100%;
-		  overflow: hidden;
-		}
-		
-		.slide-track {
-		  display: flex;
-		  transition: transform 0.5s ease;
-		}
-		
-		.slide {
-		  flex: 0 0 100%;
-		  display: flex;
-		  justify-content: center;
-		  align-items: center;
-		  position: relative;
-		}
-		
-		.slide img {
-		  width: 100%;
-		  /* height: auto; */
-		  height: 100%;
-		  object-fit: cover;
-		  border-radius: 16px;
-		  display: block;
-		  box-shadow:
-		    0 6px 12px rgba(0, 0, 0, 0.15),
-		    0 0 20px rgba(215, 25, 31, 0.05);
-		  transition: all 0.3s ease;
-		  position: relative;
-		  z-index: 2;
-		}
-		
-		.slide img:hover {
-		  transform: translateY(-5px) scale(1.02);
-		  box-shadow:
-		    0 12px 24px rgba(0, 0, 0, 0.2),
-		    0 0 30px rgba(215, 25, 31, 0.15);
-		}
-		
-		.slide::before {
-		  content: '';
-		  position: absolute;
-		  top: 20px;
-		  left: 20px;
-		  width: 90%;
-		  height: 90%;
-		  background-color: rgba(255, 255, 255, 0.3);
-		  filter: blur(12px);
-		  border-radius: 20px;
-		  z-index: 1;
-		}
-		
-		.dots {
-		  position: absolute;
-		  bottom: 10px;
-		  left: 50%;
-		  transform: translateX(-50%);
-		  display: flex;
-		  gap: 8px;
-		  z-index: 3;
-		}
-		
-		.dots button {
-		  width: 10px;
-		  height: 10px;
-		  border-radius: 50%;
-		  border: none;
-		  background: #ccc;
-		  cursor: pointer;
-		}
-		
-		.dots button.active {
-		  background: #d7191f;
-		}
-		
-		
-		/* ✅ QR 안내 박스 (오른쪽) */
-		.app-download-box {
-		  border-radius: 16px;
-		  border: 1px solid #eee;
-		  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-		  padding: 20px;
-		  width: 240px;
-		  box-sizing: border-box;
-		  text-align: center;
-		  flex-shrink: 0;
-		  
-		}
-
-		
-		.app-info h3 {
-		  font-size: 22px;
-		  color: #d7191f;
-		  margin-bottom: 14px;
-		  font-weight: 800;
-		}
-		
-		.app-info .desc {
-		  font-size: 16px;
-		  color: #333;
-		  line-height: 1.6;
-		  margin-bottom: 20px;
-		  font-weight: 500;
-		}
-		
-		.qr-image {
-		  width: 160px;
-		  height: auto;
-		  border-radius: 12px;
-		  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-		  margin-bottom: 10px;
-		}
-		
-		.subtext {
-		  font-size: 14px;
-		  color: #555;
-
-		}
+        .slider-section-bg {
+            background: linear-gradient(to bottom, #fffdf8 0%, #f3f7ff 100%);
+            padding: 10px 0;              /* 상하 여백 추가 */
+        }
 
 
-		/* ================================
+        /* ✅ 슬라이더 공통 스타일 */
+        .slider {
+            position: relative;
+            width: 680px;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 16px;
+            background: transparent;
+        }
+
+        .slide-track-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .slide-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .slide {
+            flex: 0 0 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            /* height: auto; */
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            display: block;
+            box-shadow:
+                    0 6px 12px rgba(0, 0, 0, 0.15),
+                    0 0 20px rgba(215, 25, 31, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .slide img:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow:
+                    0 12px 24px rgba(0, 0, 0, 0.2),
+                    0 0 30px rgba(215, 25, 31, 0.15);
+        }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 90%;
+            height: 90%;
+            background-color: rgba(255, 255, 255, 0.3);
+            filter: blur(12px);
+            border-radius: 20px;
+            z-index: 1;
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 3;
+        }
+
+        .dots button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: none;
+            background: #ccc;
+            cursor: pointer;
+        }
+
+        .dots button.active {
+            background: #d7191f;
+        }
+
+
+        /* ✅ QR 안내 박스 (오른쪽) */
+        .app-download-box {
+            border-radius: 16px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 20px;
+            width: 240px;
+            box-sizing: border-box;
+            text-align: center;
+            flex-shrink: 0;
+
+        }
+
+
+        .app-info h3 {
+            font-size: 22px;
+            color: #d7191f;
+            margin-bottom: 14px;
+            font-weight: 800;
+        }
+
+        .app-info .desc {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .qr-image {
+            width: 160px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 10px;
+        }
+
+        .subtext {
+            font-size: 14px;
+            color: #555;
+        }
+
+
+        /* ================================
            ✅ 3. 메뉴 (menu-section)
         ================================ */
 
-
-		.menu-grid {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			/* ✅ 유지 */
-			gap: 12px;
-
-        
         .menu-bg-wrapper {
-		  background: linear-gradient(to bottom, #fffaf4 0%, #f1f8ff 100%);
-		  padding: 80px 0;
-		  border-radius: 0 0 24px 24px;
-		}
-        
+            background: linear-gradient(to bottom, #fffaf4 0%, #f1f8ff 100%);
+            padding: 80px 0;
+            border-radius: 0 0 24px 24px;
+        }
+
         .menu-grid {
-		  display: grid;
-		  grid-template-columns: repeat(3, 1fr); /* ✅ 유지 */
-		  gap: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* ✅ 유지 */
+            gap: 12px;
+        }
 
-		}
+        .menu-card {
+            background-color: #fffff1;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-		.menu-card {
-			background-color: #fffff1;
-			border-radius: 12px;
-			padding: 20px;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-			min-height: 220px;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-		}
+        /* 카드 상단: 아이콘 + 텍스트 나란히 */
+        .menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
 
-		/* 카드 상단: 아이콘 + 텍스트 나란히 */
-		.menu-header {
-
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 10px;
-			margin-bottom: 12px;
-		}
-
-		.menu-header img {
-			width: 44px;
-			height: 44px;
-			border-radius: 50%;
-			/* 🎯 완전 동그랗게 */
-
-		  display: flex;
-		  align-items: center;
-		  justify-content: center;
-		  gap: 16px;
-		  margin-bottom: 12px;
-		}
-		
-		.menu-header img {
-		  width: 52px;
-		  height: 52px;
-		  border-radius: 20%; /* 🎯 완전 동그랗게 */
-		}
-
-		
-		.menu-title {
-		  font-size: 22px;
-		  font-weight: 800;
-		  color : #000000;
-
-		}
+        .menu-header img {
+            width: 52px;
+            height: 52px;
+            border-radius: 20%; /* 🎯 완전 동그랗게 */
+        }
 
 
-		.menu-title {
-			font-size: 20px;
-			font-weight: bold;
-		}
+        .menu-title {
+            font-size: 22px;
+            font-weight: 800;
+            color : #000000;
+        }
 
-		/* 리스트 스타일 */
-		.menu-card ul {
-			list-style: none;
-			padding: 0;
-			margin: 0;
-			width: 100%;
-		}
+        /* 리스트 스타일 */
+        .menu-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
 
+        .menu-card li {
+            border-bottom: 1px solid #ddd; /* ✅ 얇은 밑줄 */
+            padding: 12px 0;
+        }
 
-		.menu-card li {
-			margin: 16px 0;
-			text-align: center;
-		}
+        .menu-card a:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-1px);
+        }
 
-		.menu-card a:hover {
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-			transform: translateY(-1px);
-		}
-
-		.menu-card a {
-			text-decoration: none;
-			font-size: 18px;
-			font-weight: bold;
-			display: inline-block;
-			background-color: #ffffff;
-			/* ✅ 흰 배경 */
-			border-radius: 12px;
-			/* ✅ 둥글게 */
-			padding: 8px 16px;
-			/* ✅ 안쪽 여백 */
-			transition: all 0.2s ease;
-		}
-
-		.menu-card a::after {
-			content: '›';
-			/* 오른쪽 화살표 */
-			display: inline-block;
-			margin-left: 8px;
-			font-size: 18px;
-			vertical-align: middle;
-		}
-
-		/* 각 카드 배경/링크 색상 */
-
-		.yellow-bg {
-			background: linear-gradient(135deg, #fde4e4 0%, #e8f0ff 100%);
-		}
-
-		.yellow-bg a {
-			color: #d4aa00;
-		}
-
-		.blue-bg {
-			background: linear-gradient(135deg, #e0f5e9 0%, #f0f5ff 100%);
-		}
-
-		.blue-bg a {
-			color: #2196f3;
-		}
-
-		.deep-blue-bg {
-			background: linear-gradient(135deg, #fff3e5 0%, #e5f3ff 100%);
-		}
-
-		.deep-blue-bg a {
-			color: #0d47a1;
-		}
+        .menu-card a {
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 8px 16px;
+            display: flex;                   /* ✅ 핵심: flex 적용 */
+            justify-content: space-between; /* ✅ 왼쪽(텍스트) / 오른쪽(화살표) */
+            align-items: center;
+            width: 100%;                    /* ✅ a 전체 넓이 차지 */
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            color: #000;
+        }
+        .menu-card a::after {
+            content: '›';  /* 오른쪽 화살표 */
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 18px;
+            vertical-align: middle;
+        }
 
 
-		.main-fx-ad-wrap {
-			display: flex;
-			justify-content: space-between;
-			gap: 28px;
-		}
+        /* 각 카드 배경/링크 색상 */
 
-		.main-fx-ad {
-			flex: 1;
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			padding: 28px;
-			border-radius: 12px;
-			box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-			font-weight: 700;
-			color: #222;
-			transition: transform .2s, box-shadow .2s;
-		}
+        .yellow-bg {
+            background: linear-gradient(135deg, #fde4e4 0%, #e8f0ff 100%);
+        }
+        .yellow-bg a {
+            color: #000000;
+        }
 
-		.main-fx-ad:hover {
-			transform: translateY(-4px);
-			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-		}
+        .blue-bg {
+            background: linear-gradient(135deg, #e0f5e9 0%, #f0f5ff 100%);
+        }
+        .blue-bg a {
+            color: #000000;
+        }
 
-		.fx-color1 {
-			background: linear-gradient(135deg, #fde4e4 0%, #e8f0ff 100%);
-		}
-
-		.fx-color2 {
-			background: linear-gradient(135deg, #e0f5e9 0%, #f0f5ff 100%);
-		}
-
-		.fx-color3 {
-			background: linear-gradient(135deg, #fff3e5 0%, #e5f3ff 100%);
-		}
-
-		.main-fx-ad .fx-icon {
-			flex-shrink: 0;
-			width: 48px;
-			height: 48px;
-			background: #fff;
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			font-size: 1.6rem;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-		}
-
-		.main-fx-ad .desc {
-			flex: 1;
-			font-size: 1.1rem;
-			line-height: 1.3;
-		}
-
-		.main-fx-ad .more-arrow {
-			font-size: 1.5rem;
-			opacity: .7;
-		}
+        .deep-blue-bg {
+            background: linear-gradient(135deg, #fff3e5 0%, #e5f3ff 100%);
+        }
+        .deep-blue-bg a {
+            color: #000000;
+        }
 
 
-
-
-		
-		.menu-card li {
-		  border-bottom: 1px solid #ddd; /* ✅ 얇은 밑줄 */
-		  padding: 12px 0;
-		}
-		
-		.menu-card a:hover {
-		  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-		  transform: translateY(-1px);
-		}
-				
-		.menu-card a {
-		  text-decoration: none;
-		  font-size: 18px;
-		  font-weight: bold;
-		  padding: 8px 16px;
-		  display: flex;                   /* ✅ 핵심: flex 적용 */
-		  justify-content: space-between; /* ✅ 왼쪽(텍스트) / 오른쪽(화살표) */
-		  align-items: center;
-		  width: 100%;                    /* ✅ a 전체 넓이 차지 */
-		  box-sizing: border-box;
-		  transition: all 0.2s ease;
-		  color: #000;
-		}
-		.menu-card a::after {
-		  content: '›';  /* 오른쪽 화살표 */
-		  display: inline-block;
-		  margin-left: 8px;
-		  font-size: 18px;
-		  vertical-align: middle;
-		}
-		
-		
-		/* 각 카드 배경/링크 색상 */
-		
-		.yellow-bg {
-		  background: linear-gradient(135deg, #fde4e4 0%, #e8f0ff 100%);
-		}
-		.yellow-bg a {
-		  color: #000000;
-		}
-		
-		.blue-bg {
-		  background: linear-gradient(135deg, #e0f5e9 0%, #f0f5ff 100%);
-		}
-		.blue-bg a {
-		  color: #000000;
-		}
-		
-		.deep-blue-bg {
-		  background: linear-gradient(135deg, #fff3e5 0%, #e5f3ff 100%);
-		}
-		.deep-blue-bg a {
-		  color: #000000;
-		}
-		
-		
-		.main-fx-ad-wrap {
+        .main-fx-ad-wrap {
             display: flex;
             justify-content: space-between;
             gap: 28px;
         }
         .main-fx-ad {
-	        flex: 1;
-		    display: flex;
-		    align-items: center;
-		    gap: 12px;
-		    padding: 28px;
-		    border-radius: 12px;
-		    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-		    font-weight: 700;
-		    color: #222;
-		    transition: transform 0.2s, box-shadow 0.2s;
-		    text-decoration: none; /* ✅ 밑줄 제거 */
-	       }
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 28px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            font-weight: 700;
+            color: #222;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none; /* ✅ 밑줄 제거 */
+        }
         .main-fx-ad:hover {
             transform: translateY(-4px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.1);
@@ -811,168 +503,72 @@
         .fx-color1 { background: linear-gradient(135deg, #fde4e4 0%, #e8f0ff 100%); }
         .fx-color2 { background: linear-gradient(135deg, #e0f5e9 0%, #f0f5ff 100%); }
         .fx-color3 { background: linear-gradient(135deg, #fff3e5 0%, #e5f3ff 100%); }
-        
-		/* ✅ 아이콘 스타일 */
-		.main-fx-ad .fx-icon {
-		  flex-shrink: 0;
-		  width: 48px;
-		  height: 48px;
-		  background: #fff;
-		  border-radius: 20%;
-		  display: flex;
-		  align-items: center;
-		  justify-content: center;
-		  font-size: 1.6rem;
-		  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-		}
-		
-		/* ✅ 텍스트 블록 전체 */
-		.main-fx-ad .desc {
-		  flex: 1;
-		  text-decoration: none; /* 밑줄 제거 */
-		  font-weight: 500;
-		  font-size: 1.05rem;
-		  line-height: 1.5;
-		}
-		
-		/* ✅ 제목 텍스트 (strong) */
-		.main-fx-ad .desc strong {
-		  display: block;
-		  margin-bottom: 2px; /* 제목 아래 간격 조절 */
-		  font-size: 1.15rem;
-		  font-weight: 800;
-		  line-height: 1.4;
-		}
-		
-		/* ✅ 설명 텍스트 (p) */
-		.main-fx-ad .desc p {
-		  margin: 0;
-		  padding: 0;
-		  font-size: 1.05rem;
-		  line-height: 1.4;
-		  text-decoration: none;
-		}
-		
-		/* ✅ 화살표 스타일 */
-		.main-fx-ad .more-arrow {
-		  font-size: 1.5rem;
-		  opacity: 0.7;
-		}
 
-		
-		
-		
-		/* ================================
+        /* ✅ 아이콘 스타일 */
+        .main-fx-ad .fx-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            background: #fff;
+            border-radius: 20%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ✅ 텍스트 블록 전체 */
+        .main-fx-ad .desc {
+            flex: 1;
+            text-decoration: none; /* 밑줄 제거 */
+            font-weight: 500;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+
+        /* ✅ 제목 텍스트 (strong) */
+        .main-fx-ad .desc strong {
+            display: block;
+            margin-bottom: 2px; /* 제목 아래 간격 조절 */
+            font-size: 1.15rem;
+            font-weight: 800;
+            line-height: 1.4;
+        }
+
+        /* ✅ 설명 텍스트 (p) */
+        .main-fx-ad .desc p {
+            margin: 0;
+            padding: 0;
+            font-size: 1.05rem;
+            line-height: 1.4;
+            text-decoration: none;
+        }
+
+        /* ✅ 화살표 스타일 */
+        .main-fx-ad .more-arrow {
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+
+
+
+
+        /* ================================
            ✅ 3-2. 서비스 메뉴
         ================================ */
 
 
-		.main-service-menu {
-
-			display: flex;
-			justify-content: space-between;
-			gap: 30px;
-			margin-top: 48px;
-		}
-
-		.main-service-item {
-			flex: 1;
-			background: #fff;
-			border-radius: 18px;
-			box-shadow: 0 4px 18px rgba(120, 120, 140, 0.07);
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			min-height: 180px;
-			padding: 24px 0;
-			border: 1.5px solid #f2f2f2;
-			transition: transform 0.15s, box-shadow 0.15s;
-			cursor: pointer;
-		}
-
-		.main-service-item:hover {
-			box-shadow: 0 8px 32px rgba(120, 120, 140, 0.13);
-			transform: translateY(-5px) scale(1.04);
-			background: #f3f7ff;
-			border-color: #c3d2f8;
-		}
-
-		.main-service-item .icon {
-			font-size: 2.5rem;
-			margin-bottom: 10px;
-			transition: transform .17s;
-		}
-
-		.main-service-item:hover .icon {
-			transform: scale(1.19) rotate(-4deg);
-		}
-
-		.main-service-item .text {
-			font-size: 1.25rem;
-			font-weight: 700;
-			color: #2e3650;
-			letter-spacing: -0.01em;
-		}
-
-
-
-
-
-
-
-		/* ================================
-           ✅ 4. 앱 QR 코드
-        ================================ */
-
-		.app-download-box {
-			background: #fffef6;
-			border-radius: 16px;
-			border: 1px solid #eee;
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-			padding: 30px;
-			width: 380px;
-			margin: 0 auto;
-			text-align: center;
-		}
-
-		.app-info h3 {
-			font-size: 22px;
-			color: #d7191f;
-			margin-bottom: 14px;
-			font-weight: 800;
-		}
-
-		.app-info .desc {
-			font-size: 16px;
-			color: #333;
-			line-height: 1.6;
-			margin-bottom: 20px;
-			font-weight: 500;
-		}
-
-		.qr-image {
-			width: 160px;
-			height: auto;
-			border-radius: 12px;
-			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-			margin-bottom: 10px;
-		}
-
-		.subtext {
-			font-size: 14px;
-			color: #555;
-		}
-
+        .main-service-menu {
             display: flex;
             justify-content: space-between;
             gap: 30px;
             margin-top: 48px;
             background-color: #fdfdfd;           /* 은은한 흰 배경 */
-		  padding: 32px;                        /* 안쪽 여백 */
-		  border-radius: 20px;                  /* 부드러운 라운드 */
-		  box-shadow: 0 4px 12px rgba(0,0,0,0.04); /* 부드러운 음영 */
-		  border: 1px solid #f2f2f2;
+            padding: 32px;                        /* 안쪽 여백 */
+            border-radius: 20px;                  /* 부드러운 라운드 */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04); /* 부드러운 음영 */
+            border: 1px solid #f2f2f2;
         }
         .main-service-item {
             flex: 1;
@@ -1010,356 +606,354 @@
             letter-spacing: -0.01em;
         }
 
-
-
-      
-
-       
-
-
-
-		/* ================================
+        /* ================================
            ✅ 5. 푸터 (footer)
         ================================ */
-		.footer {
-			text-align: center;
-			margin: 40px 0 20px;
-			font-size: 15px;
-			color: var(--bnk-silver);
-		}
-	</style>
+        .footer {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 15px;
+            color: var(--bnk-silver);
+        }
+    </style>
 </head>
 
 <body>
 
 	<div th:replace="~{fragments/header2 :: header}"></div>
+	
 	<main class="bnk-font-area">
 	<div class="full-red-line"></div>
 
 	<!-- ✅ 환율 정보 -->
-	<div class="rate-section">
-		<div class="container">
-			<div class="rate-container">
-				<div class="rate-track" id="rateTrack">
-					<div class="rate-box" th:each="rate : ${rates}">
-						<img th:src="@{'/img/flags/' + ${rate.rcode.toLowerCase()} + '.png'}" class="flag-icon"
-							alt="flag" />
-						<span class="rate-text">
-							<span class="rcode" th:text="${rate.rcode}"></span>&nbsp;
-							<span class="rvalue" th:text="${rate.rvalue}"></span>
-						</span>
-					</div>
-				</div>
-			</div>
-			<!-- ✅ 기준일 표시 추가 -->
-			<div class="rate-date-label" id="rateDateLabel"></div>
-		</div>
-	</div>
+<div class="rate-section">
+    <div class="container">
+        <div class="rate-container">
+            <div class="rate-track" id="rateTrack">
+                <div class="rate-box" th:each="rate : ${rates}">
+                    <img th:src="@{'/img/flags/' + ${rate.rcode.toLowerCase()} + '.png'}" class="flag-icon"
+                         alt="flag" />
+                    <span class="rate-text">
+                            <span class="rcode" th:text="${rate.rcode}"></span>&nbsp;
+                            <span class="rvalue" th:text="${rate.rvalue}"></span>
+                        </span>
+                </div>
+            </div>
+        </div>
+        <!-- ✅ 기준일 표시 추가 -->
+        <div class="rate-date-label" id="rateDateLabel"></div>
+    </div>
+</div>
 
-	<!-- 1-1 환율 정보 비교 모달 -->
-	<div id="rateModal" class="modal hidden">
-		<div class="modal-content">
-			<span class="close-button">&times;</span>
-			<h2 class="modal-title">환율 비교</h2>
-			<p class="modal-date" id="modalCurrencyTitle">통화: USD</p>
-			<table class="rate-table">
-				<thead>
-					<tr>
-						<th>날짜</th>
-						<th>평균 환율</th>
-						<th>변동</th>
-					</tr>
-				</thead>
-				<tbody id="modalRateBody">
+<!-- 1-1 환율 정보 비교 모달 -->
+<div id="rateModal" class="modal hidden">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2 class="modal-title">환율 비교</h2>
+        <p class="modal-date" id="modalCurrencyTitle">통화: USD</p>
+        <table class="rate-table">
+            <thead>
+            <tr>
+                <th>날짜</th>
+                <th>평균 환율</th>
+                <th>변동</th>
+            </tr>
+            </thead>
+            <tbody id="modalRateBody">
 
-				</tbody>
-			</table>
-		</div>
-	</div>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <div class="slider-section-bg">
     <div class="dual-slider-wrapper">
-	  <!-- 🎈 왼쪽: 상품 슬라이더만 유지 -->
-	  <div class="slider left-slider">
-	    <div class="slide-track-wrapper">
-	      <div class="slide-track">
-	        <div class="slide"><img src="/img/main/product01.png" alt="상품1"></div>
-	        <div class="slide"><img src="/img/main/product02.png" alt="상품2"></div>
-	        <div class="slide"><img src="/img/main/product03.png" alt="상품3"></div>
-	      </div>
-	    </div>
-	    <div class="dots"></div>
-	  </div>
-	
-	  <!-- ✅ 오른쪽: QR 안내 박스만 배치 -->
-	  <div class="app-download-box">
-	    <div class="app-info">
-	      <h3>📱 스마트 계좌 개설</h3>
-	      <p class="desc">
-	       QR코드를 스캔하여 <br>
-			계좌를 간편하게 개설 가능
-	      </p>
-	      <img src="/img/qr/app.png" alt="BNK 앱 QR" class="qr-image" />
-	      <p class="subtext">BNK 앱 설치 및 계좌 개설</p>
-	    </div>
-	  </div>
+        <!-- 🎈 왼쪽: 상품 슬라이더만 유지 -->
+        <div class="slider left-slider">
+            <div class="slide-track-wrapper">
+                <div class="slide-track">
+                    <div class="slide"><img src="/img/main/product01.png" alt="상품1"></div>
+                    <div class="slide"><img src="/img/main/product02.png" alt="상품2"></div>
+                    <div class="slide"><img src="/img/main/product03.png" alt="상품3"></div>
+                </div>
+            </div>
+            <div class="dots"></div>
+        </div>
 
-	</div>
+        <!-- ✅ 오른쪽: QR 안내 박스만 배치 -->
+        <div class="app-download-box">
+            <div class="app-info">
+                <h3>📱 스마트 계좌 개설</h3>
+                <p class="desc">
+                    QR코드를 스캔하여 <br>
+                    계좌를 간편하게 개설 가능
+                </p>
+                <img src="/img/qr/app.png" alt="BNK 앱 QR" class="qr-image" />
+                <p class="subtext">BNK 앱 설치 및 계좌 개설</p>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="menu-bg-wrapper">
-   <div class="menu-section">
-		  <div class="container">
-		    <div class="menu-grid">
-		      <!-- 외환 예금 -->
-		      <div class="menu-card yellow-bg">
-		        <div class="menu-header">
-		          <img src="/img/icon/예금 상품.png" alt="예금 아이콘">
-		          <div class="menu-title">외환 예금</div>
-		        </div>
-		        <ul>
-		          <li><a href="#" th:text="${cMap['FX001'].medium}">외화예금상품테스트</a></li>
-		          <li><a href="#" th:text="${cMap['FX002'].small}">외화예금안내</a></li>
-		          <li><a href="#" th:text="${cMap['FX005'].medium}">외화예금우대서비스</a></li>
-		        </ul>
-		      </div>
-		
-		      <!-- 환전:환율 -->
-		      <div class="menu-card blue-bg">
-		        <div class="menu-header">
-		          <img src="/img/icon/환전.png" alt="환전 아이콘">
-		          <div class="menu-title" th:text="${cMap['FX091'].large}">환전:환율</div>
-		        </div>
-		        <ul>
-		          <li><a href="#" th:text="${cMap['FX091'].medium}">환전 안내</a></li>
-		          <li><a href="/forexProduct" th:text="${cMap['FX092'].medium}">환전 상품</a></li>
-		          <li><a href="/forexEvent" th:text="${cMap['FX093'].medium}">환율 이벤트</a></li>
-		        </ul>
-		      </div>
-		
-		      <!-- 수출입 금융 -->
-		      <div class="menu-card deep-blue-bg">
-		        <div class="menu-header">
-		          <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
-		          <div class="menu-title" th:text="${cMap['FX090'].large}">수출입 금융</div>
-		        </div>
-		        <ul>
-		          <li><a href="#" th:text="${cMap['FX089'].small}">수입서류제출</a></li>
-		          <li><a href="#" th:text="${cMap['FX090'].small}">수출서류제출</a></li>
-		        </ul>
-		      </div>
-		
-		    </div>
-		  </div>
-		</div>
-	</div>
 
-	<div class="container" style="text-align: center; margin-top: 60px;">
-		<h2 style="
+<div class="menu-bg-wrapper">
+    <div class="menu-section">
+        <div class="container">
+            <div class="menu-grid">
+                <!-- 외환 예금 -->
+                <div class="menu-card yellow-bg">
+                    <div class="menu-header">
+                        <img src="/img/icon/예금 상품.png" alt="예금 아이콘">
+                        <div class="menu-title">외환 예금</div>
+                    </div>
+                    <ul>
+                        <li><a href="#" th:text="${cMap['FX001'].medium}">외화예금상품테스트</a></li>
+                        <li><a href="#" th:text="${cMap['FX002'].small}">외화예금안내</a></li>
+                        <li><a href="#" th:text="${cMap['FX005'].medium}">외화예금우대서비스</a></li>
+                    </ul>
+                </div>
+
+                <!-- 환전:환율 -->
+                <div class="menu-card blue-bg">
+                    <div class="menu-header">
+                        <img src="/img/icon/환전.png" alt="환전 아이콘">
+                        <div class="menu-title" th:text="${cMap['FX091'].large}">환전:환율</div>
+                    </div>
+                    <ul>
+                        <li><a href="#" th:text="${cMap['FX091'].medium}">환전 안내</a></li>
+                        <li><a href="/forexProduct" th:text="${cMap['FX092'].medium}">환전 상품</a></li>
+                        <li><a href="/forexEvent" th:text="${cMap['FX093'].medium}">환율 이벤트</a></li>
+                    </ul>
+                </div>
+
+                <!-- 수출입 금융 -->
+                <div class="menu-card deep-blue-bg">
+                    <div class="menu-header">
+                        <img src="/img/icon/수출입금융.png" alt="수출입 아이콘">
+                        <div class="menu-title" th:text="${cMap['FX090'].large}">수출입 금융</div>
+                    </div>
+                    <ul>
+                        <li><a href="#" th:text="${cMap['FX089'].small}">수입서류제출</a></li>
+                        <li><a href="#" th:text="${cMap['FX090'].small}">수출서류제출</a></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="text-align: center; margin-top: 60px;">
+        <h2 style="
 		    font-size: 28px;
 		    font-weight: 800;
 		    font-family: 'Spoqa Han Sans Neo', 'Noto Sans KR', sans-serif;
 		    color: #000;
 		    margin-bottom: 8px;
 		  ">자주 찾는 서비스</h2>
-	</div>
+    </div>
 
 
 
-	<!-- ✅ 주요 외환 서비스 안내 -->
-	<div class="container">
-		<div class="main-fx-ad-wrap">
-			<a href="#" class="main-fx-ad fx-color1">
-				<div class="fx-icon">🎓</div>
-				<div class="desc"><strong>유학 서비스</strong><br>유학생 대상 외환 안내 및 지원</div>
-				<div class="more-arrow">→</div>
-			</a>
-			<a href="#" class="main-fx-ad fx-color2">
-				<div class="fx-icon">🌏</div>
-				<div class="desc"><strong>여행 서비스</strong><br>여행자 외환 환전/안내 서비스</div>
-				<div class="more-arrow">→</div>
-			</a>
-			<a href="#" class="main-fx-ad fx-color3">
-				<div class="fx-icon">🏠</div>
-				<div class="desc"><strong>이주 서비스</strong><br>해외 이주자 환전 및 자금이동 지원</div>
-				<div class="more-arrow">→</div>
-			</a>
-		</div>
-	</div>
+    <!-- ✅ 주요 외환 서비스 안내 -->
+    <div class="container">
+        <div class="main-fx-ad-wrap">
+            <a href="#" class="main-fx-ad fx-color1">
+                <div class="fx-icon">🎓</div>
+                <div class="desc"><strong>유학 서비스</strong>
+                    <p>유학생 대상 외환 안내 및 지원</p></div>
+                <div class="more-arrow">→</div>
+            </a>
+            <a href="#" class="main-fx-ad fx-color2">
+                <div class="fx-icon">🌏</div>
+                <div class="desc"><strong>여행 서비스</strong>
+                    <p>여행자 외환 환전/<br>안내 서비스</p></div>
+                <div class="more-arrow">→</div>
+            </a>
+            <a href="#" class="main-fx-ad fx-color3">
+                <div class="fx-icon">🏠</div>
+                <div class="desc"><strong>이주 서비스</strong>
+                    <p>해외 이주자 환전 및 <br> 자금이동 지원</p></div>
+                <div class="more-arrow">→</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<!-- ✅ 주요 고객 서비스 메뉴 -->
+<div class="container">
+    <div class="main-service-menu">
+        <div class="main-service-item"><span class="icon">🏦</span><span class="text">영업점 찾기</span></div>
+        <div class="main-service-item"><span class="icon">📞</span><span class="text">전화 상담</span></div>
+        <div class="main-service-item"><span class="icon">💬</span><span class="text">채팅 상담</span></div>
+        <div class="main-service-item"><span class="icon">✉️</span><span class="text">이메일 상담</span></div>
+        <div class="main-service-item"><span class="icon">💻</span><span class="text">원격지원 상담</span></div>
+        <div class="main-service-item"><span class="icon">❓</span><span class="text">FAQ</span></div>
+    </div>
+</div>
 
 
 
-	<!-- ✅ 주요 고객 서비스 메뉴 -->
-	<div class="container">
-		<div class="main-service-menu">
-			<div class="main-service-item"><span class="icon">🏦</span><span class="text">영업점 찾기</span></div>
-			<div class="main-service-item"><span class="icon">📞</span><span class="text">전화 상담</span></div>
-			<div class="main-service-item"><span class="icon">💬</span><span class="text">채팅 상담</span></div>
-			<div class="main-service-item"><span class="icon">✉️</span><span class="text">이메일 상담</span></div>
-			<div class="main-service-item"><span class="icon">💻</span><span class="text">원격지원 상담</span></div>
-			<div class="main-service-item"><span class="icon">❓</span><span class="text">FAQ</span></div>
-		</div>
-	</div>
-
-
-
-
-
-
-
-
-	<div class="full-gray-line"></div>
+<div class="full-gray-line"></div>
 	</main>
 	
 	<!-- ✅ 푸터 -->
 	<div th:replace="fragments/dictionary-button :: dictionary-button"></div>
 	<div th:replace="~{fragments/footer :: footer}"></div>
 
-	 <script>
+<script>
     document.addEventListener("DOMContentLoaded", () => {
-      const modal = document.getElementById('rateModal');
-      const modalRateBody = document.getElementById('modalRateBody');
-      const modalCurrencyTitle = document.getElementById('modalCurrencyTitle');
-      const closeButton = document.querySelector('.close-button');
+        const modal = document.getElementById('rateModal');
+        const modalRateBody = document.getElementById('modalRateBody');
+        const modalCurrencyTitle = document.getElementById('modalCurrencyTitle');
+        const closeButton = document.querySelector('.close-button');
 
-      function getBaseDate() {
-        const today = new Date();
-        const day = today.getDay();
-        if (day === 0) today.setDate(today.getDate() - 2);
-        else if (day === 6) today.setDate(today.getDate() - 1);
-        else today.setDate(today.getDate() - 1);
-        return today;
-      }
+        // ✅ 기준일 계산 함수 (주말은 금요일로 조정)
+        function getBaseDate() {
+            const today = new Date();
+            const day = today.getDay();
+            if (day === 0) today.setDate(today.getDate() - 2); // 일요일 → 금요일
+            else if (day === 6) today.setDate(today.getDate() - 1); // 토요일 → 금요일
+            else today.setDate(today.getDate() - 1); // 평일 → 어제
+            return today;
+        }
 
-      const formatDate = (dateStr) => {
-        const d = new Date(dateStr);
-        const year = String(d.getFullYear()).slice(2);
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}.${month}.${day}`;
-      };
+        // ✅ 날짜 포맷 함수 (yyyy-mm-dd → yy.mm.dd)
+        const formatDate = (dateStr) => {
+            const d = new Date(dateStr);
+            const year = String(d.getFullYear()).slice(2);
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${year}.${month}.${day}`;
+        };
 
-      const baseDate = getBaseDate();
-      const y = String(baseDate.getFullYear()).slice(2);
-      const m = String(baseDate.getMonth() + 1).padStart(2, '0');
-      const d = String(baseDate.getDate()).padStart(2, '0');
-      const formatted = `기준일 ${y}.${m}.${d} 고지`;
-      const label = document.getElementById("rateDateLabel");
-      if (label) label.textContent = formatted;
+        // ✅ 기준일 표시
+        const baseDate = getBaseDate();
+        const y = String(baseDate.getFullYear()).slice(2);
+        const m = String(baseDate.getMonth() + 1).padStart(2, '0');
+        const d = String(baseDate.getDate()).padStart(2, '0');
+        const label = document.getElementById("rateDateLabel");
+        if (label) label.textContent = `기준일 ${y}.${m}.${d} 고지`;
 
-      const track = document.querySelector('.rate-track');
-      const items = [...track.children];
+        // ✅ 환율 슬라이드 복제 (무한 스크롤용)
+        const track = document.querySelector('.rate-track');
+        const items = [...track.children];
 
-      if (items.length === 0) {
-        console.warn("⚠️ .rate-track 안에 환율 항목이 없습니다. 복제 중단.");
-        return;
-      }
+        if (items.length === 0) {
+            console.warn("⚠️ .rate-track 안에 항목이 없습니다. 복제 중단.");
+            return;
+        }
 
-      const cloneCount = Math.ceil(6 / items.length) + 1;
-      for (let i = 0; i < cloneCount; i++) {
-        items.forEach(item => {
-          const clone = item.cloneNode(true);
-          track.appendChild(clone);
-        });
-      }
+        const cloneCount = Math.ceil(6 / items.length) + 1;
+        for (let i = 0; i < cloneCount; i++) {
+            items.forEach(item => {
+                const clone = item.cloneNode(true);
+                track.appendChild(clone);
+            });
+        }
 
-      function initSlider(sliderSelector) {
-        const slider = document.querySelector(sliderSelector);
-        const track = slider.querySelector('.slide-track');
-        const slides = slider.querySelectorAll('.slide');
-        const dotsContainer = slider.querySelector('.dots');
+        // ✅ 상품 배너 슬라이더만 초기화
+        function initSlider(sliderSelector) {
+            const slider = document.querySelector(sliderSelector);
+            const track = slider.querySelector('.slide-track');
+            const slides = slider.querySelectorAll('.slide');
+            const dotsContainer = slider.querySelector('.dots');
 
-        let currentIndex = 0;
-        let slideWidth = slider.clientWidth;
-        const total = slides.length;
+            let currentIndex = 0;
+            let slideWidth = slider.clientWidth;
+            const total = slides.length;
 
-        dotsContainer.innerHTML = '';
+            dotsContainer.innerHTML = '';
 
-        for (let i = 0; i < total; i++) {
-          const dot = document.createElement('button');
-          dot.setAttribute('aria-label', `슬라이드 ${i + 1}`);
-          dot.addEventListener('click', () => {
-            currentIndex = i;
+            for (let i = 0; i < total; i++) {
+                const dot = document.createElement('button');
+                dot.setAttribute('aria-label', `슬라이드 ${i + 1}`);
+                dot.addEventListener('click', () => {
+                    currentIndex = i;
+                    update();
+                    resetInterval();
+                });
+                dotsContainer.appendChild(dot);
+            }
+
+            const dots = dotsContainer.querySelectorAll('button');
+
+            function update() {
+                track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+                dots.forEach(dot => dot.classList.remove('active'));
+                dots[currentIndex].classList.add('active');
+            }
+
+            function autoSlide() {
+                currentIndex = (currentIndex + 1) % total;
+                update();
+            }
+
+            let interval = setInterval(autoSlide, 3000);
+
+            function resetInterval() {
+                clearInterval(interval);
+                interval = setInterval(autoSlide, 3000);
+            }
+
+            window.addEventListener('resize', () => {
+                slideWidth = slides[0].clientWidth;
+                update();
+            });
+
             update();
-            resetInterval();
-          });
-          dotsContainer.appendChild(dot);
         }
 
-        const dots = dotsContainer.querySelectorAll('button');
+        // ✅ 오른쪽 슬라이더 제거 -> left만 초기화
+        initSlider('.left-slider');
 
-        function update() {
-          track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-          dots.forEach(dot => dot.classList.remove('active'));
-          dots[currentIndex].classList.add('active');
-        }
+        // ✅ 환율 비교 모달 연결
+        track.addEventListener('click', (e) => {
+            const box = e.target.closest('.rate-box');
+            if (!box) return;
 
-        function autoSlide() {
-          currentIndex = (currentIndex + 1) % total;
-          update();
-        }
+            const currency = box.querySelector('.rcode')?.textContent;
+            if (!currency) return;
 
-        let interval = setInterval(autoSlide, 2000);
+            fetch(`/api/compareRate?rcode=${currency}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (!data || data.length === 0) {
+                        modalRateBody.innerHTML = '<tr><td colspan="3">데이터 없음</td></tr>';
+                        return;
+                    }
 
-        function resetInterval() {
-          clearInterval(interval);
-          interval = setInterval(autoSlide, 2000);
-        }
+                    data.sort((a, b) => new Date(a.rdate) - new Date(b.rdate));
+                    modalRateBody.innerHTML = '';
 
-        window.addEventListener('resize', () => {
-          slideWidth = slides[0].clientWidth;
-          update();
+                    data.forEach((row, i) => {
+                        const prev = i > 0 ? data[i - 1].rvalue : null;
+                        const diff = prev ? (row.rvalue - prev).toFixed(4) : '-';
+                        const icon = diff === '-' ? '–' : (diff > 0 ? '▲' : '▼');
+                        const className = diff === '-' ? 'change-same' : (diff > 0 ? 'change-up' : 'change-down');
+                        const label = formatDate(row.rdate);
+
+                        modalRateBody.innerHTML += `
+                            <tr>
+                                <td>${label}</td>
+                                <td>${parseFloat(row.rvalue).toFixed(4)}</td>
+                                <td><span class="${className}">${icon} ${diff !== '-' ? Math.abs(diff) : ''}</span></td>
+                            </tr>`;
+                    });
+
+                    modalCurrencyTitle.textContent = `통화: ${currency}`;
+                    modal.classList.remove('hidden');
+                });
         });
 
-        update();
-      }
-
-      initSlider('.left-slider');
-      initSlider('.right-slider');
-
-      track.addEventListener('click', (e) => {
-        const box = e.target.closest('.rate-box');
-        if (!box) return;
-
-        const currency = box.querySelector('.rcode')?.textContent;
-        if (!currency) return;
-
-        fetch(`/api/compareRate?rcode=${currency}`)
-          .then(res => res.json())
-          .then(data => {
-            if (!data || data.length === 0) {
-              modalRateBody.innerHTML = '<tr><td colspan="3">데이터 없음</td></tr>';
-              return;
-            }
-
-            data.sort((a, b) => new Date(a.rdate) - new Date(b.rdate));
-            modalRateBody.innerHTML = '';
-
-            for (let i = 0; i < data.length; i++) {
-              const row = data[i];
-              const prev = i > 0 ? data[i - 1].rvalue : null;
-              const diff = prev ? (row.rvalue - prev).toFixed(4) : '-';
-              const icon = diff === '-' ? '–' : (diff > 0 ? '▲' : '▼');
-              const className = diff === '-' ? 'change-same' : (diff > 0 ? 'change-up' : 'change-down');
-              const label = formatDate(row.rdate);
-
-              modalRateBody.innerHTML += '<tr>' +
-                '<td>' + label + '</td>' +
-                '<td>' + parseFloat(row.rvalue).toFixed(4) + '</td>' +
-                '<td><span class="' + className + '">' + icon + ' ' + (diff !== '-' ? Math.abs(diff) : '') + '</span></td>' +
-                '</tr>';
-            }
-
-            modalCurrencyTitle.textContent = `통화: ${currency}`;
-            modal.classList.remove('hidden');
-          });
-      });
-
-      closeButton.addEventListener('click', () => {
-        modal.classList.add('hidden');
-      });
+        // ✅ 모달 닫기 처리
+        closeButton.addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', e => {
+            if (e.target === modal) modal.classList.add('hidden');
+        });
     });
-  </script>
+
+</script>
 </body>
 
 </html>
