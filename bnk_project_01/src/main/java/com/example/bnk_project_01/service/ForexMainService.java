@@ -31,25 +31,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Service
 public class ForexMainService {
 	
-	 /* static {
-        try {
-            // ✅ 개발‑전용 : 모든 인증서를 신뢰
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, new TrustManager[] { new X509TrustManager() {
-                public void checkClientTrusted(X509Certificate[] c, String a) {}
-                public void checkServerTrusted(X509Certificate[] c, String a) {}
-                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
-            }}, new SecureRandom());
-
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-            HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
-
-            System.out.println("⚠️  **개발용** 모든 SSL 인증서 신뢰 모드 활성화");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    } */  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@서버 끄면 주석처리해놓으세요@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
     @Value("${exim.api-key}")
     private String authKey;
 
