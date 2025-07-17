@@ -438,7 +438,7 @@ function showComparisonStats(comparison) {
     const added = comparison.file2.filter(item => item.type === 'added').length;
     const removed = comparison.file1.filter(item => item.type === 'removed').length;
     
-    console.log(`비교 통계 - 추가된 줄: ${added}, 삭제된 줄: ${removed}`);
+    console.log(`비교 통계 - 삭제된 줄: ${removed}, 추가된 줄: ${added}`);
     
     updateStatsDisplay(added, removed);
 }
