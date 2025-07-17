@@ -156,6 +156,9 @@ input[type="text"]:focus, select:focus {
     border-color: #dc3545;
     padding: 4px 8px;
     font-size: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
 .save-btn:hover {
@@ -180,13 +183,15 @@ input[type="text"]:focus, select:focus {
     overflow-x: auto;
     border: 1px solid #dee2e6;
     background: white;
+    width: 100%;
 }
 
 #resultTable {
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
-    min-width: 800px;
+    table-layout: fixed;
+    min-width: 1000px;
 }
 
 #resultTable thead {
@@ -200,6 +205,51 @@ input[type="text"]:focus, select:focus {
     font-weight: bold;
     font-size: 13px;
     border: 1px solid #dee2e6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#resultTable th:nth-child(1), 
+#resultTable td:nth-child(1) {
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+}
+
+#resultTable th:nth-child(2), 
+#resultTable td:nth-child(2) {
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+}
+
+#resultTable th:nth-child(3), 
+#resultTable td:nth-child(3) {
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+}
+
+#resultTable th:nth-child(4), 
+#resultTable td:nth-child(4) {
+    width: 400px;
+    min-width: 400px;
+    max-width: 400px;
+}
+
+#resultTable th:nth-child(5), 
+#resultTable td:nth-child(5) {
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
+}
+
+#resultTable th:nth-child(6), 
+#resultTable td:nth-child(6) {
+    width: 100px;
+    min-width: 100px;
+    max-width: 100px;
 }
 
 #resultTable td {
@@ -208,6 +258,18 @@ input[type="text"]:focus, select:focus {
     border: 1px solid #dee2e6;
     vertical-align: middle;
     color: #495057;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#resultTable td:nth-child(3), 
+#resultTable td:nth-child(4) {
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-all;
+    line-height: 1.4;
+    padding: 8px 6px;
 }
 
 #resultTable tbody tr:nth-child(even) {
@@ -332,4 +394,44 @@ input[type="checkbox"] {
     padding: 8px 4px;
     color: #6c757d;
     font-size: 14px;
+}
+
+@media (max-width: 1200px) {
+    #resultTable {
+        min-width: 900px;
+    }
+    
+    #resultTable th:nth-child(3), 
+    #resultTable td:nth-child(3) {
+        width: 250px;
+        min-width: 250px;
+        max-width: 250px;
+    }
+    
+    #resultTable th:nth-child(4), 
+    #resultTable td:nth-child(4) {
+        width: 300px;
+        min-width: 300px;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    #resultTable {
+        min-width: 800px;
+    }
+    
+    #resultTable th:nth-child(3), 
+    #resultTable td:nth-child(3) {
+        width: 200px;
+        min-width: 200px;
+        max-width: 200px;
+    }
+    
+    #resultTable th:nth-child(4), 
+    #resultTable td:nth-child(4) {
+        width: 250px;
+        min-width: 250px;
+        max-width: 250px;
+    }
 }
