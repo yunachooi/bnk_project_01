@@ -60,14 +60,14 @@
         <li><a href="#">카드</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
         <li><a href="#">보험/공제</a><div class="dropdown placeholder"><div class="dropdown-inner">아직 준비 중입니다.</div></div></li>
         <li>
-          <a href="#" class="submenu-exchange-active">외환</a>
+          <a href="/forex" class="submenu-exchange-active">외환</a>
           <div class="dropdown forex-menu">
             <div class="dropdown-inner">
               <div class="mega-menu">
                 <div class="mega-column">
                   <h4>외화예금</h4>
                   <ul>
-                    <li><a href="#" class="active-link">외화예금상품</a></li>
+                    <li><a href="/product" class="active-link">외화예금상품</a></li>
                     <li><a href="#" class="inactive-link">외화예금안내</a></li>
                     <li><a href="#" class="inactive-link">외화예금우대서비스</a></li>
                   </ul>
@@ -84,7 +84,7 @@
                   <h4>수출입금융</h4>
                   <ul>
                     <li><a href="#" class="inactive-link">수출업무</a></li>
-                    <li><a href="#" class="active-link">수입업무</a></li>
+                    <li><a href="/user/import" class="active-link">수입업무</a></li>
                     <li><a href="#" class="inactive-link">내국신용장/무역금융</a></li>
                     <li><a href="#" class="inactive-link">전자무역</a></li>
                     <li><a href="#" class="inactive-link">수출입통관 상담 서비스 안내</a></li>
@@ -104,7 +104,7 @@
                   <h4>환전</h4>
                   <ul>
                     <li><a href="#" class="inactive-link">환전안내</a></li>
-                    <li><a href="#" class="active-link">환전서비스안내</a></li>
+                    <li><a href="/forexProduct" class="active-link">환전서비스안내</a></li>
                     <li><a href="#" class="inactive-link">환율우대</a></li>
                     <li><a href="#" class="inactive-link">환전계산기</a></li>
                     <li><a href="#" class="inactive-link">동북아허브영업점</a></li>
@@ -117,7 +117,7 @@
                     <li><a href="#" class="inactive-link">환율제공서비스</a></li>
                     <li><a href="#" class="inactive-link">외환시장동향</a></li>
                     <li><a href="#" class="inactive-link">환리스크관리</a></li>
-                    <li><a href="#" class="active-link">환율우대쿠폰</a></li>
+                    <li><a href="/forexEvent" class="active-link">환율우대쿠폰</a></li>
                   </ul>
                 </div>
                 <div class="mega-column">
@@ -196,13 +196,22 @@
       }
     });
 
-    // 드롭다운 메뉴 토글
-    document.querySelectorAll('.has-dropdown > a').forEach(menu => {
-      menu.addEventListener('click', e => {
-        e.preventDefault();
-        const dropdown = menu.nextElementSibling;
-        dropdown.classList.toggle('open');
+    window.addEventListener('scroll', () => {
+        document.querySelectorAll('.dropdown').forEach(d => {
+          d.style.display = 'none';        // 우선 감춤
+          d.dataset.closedByScroll = '1';  // 👉 표시만 남김
+        });
       });
-    });
+
+      // 2) 다시 메뉴에 올라오면 style 값을 초기화
+      document.querySelectorAll('.navbar-submenu li').forEach(li => {
+        li.addEventListener('mouseenter', () => {
+          const dd = li.querySelector('.dropdown');
+          if (dd && dd.dataset.closedByScroll) {
+            dd.style.display = '';         // 인라인 제거
+            delete dd.dataset.closedByScroll;
+          }
+        });
+      });
   </script>
 </div>
