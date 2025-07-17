@@ -1,4 +1,4 @@
-// approval-page.js — 간단 · 이벤트 위임 버전 (수정됨)
+// approval-page.js
 // ==================================================
 const API = '/api/approve';   // GET 전체, POST /{pno}
 

@@ -1,27 +1,29 @@
 <div th:fragment="content" class="page-inner category-inner">
-  <h2>카테고리 관리</h2>
-  <button id="btnAdd">+ 등록</button>
-
-  <table>
-    <thead><tr>
-      <th>코드</th><th>대분류</th><th>중분류</th><th>소분류</th><th>삭제</th>
-    </tr></thead>
-    <tbody id="tbody"></tbody>
-  </table>
-
-  <div id="modal" class="hidden">
-    <div class="box">
-      <h3>카테고리 등록</h3>
-      <form id="frmAdd">
-        <label>코드   <input name="cno"    required/></label>
-        <label>대분류 <input name="large"  required/></label>
-        <label>중분류 <input name="medium"/></label>
-        <label>소분류 <input name="small" /></label>
-        <div class="btns">
-          <button type="submit" id="btnSave">저장</button>
-          <button type="button" id="btnClose">취소</button>
-        </div>
-      </form>
-    </div>
+	<div class="full-width-container">
+	  <h2>카테고리 관리</h2>
+	  <button id="btnAdd">등록</button>
+	
+	  <table>
+	    <thead><tr>
+	      <th>코드</th><th>대분류</th><th>중분류</th><th>소분류</th><th>삭제</th>
+	    </tr></thead>
+	    <tbody id="tbody"></tbody>
+	  </table>
+	
+	  <div id="modal" class="hidden">
+	    <div class="box">
+	      <h3>카테고리 등록</h3>
+	      <form id="frmAdd">
+	        <label>코드   <input name="cno"    required/></label>
+	        <label>대분류 <input name="large"  required/></label>
+	        <label>중분류 <input name="medium"/></label>
+	        <label>소분류 <input name="small" /></label>
+	        <div class="btns">
+	          <button type="submit" id="btnSave">저장</button>
+	          <button type="button" id="btnClose">취소</button>
+	        </div>
+	      </form>
+	    </div>
+	  </div>
   </div>
 </div>
