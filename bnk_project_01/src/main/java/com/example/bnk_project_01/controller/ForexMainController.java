@@ -20,7 +20,6 @@ import com.example.bnk_project_01.entity.Category;
 import com.example.bnk_project_01.entity.Rate;
 import com.example.bnk_project_01.repository.CategoryRepository;
 import com.example.bnk_project_01.repository.ForexMainRepository;
-import com.example.bnk_project_01.service.ForexMainService;
 
 @Controller
 public class ForexMainController {
@@ -28,8 +27,8 @@ public class ForexMainController {
     @Autowired
     private ForexMainRepository forexMainRepository;
 
-    @Autowired
-    private ForexMainService forexMainService;
+    //@Autowired
+    //private ForexMainService forexMainService;
 
     @Autowired
     private CategoryRepository cateRepo;
@@ -70,16 +69,16 @@ public class ForexMainController {
         List<Rate> rates = forexMainRepository.findByRdate(baseDate);
 
         // ✅ 환율 데이터 없으면 API 호출 → 저장 후 재조회
-        if (rates == null || rates.isEmpty()) {
-            try {
-                forexMainService.fetch();
-                rates = forexMainRepository.findByRdate(baseDate);
-            } catch (Exception e) {
-                e.printStackTrace();
-                model.addAttribute("error", "환율 불러오기 실패 : " + e.getMessage());
-                return "forexMainPage";
-            }
-        }
+//        if (rates == null || rates.isEmpty()) {
+//            try {
+//                forexMainService.fetch();
+//                rates = forexMainRepository.findByRdate(baseDate);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                model.addAttribute("error", "환율 불러오기 실패 : " + e.getMessage());
+//                return "forexMainPage";
+//            }
+//        }
 
         // ✅ 월요일이면 비교용 모달에 금/목 데이터 추가
         if (today.getDayOfWeek() == DayOfWeek.MONDAY) {
