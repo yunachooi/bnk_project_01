@@ -2,351 +2,281 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>부산은행 외화예금</title>
-  <link rel="stylesheet" th:href="@{/css/common.css}" />
+  <title>BNK 외화예금</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap">
   <style>
-    html { font-size: 16px; }
-    body { font-family: 'Noto Sans KR', sans-serif; background: #fff; color: #000; margin: 0; padding: 0 0; transition: background-color 0.3s, color 0.3s;}
-    body.dark-mode { background: #111; color: #eee; }
-    .container2 { width: 1000px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 0; }
-    h2 {
-      font-size: 1.8rem;
-      color: #212d49;
-      margin-bottom: 30px;
-      border-bottom: 2px solid #212d49;
-      padding-bottom: 10px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      background: transparent;
-      transition: color 0.3s, border-color 0.3s;
+    * { box-sizing: border-box; }
+    html, body { height:100%; }
+    body {
+      margin:0; font-family:'Noto Sans KR',sans-serif; color:#212d49; background:#fff;
+      transition: background 0.3s, color 0.3s;
     }
-    body.dark-mode h2 {
-      color: #ff7676;
-      border-bottom: 2px solid #ff7676;
+    .container-main {
+      width: 1000px; max-width: 98vw;
+      margin: 0 auto; padding: 0 0 60px 0; position: relative;
+      z-index: 2;
     }
-    
-    
-    
-    
-    .deposit-protection-info {
-      max-width: 1000px;
-      margin: 0 auto 14px auto;
-      background: #f5f7fa;
-      color: #333;
-      padding: 18px 0 16px 0;
-      border-radius: 15px;
+    .main-title { font-size:2.1rem; font-weight:900; margin:56px 0 32px 0; text-align: center;}
+    .filter-buttons, .category-buttons {
+      display: flex; justify-content: center; gap: 12px;
+    }
+    .filter-buttons { margin-bottom: 16px; }
+    .category-buttons { margin-bottom: 34px; }
+    .filter-buttons button, .category-buttons button {
+      background: #fff; color:#e60012; border: 2px solid #e60012;
+      padding:7px 22px; border-radius:22px; font-size: 1.08rem;
+      font-weight:700; cursor:pointer; transition:.18s;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .filter-buttons button.active, .filter-buttons button:hover,
+    .category-buttons button.active, .category-buttons button:hover {
+      background: #e60012; color: #fff;
+    }
+    /* 비교 타이틀 */
+    .compare-title {
+      font-size: 1.5rem;
+      font-weight: bold;
       text-align: center;
-      font-size: 1.10rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      box-shadow: 0 2px 8px 0 rgba(33,45,73,0.06);
-      position: relative;
-  	overflow: hidden;
-    }
-    
-    .deposit-protection-info .shine-bar {
-  position: absolute;
-  left: -60px;
-  top: 0; bottom: 0;
-  width: 60px;
-  background: linear-gradient(105deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 40%, rgba(255,255,255,0) 100%);
-  filter: blur(2.5px);
-  pointer-events: none;
-  animation: shineBarAnim 3.8s linear infinite;
-  opacity: 0.93;
-}
-@keyframes shineBarAnim {
-  0%, 77% { left: -60px; opacity: 0; }
-  80% { left: -60px; opacity: 0.05; }
-  87% { left: 101%; opacity: 1; }
-  89% { left: 101%; opacity: 0; }
-  100% { left: 101%; opacity: 0; }
-}
-/* 아이콘에만 살짝 glow */
-.deposit-protection-info .shield-ico {
-  filter: drop-shadow(0 0 6px #b8d6ffcc) drop-shadow(0 0 2px #fff);
-  transition: filter 0.5s;
-  animation: iconGlowAnim 3.8s linear infinite;
-}
-@keyframes iconGlowAnim {
-  0%, 77%, 100% { filter: drop-shadow(0 0 2px #b8d6ff80); }
-  80%, 87% { filter: drop-shadow(0 0 8px #91bbffcc) drop-shadow(0 0 2px #fff); }
-}
-    
-    
-    
-    
-    body.dark-mode .deposit-protection-info {
-      background: #1b243a;
-      color: #fff;
-      box-shadow: 0 2px 8px 0 rgba(33,45,73,0.15);
-    }
-    .currency-filter-area {
-      max-width: 1000px;
-      margin: 0 auto 0 auto;
-      background: #f5f7fa;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px 0 rgba(33,45,73,0.05);
-      padding: 30px 0 14px 0;
-      margin-bottom: 24px;
-      transition: background 0.3s;
-    }
-    body.dark-mode .currency-filter-area {
-      background: #222e48;
-      box-shadow: 0 2px 12px 0 rgba(30,40,60,0.16);
-    }
-    .currency-filter strong { display: block; font-size: 1.13rem; margin-bottom: 10px; font-weight: 700; color: #222; letter-spacing: -0.01em;}
-    body.dark-mode .currency-filter strong { color: #d8e6ff !important; }
-    .currency-filter { margin-bottom: 0; padding: 0; border: none; border-radius: 12px; background: none; box-shadow: none; text-align: center; transition: background-color 0.3s, color 0.3s;}
-    .currency-filter label { display: inline-block; margin: 5px 8px; background: #f4f4f4; padding: 6px 12px; border-radius: 20px; border: 1px solid #ccc; cursor: pointer; font-size: 0.9rem; color: inherit; font-weight: 500; transition: background 0.19s, color 0.19s;}
-    .currency-filter label:hover, .currency-filter label:focus, .currency-filter label:active { background: #feecec; color: #e60012; border-color: #e60012; font-weight: 700;}
-    .currency-filter input { margin-right: 6px; }
-    .notice { font-size: 0.85rem; margin-top: 12px; color: #888; text-align: center;}
-    body.dark-mode .currency-filter label { background: #282f43; border-color: #777; color: #fff !important; }
-    body.dark-mode .currency-filter label:hover, body.dark-mode .currency-filter label:focus, body.dark-mode .currency-filter label:active { background: #e60012; color: #fff; border-color: #e60012; }
-    body.dark-mode .notice { color: #d4d6e3; }
-    .filter-wrap { width: 1000px; max-width: 100%; margin: 0 auto 10px auto; }
-    .filter-buttons, .category-buttons { margin-bottom: 20px; text-align: center; }
-    .filter-buttons button, .category-buttons button { background-color: #fff; color: #212d49; border: 2px solid #b4bfd7; padding: 8px 16px; margin: 0 5px; border-radius: 20px; cursor: pointer; font-size: 0.95rem; transition: background 0.22s, color 0.22s, border-color 0.18s; font-weight: 600;}
-    .filter-buttons button.active, .filter-buttons button:hover, .filter-buttons button:focus, .category-buttons button.active, .category-buttons button:hover, .category-buttons button:focus { background: #e60012; color: #fff; border: 2px solid #e60012;}
-    .filter-buttons button { min-width: 92px;}
-    .category-buttons button { min-width: 92px;}
-    .compare-main-btn { display: flex; align-items: center; justify-content: center; margin: 12px auto 20px auto; background: #212d49; color: #fff; border: none; border-radius: 24px; font-size: 1rem; padding: 7px 22px; font-weight: 500; box-shadow: 0 2px 8px rgba(33,45,73,0.09); cursor: pointer; transition: background 0.19s, box-shadow 0.18s, transform 0.17s; position: relative; gap: 7px;}
-    .compare-main-btn:active, .compare-main-btn.animated, .compare-main-btn:hover { background: #e60012; color: #fff; transform: scale(1.07); box-shadow: 0 4px 16px 0 rgba(230,0,18,0.14);}
-    .compare-plus-animate { animation: plusBlink 0.7s; }
-    @keyframes plusBlink { 0% { color: #212d49; text-shadow: 0 0 0 #e60012; transform: scale(1);} 40%  { color: #e60012; text-shadow: 0 0 16px #e60012,0 0 20px #fff; transform: scale(1.17);} 100% { color: #212d49; text-shadow: 0 0 0 #fff; transform: scale(1);}
-    }
-    .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px;}
-    @media (max-width: 1100px) { .container, .filter-wrap, .currency-filter-area, .deposit-protection-info { width: 98% !important; max-width: 98vw !important; } }
-    @media (max-width: 950px) { .product-grid { grid-template-columns: repeat(2,1fr); } }
-    @media (max-width: 650px) { .product-grid { grid-template-columns: 1fr; } }
-    .product-card { background: #fff; border: 1px solid #dcdcdc; border-radius: 14px; padding: 22px 18px 20px 18px; box-shadow: 0 3px 8px rgba(0,0,0,0.05); position: relative; transition: transform 0.22s cubic-bezier(.4,2,.7,1), box-shadow 0.22s; will-change: transform, box-shadow;}
-    .product-card:hover { transform: translateY(-7px) scale(1.025); box-shadow: 0 8px 24px 0 rgba(33,45,73,0.11); border-color: #e60012;}
-    body.dark-mode .product-card { background-color: #232a38; border-color: #36466c; color: #eee;}
-    .signup-links { margin-bottom: 10px; }
-    .signup-links a { display: inline-block; padding: 4px 10px; margin-right: 8px; border-radius: 20px; background-color: #f7f7f7; border: 1px solid #ccc; font-size: 0.8rem; text-decoration: none; color: #e60012; font-weight: 500; transition: background-color 0.3s; margin-bottom: 2px;}
-    .signup-links a:last-child { margin-right: 0; }
-    body.dark-mode .signup-links a { background-color: #333; border-color: #777; color: #ff8c8c;}
-    .product-name { font-size: 1.15rem; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; color: #212d49;}
-    body.dark-mode .product-name { color: #fff !important; }
-    .shield-icon { position: relative; cursor: pointer; margin-left: 4px; }
-    .shield-icon::after { content: attr(data-tooltip); position: absolute; bottom: 130%; left: 50%; transform: translateX(-50%); background-color: #333; color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 10;}
-    .shield-icon:hover::after { opacity: 1; }
-    .compare-checkbox { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border: 2px solid #212d49; border-radius: 6px; position: absolute; top: 18px; right: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #212d49; background: #fff; transition: background-color 0.3s, color 0.3s; z-index: 2; text-align: center; font-weight: 700; box-shadow: 0 2px 8px 0 rgba(33,45,73,0.08);}
-    .compare-checkbox::before { content: "+"; display: block; transition: color 0.23s; }
-    .compare-checkbox:checked { background-color: #e60012; color: #fff; border-color: #e60012;}
-    .compare-checkbox:checked::before { content: "✓"; color: #fff; }
-    .compare-checkbox.animate { animation: plusBlink 0.7s; }
-    .recommendation { font-size: 0.96rem; margin-bottom: 12px; color: #555;}
-    body.dark-mode .recommendation { color: #f0dcdc;}
-    .toggle-btn { background-color: #212d49; border: none; color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 0.93rem; cursor: pointer; transition: background-color 0.3s;}
-    .toggle-btn:hover { background-color: #e60012; }
-    .details { display: none; font-size: 0.92rem; line-height: 1.65; margin-top: 12px; color: #333; border-top: 1px solid #ddd; padding-top: 12px;}
-    body.dark-mode .details { border-color: #555; color: #eee;}
-    #compareArea {
-      position: relative;
+      color: #18355f;
+      margin: 36px 0 10px 0;
+      letter-spacing: 0.03em;
       display: none;
-      background: #eef3fa;
-      border-radius: 16px;
-      margin: 20px auto 30px auto;
-      padding: 40px 32px 36px 32px;
-      min-height: 250px;
-      max-width: 1000px;
-      overflow-x: auto;
-      box-shadow: 0 4px 18px 0 rgba(33,45,73,0.08);
-      border: 1.5px solid #dde4f1;
+    }
+    .compare-title.active { display: block; }
+
+    /* 비교하기 영역 */
+    #compareArea {
+      position: relative; display: none; background: #f5faff;
+      border-radius: 22px;
+      box-shadow: 0 4px 24px 0 rgba(33,45,73,0.11);
+      border: 2.5px solid #c9e1f7;
+      max-width: 1100px;
+      margin: 0 auto 32px auto; padding: 38px 26px 16px 26px;
+      min-height: 90px; overflow-x: auto; z-index: 5;
       transition: background 0.25s, border 0.25s;
     }
-    #compareArea.active { display: block; }
-    .close-compare {
-      position: absolute;
-      top: 12px; right: 24px;
+    #compareArea.active { display: block;}
+    .close-compare { position: absolute; top: 10px; right: 24px;
       background: none; border: none; font-size: 1.6rem;
-      cursor: pointer; color: #888; z-index: 10;
-      line-height: 1; font-weight: 900; padding: 2px;
-      transition: color 0.19s;
-    }
+      cursor: pointer; color: #888; z-index: 10; line-height: 1; font-weight: 900; padding: 2px;
+      transition: color 0.19s;}
     .close-compare:hover { color: #e60012; background: #f8eaea;}
-    table.compare-table {
-      width: 100%;
-      min-width: 500px;
-      max-width: 920px;
+    table.compare-table { width: 100%; min-width: 600px; max-width: 900px; margin: 0 auto; border-collapse: separate; border-spacing: 0;
+      background: #fff; border-radius: 18px; box-shadow: none; overflow: visible; margin-bottom: 14px; table-layout: fixed;}
+    table.compare-table th, table.compare-table td {
+      border: 1px solid #b4bfd7; padding: 12px 7px; text-align: center;
+      background: #fff; white-space: pre-line; line-height: 1.6; font-size: 1em; vertical-align: middle;
+      min-width: 80px; transition: background 0.22s;
+    }
+    table.compare-table th {
+      background: #eaf2fb;
+      color: #19315e;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+    }
+    table.compare-table th:first-child, table.compare-table td:first-child {
+      width: 120px !important; min-width: 120px !important; max-width: 120px !important;
+      background: #eef6fb; text-align: center;
+    }
+    table.compare-table td:nth-child(3) { background: #f8fbff !important; }
+    .compare-product-header {
+      font-weight: bold;
+      font-size: 1.09rem;
+      letter-spacing: 0.01em;
+      color: #47649c;
+      padding-bottom: 5px;
+    }
+    .compare-limit-msg { color: #e60012; font-size: 1.09rem; margin: 10px auto 0 auto; text-align: center; font-weight: 700; background: none;}
+    /* 카드영역 */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 38px 28px;
+      min-height: 355px;
+      width:100%;
       margin: 0 auto;
-      border-collapse: separate;
-      border-spacing: 0;
-      background: #fafdff;
-      border-radius: 10px;
-      box-shadow: 0 2px 12px 0 rgba(33,45,73,0.07);
-      overflow: visible;
-      margin-bottom: 18px;
-      table-layout: fixed;
     }
-    table.compare-table th,
-    table.compare-table td {
-      border: 1px solid #b4bfd7;
-      padding: 11px 10px;
+    @media (max-width: 1200px) {
+      .container-main { width:97vw;}
+      .side-banner-fixed { display: none !important;}
+    }
+    @media (max-width: 900px) {
+      .product-grid { grid-template-columns:repeat(2,1fr);}
+    }
+    @media (max-width: 650px) {
+      .product-grid { grid-template-columns:1fr;}
+    }
+    .product-card {
+      position: relative; border: 1.5px solid #eee; border-radius: 18px;
+      overflow: hidden; background: #fff;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      min-height:355px; width:100%;
+      display: flex; flex-direction:column; justify-content: flex-start;
+      transition: transform 0.23s, box-shadow 0.23s, border 0.25s;
+      max-width:340px; margin:0 auto;
+      outline: none;
+    }
+    .product-card.selected {
+      border: 2.2px solid #e60012 !important;
+      box-shadow: 0 0 0 4px #fde4e9;
+      animation: shineBorder 0.55s;
+      background: linear-gradient(135deg, #fff 65%, #ffe4ea 100%);
+    }
+    @keyframes shineBorder {
+      0% { box-shadow: 0 0 0 0 #fde4e9; }
+      40% { box-shadow: 0 0 0 8px #fde4e9; }
+      100% { box-shadow: 0 0 0 4px #fde4e9; }
+    }
+    .product-card:focus { box-shadow:0 0 0 3px #e60012,0 4px 14px rgba(0,0,0,0.10);}
+    .product-card:hover { transform:translateY(-7px); box-shadow:0 10px 28px 0 rgba(33,45,73,0.13);}
+    .product-img-wrapper {position: relative; width:100%; height:178px; overflow:hidden; background:#f8f9fa;}
+    .product-img {width: 100%; height: 100%; object-fit: cover; display: block;}
+    .card-hover-overlay {
+      position:absolute;top:0;left:0;right:0;bottom:0;
+      background:rgba(0,0,0,0.63);color:#fff;font-size:1.05rem;
+      text-align:center;opacity:0;transition:opacity .33s cubic-bezier(.43,.44,.55,1.05);
+      pointer-events:none;z-index:4;display:flex;align-items:center;justify-content:center;
+      padding:0 16px;line-height:1.7;word-break:keep-all;
+    }
+    .product-card:hover .card-hover-overlay,
+    .product-card:focus .card-hover-overlay.card-tts-on {opacity:1;pointer-events:auto;}
+    .badge {position: absolute; top: 13px; left: 13px; background: #fff; border: 1px solid #e60012; color: #e60012; font-weight: 700; font-size: 0.85rem; padding: 5px 13px; border-radius: 14px; z-index: 3;}
+    .compare-checkbox {
+      -webkit-appearance: none; appearance: none;
+      width: 30px; height: 30px; border: 2.2px solid #e60012;
+      border-radius: 50%; position: absolute; top: 14px; right: 15px;
+      background: #fff; color: #e60012; font-size: 20px; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10; box-shadow: 0 1px 7px 0 rgba(230,0,18,0.10);
+      transition: background 0.23s, color 0.23s, border-color 0.18s;
       text-align: center;
+    }
+    .compare-checkbox::before { content: "+"; display: block; transition: color 0.22s;}
+    .compare-checkbox:checked {background-color: #e60012; color: #fff; border-color: #e60012;}
+    .compare-checkbox:checked::before { content: "✓"; color: #fff;}
+    .compare-checkbox:disabled { opacity: 0.4; cursor: not-allowed;}
+    .compare-checkbox.animated {
+      animation: popCheckbox 0.45s cubic-bezier(.4,2,.5,.97);
+      box-shadow: 0 0 0 5px #ffe4e6;
+    }
+    @keyframes popCheckbox {
+      0% { transform: scale(1);}
+      30% { transform: scale(1.3); background: #feecec;}
+      70% { transform: scale(0.9);}
+      100% { transform: scale(1);}
+    }
+    .product-info {
+      padding: 23px 10px 8px 10px; background: #fff; text-align: center; flex:1 1 auto;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    }
+    .product-name {
+      font-weight: 900; font-size: 1.27rem; margin-bottom: 9px; color: #212d49;
+      display: flex; justify-content: center; align-items: center; gap: 7px; line-height: 1.25;
+    }
+    .product-tags {margin-bottom: 8px;}
+    .product-tags span {display: inline-block; font-size: 0.93rem; margin: 0 5px 5px 0; color: #5b5c5f; background: #f4f5fa; border-radius: 8px; padding: 3px 11px; font-weight: 600;}
+    .shield-icon {margin-left:4px;}
+    .product-currency {
+      min-height: 48px; margin-top: 6px; margin-bottom: 4px; font-size: 1.18rem; font-weight: 900;
+      color: #e60012; letter-spacing: 0.01em; line-height: 1.22; white-space: pre-line;
+    }
+    /* ---- 오른쪽 고정 배너 ---- */
+    .side-banner-fixed {
+      position: absolute;
+      left: 53%;
+      margin-left: 465px;
+      width: 190px;
+      min-width: 140px;
+      z-index: 99;
       background: #fff;
-      word-break: break-word;
-      white-space: pre-line;
-      line-height: 1.7;
-      font-size: 1.03em;
-      vertical-align: middle;
-      min-width: 80px;
-      transition: background 0.22s;
-    }
-    /* 🔥 첫 열(항목명)만 120px 고정 */
-    table.compare-table th:first-child,
-    table.compare-table td:first-child {
-      width: 120px !important;
-      min-width: 120px !important;
-      max-width: 120px !important;
-      white-space: normal !important;
-      word-break: break-all !important;
-      background: #f1f6fb;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px 0 rgba(33,45,73,0.09);
+      padding: 20px 10px 8px 10px;
+      display: flex; flex-direction: column;
+      align-items: center;
       text-align: center;
+      transition: left 0.2s, top 0.2s;
     }
-    
-    table.compare-table th:nth-child(2) {
-      background: #c7daf3 !important;
+    .side-banner-title {
+      font-size: 1.2em; font-weight: 900;
+      margin-bottom: 15px; color: #212d49;
     }
-    table.compare-table th:nth-child(4) {
-      background: #c7daf3 !important;
+    .side-banner-currency-list {
+      display: flex; flex-direction: column; gap: 10px; width: 100%; align-items: center; margin-bottom: 7px;
     }
-    
-    /* 두 번째 상품 열 옅은 색 */
-    table.compare-table th:nth-child(3) {
-      background: #c7daf3 !important;
-    }
-    table.compare-table td:nth-child(3) {
-      background: #f8fbff !important;
-    }
-    table.compare-table th:not(:first-child), table.compare-table td:not(:first-child) {
-      text-align: center;
-      font-size: 1em;
-    }
-    table.compare-table colgroup col:not(:first-child) {
-      width: auto !important;
-    }
-    @media (max-width: 1000px) {
-      #compareArea, table.compare-table {
-        max-width: 99vw;
-        min-width: 380px;
-      }
-    }
-    body.dark-mode #compareArea { background: #232a38; border-color: #283d70; }
-    body.dark-mode table.compare-table { background: #232a38; }
-    body.dark-mode table.compare-table th,
-    body.dark-mode table.compare-table td {
-      background: #222e4c; color: #fff; border-color: #374567;
-    }
-    body.dark-mode table.compare-table th:first-child,
-    body.dark-mode table.compare-table td:first-child {
-      background: #263153; color: #ffdddd;
-    }
-    body.dark-mode table.compare-table th:not(:first-child) {
-      background: #21262c; color: #ffcccc;
-    }
-    .compare-message {
-      color: #e60012;
-      font-size: 1.02rem;
-      margin-top: 8px;
-      text-align: center;
-      opacity: 1;
-      transition: opacity 0.35s;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      min-height: 22px;
-      margin-bottom: 0;
-    }
-    .compare-message.hidden { opacity: 0; min-height: 0; }
-    .compare-limit-msg {
-      color: #e60012;
-      font-size: 1.13rem;
-      margin: 28px auto 10px auto;
-      text-align: center;
-      font-weight: 700;
-      background: none;
-      letter-spacing: 0.01em;
+    .side-banner-currency-list label {
       width: 100%;
-      display: block;
+      background: #f7f8fb;
+      border-radius: 10px;
+      padding: 4px 0;
+      margin: 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.93em; font-weight: 700; color: #212d49;
+      border: 1px solid #e7e7e7;
+      transition: background 0.17s;
+      cursor: pointer;
     }
-    .no-products-msg {
-      font-size: 1.2rem;
-      color: #b32121;
+    .side-banner-currency-list label:hover, .side-banner-currency-list input:checked+label {
+      background: #feecec;
+      color: #e60012;
+      border-color: #e60012;
+    }
+    .side-banner-currency-list input[type="checkbox"] {
+      accent-color: #e60012;
+      width: 15px; height: 15px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    .side-banner-notice {
+      font-size: 0.82em;
+      color: #969fb7;
+      margin-top: 2px;
+      margin-bottom: 6px;
       text-align: center;
-      margin-top: 40px;
-      font-weight: 600;
-      padding: 35px 0 10px 0;
-      letter-spacing: -0.01em;
     }
-    .checkbox-limit-msg {
-      display: inline-block;
-      position: absolute;
-      left: 120%;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #e60012;
-      color: #fff;
-      font-size: 0.93rem;
-      padding: 6px 13px 6px 12px;
-      border-radius: 8px;
-      white-space: nowrap;
-      z-index: 20;
-      font-weight: 600;
-      opacity: 0;
-      animation: showMsg 1.5s forwards;
-      box-shadow: 0 3px 10px rgba(230,0,18,0.12);
-      pointer-events: none;
+    .compare-main-btn {
+      width:100%; font-size:0.97rem; background:#000; color:#fff; font-weight:900;
+      margin:7px 0 20px 0; padding: 7px 0;
+      border-radius: 8px; border:none; cursor:pointer; letter-spacing: 0.02em;
+      display: block; box-shadow:0 2px 8px 0 rgba(0,0,0,0.08); transition: background 0.14s, transform 0.12s; text-align:center;
     }
-    @keyframes showMsg {
-      0% { opacity: 0;}
-      15% { opacity: 1;}
-      80% { opacity: 1;}
-      100% { opacity: 0;}
-    }
-    .checkbox-limit-msg::after {
-      content: '';
-      position: absolute;
-      right: 100%; top: 50%;
-      margin-top: -7px;
-      border-width: 7px;
-      border-style: solid;
-      border-color: transparent #e60012 transparent transparent;
-    }
+    .compare-main-btn:active, .compare-main-btn:hover {background:#e60012;color:#fff;transform:scale(1.04);}
+    /* -------- 토글버튼 (접근성) -------- */
     .accessibility-controls {
       position: fixed;
-      top: 50%; right: 64px;
+      top: 46%; right: 54px;
       transform: translateY(-50%);
-      display: flex; flex-direction: column; gap: 12px;
+      display: flex; flex-direction: column; gap: 13px;
       z-index: 2000; background: none;
     }
     .accessibility-controls button {
-      padding: 10px 0; width: 40px; border: none; border-radius: 50%;
-      background-color: #212d49; color: #fff; font-size: 1rem;
-      cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      padding: 10px 0; width: 44px; border: none; border-radius: 50%;
+      background-color: #000000; color: #fff; font-size: 1.12rem;
+      cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.09);
       transition: background 0.2s, color 0.2s;
       margin-bottom: 0;
       position: relative;
       outline: none;
+      display: flex; align-items: center; justify-content: center;
     }
     .accessibility-controls button:hover { background-color: #e60012; }
     .accessibility-tooltip {
       visibility: hidden; opacity: 0;
       position: absolute; right: 110%; top: 50%;
       transform: translateY(-50%);
-      background: #212d49;
+      background: #000000;
       color: #fff;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       padding: 7px 14px;
       border-radius: 10px;
       white-space: nowrap;
       z-index: 10;
-      box-shadow: 0 2px 14px 0 rgba(25,60,120,0.11);
+      box-shadow: 0 2px 14px 0 rgba(25,60,120,0.10);
       pointer-events: none;
       transition: opacity 0.3s, visibility 0.3s;
       font-weight: 500;
       letter-spacing: 0.01em;
+      left: auto;
     }
     .accessibility-controls button:hover .accessibility-tooltip,
     .accessibility-controls button:focus .accessibility-tooltip {
@@ -366,310 +296,327 @@
       border-style: solid;
       border-color: transparent transparent transparent #212d49;
     }
-    .product-name { text-decoration: none; }
-    body.dark-mode a.product-name { color: #fff; text-decoration: none; }
+    /* 다크모드 - 비교표와 선택 강조색 */
+    body.dark-mode { background:#1d202a; color:#e6e6e6;}
+    body.dark-mode .container-main { color: #fff;}
+    body.dark-mode .product-card { background: #2a2e3c; color: #eee; border-color: #3e4763;}
+    body.dark-mode .product-card.selected { background: linear-gradient(135deg,#222741 65%,#402a3d 100%);}
+    body.dark-mode .product-info { background: #2a2e3c;}
+    body.dark-mode .side-banner-fixed {background: #222742; color: #fff;}
+    body.dark-mode .side-banner-title {color:#ffe4e4;}
+    body.dark-mode .side-banner-currency-list label { background:#27314c; color: #fff; border-color: #334;}
+    body.dark-mode .side-banner-currency-list label:hover, body.dark-mode .side-banner-currency-list input:checked+label { background:#e60012; color:#fff; border-color:#e60012;}
+    body.dark-mode .compare-main-btn { background:#fff; color:#e60012;}
+    body.dark-mode .product-name {color: #fff;}
+    body.dark-mode .compare-title {color:#ffe5e5;}
+    body.dark-mode table.compare-table th, 
+    body.dark-mode table.compare-table td { background:#232a3a !important; color:#fff !important; border-color: #556080;}
+    body.dark-mode table.compare-table th:first-child,
+    body.dark-mode table.compare-table td:first-child {background:#2c3142 !important; color: #fff;}
+    body.dark-mode .compare-product-header {color:#ffe5e5;}
   </style>
-<!-- --------------------------------- 사전CSS --------------------------------- -->    
-    <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
-    <!-- -------------------------------------------------------------------------- -->
-  
 </head>
 <body>
-  <div th:replace="~{fragments/header2 :: header}"></div>
+  <!-- 오른쪽 토글버튼 메뉴 -->
   <div class="accessibility-controls">
     <button onclick="decreaseFontSize()" title="글자 축소"><span aria-hidden="true">A−</span><span class="accessibility-tooltip">글자 축소</span></button>
     <button onclick="increaseFontSize()" title="글자 확대"><span aria-hidden="true">A+</span><span class="accessibility-tooltip">글자 확대</span></button>
-    <button id="ttsBtn" onclick="toggleTTS()" title="텍스트 읽기"><span aria-hidden="true">🔊</span><span class="accessibility-tooltip">텍스트 읽기</span></button>
-    <button id="soundModeBtn" onclick="toggleSoundMode()" title="상품 자동 소리모드">
-      <span aria-hidden="true" id="soundModeIcon">🔈</span>
-      <span class="accessibility-tooltip">상품 위에 마우스를 올리면 소리 안내</span>
-    </button>
+    <button id="ttsBtn" onclick="toggleTTS()" title="텍스트 읽기"><span aria-hidden="true">🔊</span><span class="accessibility-tooltip">전체 안내</span></button>
+    <button id="soundModeBtn" onclick="toggleSoundMode()" title="상품 소리안내"><span aria-hidden="true" id="soundModeIcon">🔈</span><span class="accessibility-tooltip">상품별 안내</span></button>
     <button id="keyboardModeBtn" onclick="toggleKeyboardMode()" title="키보드 모드">
       <span aria-hidden="true" id="keyboardModeIcon">⌨️</span>
-      <span class="accessibility-tooltip">키보드로 상품 이동/선택</span>
+      <span class="accessibility-tooltip">키보드모드</span>
     </button>
     <button id="darkModeBtn" onclick="toggleDarkMode()" title="다크/고대비">
       <span id="darkModeIcon" aria-hidden="true">🌙</span>
-      <span class="accessibility-tooltip">다크/고대비</span>
+      <span class="accessibility-tooltip">다크모드</span>
     </button>
   </div>
-  <div class="container2">
-    <h2>외화 금융상품 리스트</h2>
-    <div class="deposit-protection-info">
-      <span style="color:#3752a4; margin-right:7px;">🛡️</span> 예금자보호 대상 금융상품임을 의미합니다.
+  <div class="container-main">
+    <div class="main-title">BNK 외화예금 상품입니다.</div>
+    <div class="filter-buttons">
+      <button class="active" data-type="all">전체</button>
+      <button data-type="정기예금">정기예금</button>
+      <button data-type="적금">적금</button>
+      <button data-type="입출금예금">입출금</button>
+      <button data-type="복합형">복합형</button>
     </div>
-    <div class="currency-filter-area">
-      <div class="currency-filter">
-        <strong>가입할 통화를 선택하세요.</strong>
-        <label><input type="checkbox" value="USD"> 미국달러화(USD)</label>
-        <label><input type="checkbox" value="JPY"> 일본엔화(JPY)</label>
-        <label><input type="checkbox" value="EUR"> 유로화(EUR)</label>
-        <label><input type="checkbox" value="AUD"> 호주달러화(AUD)</label>
-        <label><input type="checkbox" value="GBP"> 영국파운드화(GBP)</label>
-        <label><input type="checkbox" value="CHF"> 스위스프랑화(CHF)</label>
-        <label><input type="checkbox" value="CAD"> 캐나다달러화(CAD)</label>
-        <label><input type="checkbox" value="CNY"> 중국위안화(CNY)</label>
-        <div class="notice">* 그 외 통화는 영업점 개별 문의 바랍니다.</div>
-      </div>
+    <div class="category-buttons">
+      <button data-cat="study">🎓 유학</button>
+      <button data-cat="immigration">🛂 이민</button>
+      <button data-cat="travel">✈️ 여행</button>
+      <button data-cat="investment">💹 투자</button>
     </div>
-    <div class="filter-wrap">
-      <div class="filter-buttons">
-        <button data-type="all" class="active" onclick="toggleProductType('all', this)">전체</button>
-        <button data-type="정기예금" onclick="toggleProductType('정기예금', this)">정기예금</button>
-        <button data-type="적금" onclick="toggleProductType('적금', this)">적금</button>
-        <button data-type="입출금예금" onclick="toggleProductType('입출금예금', this)">입출금예금</button>
-        <button data-type="복합형" onclick="toggleProductType('복합형', this)">복합형</button>
-      </div>
-      <div class="category-buttons">
-        <button data-cat="study" onclick="toggleCategory('study', this)">🎓 유학</button>
-        <button data-cat="immigration" onclick="toggleCategory('immigration', this)">🛂 이민</button>
-        <button data-cat="travel" onclick="toggleCategory('travel', this)">✈️ 여행</button>
-        <button data-cat="investment" onclick="toggleCategory('investment', this)">💹 투자</button>
-      </div>
-      <button id="mainCompareBtn" class="compare-main-btn" type="button">
-        <span id="mainComparePlus" style="font-size:1.4em;line-height:0.9;">+</span>
-        비교하기
-      </button>
-    </div>
+    <!-- 비교 타이틀 -->
+    <div id="compareTitle" class="compare-title">상품 비교</div>
+    <!-- 비교하기 영역 -->
     <div id="compareArea">
       <button class="close-compare" onclick="clearCompare()" title="비교 닫기">&times;</button>
-      <div class="compare-message hidden" id="compareMsg"></div>
       <table class="compare-table" id="compareTable"></table>
       <div id="compareLimitMsg" class="compare-limit-msg" style="display:none;">상품 비교는 최대 3개까지만 가능합니다.</div>
     </div>
     <div class="product-grid" id="productGrid"></div>
-    <div id="noProductsMsg" class="no-products-msg" style="display:none;">해당되는 상품이 없습니다.</div>
   </div>
-  <!-- --------------------------------- 사전버튼 --------------------------------- -->
-    <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
-    <!-- -------------------------------------------------------------------------- -->
-  <div th:replace="~{fragments/footer :: footer}"></div>
+  <!-- 오른쪽 고정 광고/필터/비교 배너 -->
+  <div class="side-banner-fixed" id="sideBanner">
+    <div class="side-banner-title">가입할 통화를<br>선택하세요.</div>
+    <div class="side-banner-currency-list" id="currencyList">
+      <label><input type="checkbox" value="USD"> <b>미국달러화(USD)</b></label>
+      <label><input type="checkbox" value="JPY"> <b>일본엔화(JPY)</b></label>
+      <label><input type="checkbox" value="EUR"> <b>유로화(EUR)</b></label>
+      <label><input type="checkbox" value="AUD"> <b>호주달러화(AUD)</b></label>
+      <label><input type="checkbox" value="GBP"> <b>영국파운드화(GBP)</b></label>
+      <label><input type="checkbox" value="CHF"> <b>스위스프랑화(CHF)</b></label>
+      <label><input type="checkbox" value="CAD"> <b>캐나다달러화(CAD)</b></label>
+      <label><input type="checkbox" value="CNY"> <b>중국위안화(CNY)</b></label>
+    </div>
+    <div class="side-banner-notice">
+      * 그 외 통화는 영업점<br>개별 문의 바랍니다.
+    </div>
+    <button class="compare-main-btn" id="mainCompareBtn" style="margin-top:10px;">+ 상품 비교하기</button>
+  </div>
   <script>
+    // 상품 데이터
     const products = [
-      { pno: "P001", name: "꿈이룸 외화자유적금", type: "적금", description: "자동이체로 외화 목돈을 차곡차곡 모을 수 있는 적금", period: "12개월", currencies: ["USD"], join: ["영업점 가입"], categories: ["study"] },
-      { pno: "P002", name: "BNK모아드림외화적금", type: "적금", description: "짧은 기간에도 꾸준히 외화를 모을 수 있는 적금", period: "1~12개월", currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"], categories: ["study"] },
-      { pno: "P003", name: "BNK UP & UP 외화정기예금", type: "정기예금", description: "예치기간 따라 금리가 올라가는 안정형 외화 예금", period: "1년", currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["investment"] },
-      { pno: "P006", name: "외화정기예금", type: "정기예금", description: "가장 높은 금리를 원하고 장기 예치가 가능한 분께 적합", period: "1개월~3년", currencies: ["USD", "JPY", "GBP", "CHF", "EUR", "AUD", "CAD"], join: ["영업점 가입", "인터넷 가입"], categories: ["investment"] },
-      { pno: "P004", name: "업앤업 외화MMDA", type: "입출금예금", description: "하루만 맡겨도 이자가 쌓이는 유동성 높은 외화예금", period: "제한 없음", currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["travel"] },
-      { pno: "P007", name: "외화당좌예금", type: "입출금예금", description: "외화수표 발행이 필요한 기업 고객 맞춤 상품", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF"], join: ["영업점 가입"], categories: ["immigration"] },
-      { pno: "P008", name: "외화보통예금", type: "입출금예금", description: "외화를 자주 입출금하는 개인 고객 맞춤 상품", period: "제한 없음", currencies: ["USD", "JPY", "EUR", "GBP", "CHF", "CAD", "AUD", "CNY"], join: ["영업점 가입"], categories: ["immigration"] },
-      { pno: "P005", name: "EASY 환테크 듀얼통장", type: "복합형", description: "환율 시세 걱정 없이 자동으로 외화를 사고팔고 싶은 고객 맞춤 상품", period: "제한 없음", currencies: ["USD"], join: ["영업점 가입"], categories: ["travel"] }
+      { name: "꿈이룸 외화자유적금", type: "적금", description: "외화 자동이체로\n목돈 마련을 시작하세요!", tags: ["#자동이체", "#목돈 마련"], currencies: ["USD"], join: ["영업점 가입"], categories: ["study"], img: "img/main/m1.png" },
+      { name: "BNK모아드림외화적금", type: "적금", description: "짧은 기간에도\n꾸준히 외화를 모으세요.", tags: ["#환테크", "#단기저축"], currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"], categories: ["study"], img: "img/main/m3.png" },
+      { name: "BNK UP & UP 외화정기예금", type: "정기예금", description: "예치기간이 늘수록\n금리도 UP!", tags: ["#정기예금", "#금리상승"], currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["investment"], img: "img/main/m4.png" },
+      { name: "업앤업 외화MMDA", type: "입출금예금", description: "하루만 맡겨도\n이자가 쌓여요.", tags: ["#입출금", "#유동성"], currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["travel"], img: "img/main/m2.png" },
+      { name: "외화정기예금", type: "정기예금", description: "최고 금리, 장기 예치에 적합!", tags: ["#장기예치", "#최고금리"], currencies: ["USD", "JPY", "GBP", "CHF", "EUR", "AUD", "CAD"], join: ["영업점 가입", "인터넷 가입"], categories: ["investment"], img: "img/main/m6.png" },
+      { name: "외화보통예금", type: "입출금예금", description: "외화를 자주\n입출금하는 고객을 위해!", tags: ["#자유입출금", "#개인맞춤"], currencies: ["USD", "JPY", "EUR", "GBP", "CHF", "CAD", "AUD", "CNY"], join: ["영업점 가입"], categories: ["immigration"], img: "img/main/m8.png" },
+      { name: "BNK EASY 환테크 듀얼통장", type: "복합형", description: "환율 걱정 없이\n자동환전/매매까지!", tags: ["#환테크", "#자동매매"], currencies: ["USD"], join: ["영업점 가입"], categories: ["travel"], img: "img/main/m3.png" },
+      { name: "BNK모아드림 외화정기적금", type: "적금", description: "원하는 기간에 맞춰\n차곡차곡 목돈 준비!", tags: ["#목돈모으기", "#정기적금"], currencies: ["USD"], join: ["영업점 가입"], categories: ["investment"], img: "img/main/m5.png" }
     ];
-    let compareList = [];
-    let currentType = 'all', currentCat = '';
+
+    // 접근성/상태 변수
     let currentFontSize = 16;
-    let compareMsgTimeout = null, ttsUtter, isSpeaking = false;
-    let soundMode = false, lastSpokenIdx = -1;
-    let keyboardMode = false, keyboardIdx = 0;
+    let soundMode = false;
+    let keyboardMode = false;
+    let isSpeaking = false;
+    let ttsUtter;
+
+    // 현재 필터
     let selectedType = 'all';
     let selectedCategory = '';
+    let selectedCurrencies = ['USD'];
 
-    function toggleProductType(type, btn) {
-      if(selectedType === type) {
-        selectedType = 'all';
-        document.querySelectorAll('.filter-buttons button').forEach(b=>b.classList.remove('active'));
-        document.querySelector('.filter-buttons button[data-type="all"]').classList.add('active');
-      } else {
-        selectedType = type;
-        document.querySelectorAll('.filter-buttons button').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-      }
-      renderProducts();
-    }
-    function toggleCategory(cat, btn) {
-      if(selectedCategory === cat) {
-        selectedCategory = '';
-        btn.classList.remove('active');
-      } else {
-        selectedCategory = cat;
-        document.querySelectorAll('.category-buttons button').forEach(b=>b.classList.remove('active'));
-        btn.classList.add('active');
-      }
-      renderProducts();
-    }
+    // 비교함 상태
+    let compareList = [];
+    let cardElements = [];
+    let cardFocusIdx = 0;
 
-    function renderProducts() {
-      const sel = Array.from(document.querySelectorAll('.currency-filter input:checked')).map(cb => cb.value);
-      const grid = document.getElementById('productGrid');
-      const noMsg = document.getElementById('noProductsMsg');
-      grid.innerHTML = '';
-      let list = products.filter(p=>{
-        let mt = (selectedType==='all'||p.type===selectedType);
-        let mc = (sel.length===0||p.currencies.some(c=>sel.includes(c)));
-        let catOk = (!selectedCategory||p.categories.includes(selectedCategory));
-        return mt && mc && catOk;
+    // 통화선택 체크박스 이벤트 연결
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.side-banner-currency-list input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', function() {
+          selectedCurrencies = Array.from(document.querySelectorAll('.side-banner-currency-list input[type="checkbox"]:checked')).map(x=>x.value);
+          renderProducts();
+        });
       });
-      if(list.length === 0) {
-        noMsg.style.display = "block";
-      } else {
-        noMsg.style.display = "none";
-      }
-      window.__productCardList = [];
-      list.forEach((p,idx)=>{
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.setAttribute('tabindex','0');
-        card.innerHTML = `
-          <input type="checkbox" class="compare-checkbox" title="비교함에 추가" data-name="${p.name}" ${compareList.some(c=>c.name===p.name)?"checked":""} ${(compareList.length>=3&&!compareList.some(c=>c.name===p.name))?"disabled":""} style="position:absolute;">
-          <div class="signup-links">${p.join.map(j => `<a href="#">${j}</a>`).join(' ')}</div>
-          <a href="productDetail?pno=${encodeURIComponent(p.pno)}" class="product-name">
-          ${p.name}
-          <span class="shield-icon" data-tooltip="예금자보호 대상 금융상품입니다.">🛡️</span>
-          </a>
-          <div class="recommendation">${p.description}</div>
-          <button class="toggle-btn" onclick="toggleDetails(this)">자세히 보기</button>
-          <div class="details">
-            • 가입기간: ${p.period}<br>
-            • 대상통화: ${p.currencies.map(currencyLabel).join(', ')}
-          </div>
-        `;
-        grid.appendChild(card);
-        card.addEventListener('mouseenter', function () {
-          if(soundMode) {
-            if (lastSpokenIdx === idx) return;
-            lastSpokenIdx = idx;
-            let txt = `${p.name}. 추천: ${p.description}. 가입기간: ${p.period}. 대상통화: ${p.currencies.map(currencyLabel).join(', ')}.`;
-            try { speechSynthesis.cancel(); } catch(e){}
-            let utter = new SpeechSynthesisUtterance(txt);
-            utter.lang = 'ko-KR';
-            utter.onend = ()=>{ lastSpokenIdx = -1; };
-            speechSynthesis.speak(utter);
-          }
+
+      document.querySelectorAll('.filter-buttons button').forEach(btn=>{
+        btn.addEventListener('click', function(){
+          document.querySelectorAll('.filter-buttons button').forEach(b=>b.classList.remove('active'));
+          this.classList.add('active');
+          selectedType = this.getAttribute('data-type');
+          renderProducts();
         });
-        card.addEventListener('mouseleave', function () {
-          if(soundMode) {
-            speechSynthesis.cancel();
-            lastSpokenIdx = -1;
-          }
-        });
-        const cbox = card.querySelector('.compare-checkbox');
-        cbox.addEventListener('change', function(e){
-          const prod = products.find(x=>x.name===this.dataset.name);
-          if(this.checked) {
-            if(compareList.length<3) {
-              compareList.push(prod);
-              this.classList.add('animate');
-              setTimeout(()=>this.classList.remove('animate'), 700);
-              updateCompare();
-            } else {
-              this.checked = false;
-              this.parentNode.style.position = 'relative';
-              const oldMsg = this.parentNode.querySelector('.checkbox-limit-msg');
-              if(oldMsg) oldMsg.remove();
-              const tip = document.createElement('span');
-              tip.className = 'checkbox-limit-msg';
-              tip.innerText = "비교는 3개까지만!";
-              this.parentNode.insertBefore(tip, this.nextSibling);
-              setTimeout(()=>{ if(tip.parentNode) tip.remove(); }, 1500);
-              return;
-            }
+      });
+      document.querySelectorAll('.category-buttons button').forEach(btn=>{
+        btn.addEventListener('click', function(){
+          document.querySelectorAll('.category-buttons button').forEach(b=>b.classList.remove('active'));
+          if(selectedCategory===this.getAttribute('data-cat')) {
+            selectedCategory='';
           } else {
-            compareList = compareList.filter(x=>x.name!==prod.name);
-            updateCompare();
+            selectedCategory = this.getAttribute('data-cat');
+            this.classList.add('active');
           }
           renderProducts();
         });
-        window.__productCardList.push(card);
       });
-      updateCompare();
-      if(keyboardMode && window.__productCardList.length > 0){
-        let idx = keyboardIdx;
-        if(idx < 0) idx = 0;
-        if(idx >= window.__productCardList.length) idx = window.__productCardList.length-1;
-        setTimeout(()=>{
-          window.__productCardList[idx].focus();
-          if(soundMode) announceProduct(idx);
-        }, 60);
-      }
-    }
-    function updateCompare() {
-      const area = document.getElementById('compareArea');
-      const table = document.getElementById('compareTable');
-      const msg = document.getElementById('compareMsg');
-      const limitMsg = document.getElementById('compareLimitMsg');
-      if(compareList.length === 0) {
-        area.classList.remove('active');
-        table.innerHTML = '';
-        msg.classList.add('hidden');
-        msg.textContent = '';
-        limitMsg.style.display = 'none';
-        return;
-      }
-      area.classList.add('active');
-      // colgroup: 첫 번째 열 고정(120px), 나머지는 auto
-      let html = `<colgroup>
-        <col style="width:210px; min-width:120px; max-width:120px;">
-        ${compareList.map(()=>'<col style="width:auto;">').join('')}
-      </colgroup>`;
-      html += `<tr><th></th>`;
-      compareList.forEach((p,i)=>html+=`<th>상품 ${i+1}</th>`);
-      html += `</tr>`;
-      const fields = [
-        { label:"상품명", key:"name" },
-        { label:"상품유형", key:"type" },
-        { label:"추천포인트", key:"description" },
-        { label:"가입기간", key:"period" },
-        { label:"대상통화", key:"currencies" },
-        { label:"가입방법", key:"join" }
-      ];
-      fields.forEach(f=>{
-        html += `<tr><th>${f.label}</th>`;
-        compareList.forEach((p, idx)=>{
-          let v = Array.isArray(p[f.key]) ? p[f.key].map(currencyLabel).join(', ') : p[f.key];
-          html += `<td style="word-break: break-word; white-space: pre-line;">${v}</td>`;
-        });
-        html += `</tr>`;
-      });
-      table.innerHTML = html;
 
-      if (compareList.length >= 3) {
-        limitMsg.style.display = 'block';
-      } else {
-        limitMsg.style.display = 'none';
+      document.getElementById('mainCompareBtn').onclick = function() {
+        if(compareList.length>0) {
+          showCompareArea();
+        }
+        animateAllCheckboxes();
+      };
+
+      renderProducts();
+      updateCompareArea();
+      updateDarkModeIcon();
+      adjustSideBannerPosition();
+    });
+
+    function renderProducts() {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      let list = products.filter((p, idx) => {
+        let okType = (selectedType==='all'||p.type===selectedType);
+        let okCat = (!selectedCategory||p.categories.includes(selectedCategory));
+        let okCur = (selectedCurrencies.length===0||p.currencies.some(c=>selectedCurrencies.includes(c)));
+        return okType && okCat && okCur;
+      });
+      cardElements = [];
+      list.forEach((p, idx)=>{
+        const card = document.createElement('div');
+        let checked = compareList.findIndex(x=>x.name===p.name)!==-1;
+        card.className = 'product-card'+(checked?' selected':'');
+        card.tabIndex = 0;
+        // 카드 본문
+        card.innerHTML = `
+          <div class="product-img-wrapper">
+            <img src="${p.img}" class="product-img" alt="${p.name}">
+            <div class="card-hover-overlay">${p.description.replace(/\n/g,'<br>')}</div>
+            <span class="badge">${p.join[0]}</span>
+            <input type="checkbox" class="compare-checkbox${checked ? ' animated' : ''}" title="비교함에 추가" ${checked?'checked':''} tabindex="0">
+          </div>
+          <div class="product-info">
+            <div class="product-name">${p.name} <span class="shield-icon" title="예금자보호 대상">🛡️</span></div>
+            <div class="product-tags">${p.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+            <div class="product-currency">${formatCurrencyList(p.currencies)}</div>
+          </div>
+        `;
+        // 비교함 +버튼 기능/애니메이션
+        let cb = card.querySelector('.compare-checkbox');
+        cb.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if(cb.checked) {
+            // 최대 3개 제한
+            if(compareList.length>=3) {
+              cb.checked = false;
+              showCompareLimitMsg();
+              return;
+            }
+            // 애니메이션 효과
+            cb.classList.remove('animated'); void cb.offsetWidth; cb.classList.add('animated');
+            compareList.push(p);
+          } else {
+            compareList = compareList.filter(x=>x.name!==p.name);
+          }
+          updateCompareArea();
+        });
+        // 소리 안내(접근성)
+        card.addEventListener('mouseenter', function(){
+          if(soundMode) playCardTTS(p.name, p.description.replace(/\n/g, ', '));
+        });
+        card.addEventListener('mouseleave', function(){
+          if(soundMode) stopTTS();
+        });
+        // 키보드 모드시 포커스/Space 키 선택
+        card.addEventListener('focus', function(){
+          if(keyboardMode) {
+            this.querySelector('.card-hover-overlay').classList.add('card-tts-on');
+            if(soundMode) playCardTTS(p.name, p.description.replace(/\n/g, ', '));
+          }
+        });
+        card.addEventListener('blur', function(){
+          if(keyboardMode) {
+            this.querySelector('.card-hover-overlay').classList.remove('card-tts-on');
+            stopTTS();
+          }
+        });
+        cardElements.push(card);
+        grid.appendChild(card);
+      });
+      if(keyboardMode && cardElements.length>0) {
+        cardElements[0].focus();
       }
-      msg.textContent = '';
-      msg.classList.add('hidden');
+      adjustSideBannerPosition();
+    }
+
+    // 모든 카드의 체크박스에 애니메이션 효과
+    function animateAllCheckboxes() {
+    	document.querySelectorAll('.compare-checkbox').forEach(cb => {
+    	      cb.classList.remove('animated');
+    	      void cb.offsetWidth; // 리플로우로 애니메이션 다시 적용
+    	      cb.classList.add('animated');
+    	    });
+    }
+
+    // 통화 줄바꿈 (4개 이하 한줄, 이상은 줄바꿈)
+    function formatCurrencyList(curArr) {
+      if(!curArr || curArr.length===0) return '';
+      let arr = curArr.map(c=>c.toUpperCase());
+      if(arr.length<=4) return `<span style="color:#e60012;">${arr.join(', ')}</span>`;
+      return `<span style="color:#e60012;">${arr.slice(0,4).join(', ')}<br>${arr.slice(4).join(', ')}</span>`;
+    }
+
+    // 비교 영역 표시/비활성화 & 타이틀
+    function showCompareArea() {
+      document.getElementById('compareArea').classList.add('active');
+      document.getElementById('compareTitle').classList.add('active');
+      renderCompareTable();
+    }
+    function updateCompareArea() {
+      const area = document.getElementById('compareArea');
+      const title = document.getElementById('compareTitle');
+      if(compareList.length===0) {
+        area.classList.remove('active');
+        title.classList.remove('active');
+      } else {
+        area.classList.add('active');
+        title.classList.add('active');
+        renderCompareTable();
+      }
+      renderProducts(); // 테두리 반영
     }
     function clearCompare() {
       compareList = [];
-      document.querySelectorAll('.compare-checkbox').forEach(cb=>cb.checked=false);
-      updateCompare();
-    }
-    document.addEventListener('DOMContentLoaded', ()=>{
-      document.getElementById('mainCompareBtn').addEventListener('click', ()=>{
-        document.querySelectorAll('.compare-checkbox').forEach(cb=>{
-          if(!cb.checked && !cb.disabled) {
-            cb.classList.add('compare-plus-animate');
-            setTimeout(()=>cb.classList.remove('compare-plus-animate'), 650);
-          }
-        });
-        const btn = document.getElementById('mainCompareBtn');
-        btn.classList.add('animated');
-        setTimeout(()=>btn.classList.remove('animated'), 450);
-      });
-      document.querySelectorAll('.currency-filter input').forEach(cb=>cb.addEventListener('change', renderProducts));
+      updateCompareArea();
       renderProducts();
-      updateDarkModeIcon();
-    });
-    function currencyLabel(c) {
-      const m = {
-        USD: "미국달러화(USD)",
-        JPY: "일본엔화(JPY)",
-        EUR: "유로화(EUR)",
-        AUD: "호주달러화(AUD)",
-        GBP: "영국파운드화(GBP)",
-        CHF: "스위스프랑화(CHF)",
-        CAD: "캐나다달러화(CAD)",
-        CNY: "중국위안화(CNY)"
-      };
-      return m[c] || c;
     }
-    function toggleDetails(btn) {
-      const d = btn.nextElementSibling;
-      const show = d.style.display !== "block";
-      d.style.display = show ? "block" : "none";
-      btn.textContent = show ? "접기" : "자세히 보기";
+    function showCompareLimitMsg() {
+      const msg = document.getElementById('compareLimitMsg');
+      msg.style.display = 'block';
+      setTimeout(()=>{ msg.style.display='none'; }, 1800);
     }
+    function renderCompareTable() {
+      const table = document.getElementById('compareTable');
+      if(compareList.length===0) { table.innerHTML=''; return; }
+      let productNumberHeader = `
+        <tr>
+          <th></th>
+          ${compareList.map((_,i)=>`<td><div class="compare-product-header">상품${i+1}</div></td>`).join('')}
+        </tr>
+      `;
+      table.innerHTML = `
+        ${productNumberHeader}
+        <tr>
+          <th>상품명</th>
+          ${compareList.map(p=>`<td>${p.name}</td>`).join('')}
+        </tr>
+        <tr>
+          <th>주요 특징</th>
+          ${compareList.map(p=>`<td>${p.description.replace(/\n/g,'<br>')}</td>`).join('')}
+        </tr>
+        <tr>
+          <th>가입방법</th>
+          ${compareList.map(p=>`<td>${p.join.join('<br>')}</td>`).join('')}
+        </tr>
+        <tr>
+          <th>통화</th>
+          ${compareList.map(p=>`<td>${formatCurrencyList(p.currencies)}</td>`).join('')}
+        </tr>
+      `;
+    }
+
+    // 상품 개별 TTS
+    function playCardTTS(name, desc) {
+      stopTTS();
+      ttsUtter = new SpeechSynthesisUtterance(`${name}. ${desc}`);
+      ttsUtter.lang = 'ko-KR';
+      speechSynthesis.speak(ttsUtter);
+      isSpeaking = true;
+    }
+    function stopTTS() {
+      if(isSpeaking) {
+        speechSynthesis.cancel();
+        isSpeaking = false;
+      }
+    }
+
+    // 접근성 토글
     function increaseFontSize() {
       if(currentFontSize < 24) currentFontSize++;
       document.documentElement.style.fontSize = currentFontSize + 'px';
@@ -678,25 +625,13 @@
       if(currentFontSize > 12) currentFontSize--;
       document.documentElement.style.fontSize = currentFontSize + 'px';
     }
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark-mode');
-      updateDarkModeIcon();
-    }
-    function updateDarkModeIcon() {
-      const icon = document.getElementById('darkModeIcon');
-      if (document.body.classList.contains('dark-mode')) {
-        icon.textContent = '☀️';
-      } else {
-        icon.textContent = '🌙';
-      }
-    }
     function toggleTTS() {
       if(isSpeaking) {
         speechSynthesis.cancel();
         isSpeaking = false;
         document.getElementById('ttsBtn').querySelector('span[aria-hidden]').textContent = '🔊';
       } else {
-        const text = document.querySelector('.container').innerText;
+        const text = document.querySelector('.container-main').innerText;
         ttsUtter = new SpeechSynthesisUtterance(text);
         ttsUtter.lang = 'ko-KR';
         ttsUtter.onend = () => {
@@ -711,82 +646,60 @@
     function toggleSoundMode() {
       soundMode = !soundMode;
       document.getElementById('soundModeIcon').textContent = soundMode ? '🔊' : '🔈';
-      if (!soundMode) {
-        speechSynthesis.cancel();
-      }
+      if (!soundMode) stopTTS();
     }
     function toggleKeyboardMode() {
       keyboardMode = !keyboardMode;
       document.getElementById('keyboardModeIcon').textContent = keyboardMode ? '⏹️' : '⌨️';
-      if(keyboardMode && window.__productCardList && window.__productCardList.length > 0) {
-        keyboardIdx = 0;
-        window.__productCardList[0].focus();
-        if(soundMode) announceProduct(0);
+      if(keyboardMode && cardElements.length>0) {
+        cardFocusIdx = 0;
+        cardElements[0].focus();
       }
     }
-    function announceProduct(idx){
-      if(!window.__productCardList || idx < 0 || idx >= window.__productCardList.length) return;
-      const p = getCurrentProduct(idx);
-      if(!p) return;
-      let txt = `${p.name}. 추천: ${p.description}. 가입기간: ${p.period}. 대상통화: ${p.currencies.map(currencyLabel).join(', ')}.`;
-      try { speechSynthesis.cancel(); } catch(e){}
-      let utter = new SpeechSynthesisUtterance(txt);
-      utter.lang = 'ko-KR';
-      utter.onend = ()=>{ lastSpokenIdx = -1; };
-      speechSynthesis.speak(utter);
-      lastSpokenIdx = idx;
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      updateDarkModeIcon();
     }
-    function getCurrentProduct(idx){
-      const sel = Array.from(document.querySelectorAll('.currency-filter input:checked')).map(cb => cb.value);
-      let list = products.filter(p=>{
-        let mt = (selectedType==='all'||p.type===selectedType);
-        let mc = (sel.length===0||p.currencies.some(c=>sel.includes(c)));
-        let catOk = (!selectedCategory||p.categories.includes(selectedCategory));
-        return mt && mc && catOk;
-      });
-      return list[idx];
+    function updateDarkModeIcon() {
+      const icon = document.getElementById('darkModeIcon');
+      if (document.body.classList.contains('dark-mode')) {
+        icon.textContent = '☀️';
+      } else {
+        icon.textContent = '🌙';
+      }
     }
+
+    // 키보드 화살표/탭/엔터 이벤트 (키보드 모드 활성화 시)
     document.addEventListener('keydown', function(e){
-      if(!keyboardMode) return;
-      if(!window.__productCardList || window.__productCardList.length === 0) return;
-      if(['ArrowRight','ArrowDown'].includes(e.key)){
-        keyboardIdx++;
-        if(keyboardIdx >= window.__productCardList.length) keyboardIdx = 0;
-        window.__productCardList[keyboardIdx].focus();
-        if(soundMode) announceProduct(keyboardIdx);
-        e.preventDefault();
-      } else if(['ArrowLeft','ArrowUp'].includes(e.key)){
-        keyboardIdx--;
-        if(keyboardIdx < 0) keyboardIdx = window.__productCardList.length-1;
-        window.__productCardList[keyboardIdx].focus();
-        if(soundMode) announceProduct(keyboardIdx);
-        e.preventDefault();
-      }
-      else if(e.key === "Enter"){
-        const card = window.__productCardList[keyboardIdx];
-        if(card){
-          const cb = card.querySelector('.compare-checkbox');
-          if(cb && !cb.disabled){
-            cb.checked = !cb.checked;
-            cb.dispatchEvent(new Event('change'));
-          }
+      if(!keyboardMode || cardElements.length===0) return;
+      if(document.activeElement.classList.contains('product-card')) {
+        if(e.key==="ArrowRight"||e.key==="ArrowDown") {
+          cardFocusIdx = (cardFocusIdx+1)%cardElements.length;
+          cardElements[cardFocusIdx].focus();
+          e.preventDefault();
+        }
+        if(e.key==="ArrowLeft"||e.key==="ArrowUp") {
+          cardFocusIdx = (cardFocusIdx-1+cardElements.length)%cardElements.length;
+          cardElements[cardFocusIdx].focus();
+          e.preventDefault();
         }
       }
     });
-    document.addEventListener('DOMContentLoaded', () => {
-      fetch('/product/names')
-        .then(res => res.json())
-        .then(names => {
-          // products는 이미 선언되어 있음 (하드코딩 데이터)
-          const filtered = products.filter(p => names.includes(p.name));
-          products.length = 0; // 기존 배열 비우기
-          filtered.forEach(p => products.push(p)); // 활성화 상품만 다시 채우기
-          renderProducts(); // 상품 다시 렌더링
-        })
-        .catch(err => {
-          console.error("상품명 불러오기 실패:", err);
-        });
-    });
+
+    // 광고 배너 위치 조정
+    function adjustSideBannerPosition() {
+      const grid = document.querySelector('.product-grid');
+      const banner = document.getElementById('sideBanner');
+      if (grid && banner) {
+        const rect = grid.getBoundingClientRect();
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const top = rect.top + scrollTop;
+        banner.style.top = top + 'px';
+      }
+    }
+    window.addEventListener('resize', adjustSideBannerPosition);
+    window.addEventListener('scroll', adjustSideBannerPosition);
+
   </script>
 </body>
 </html>
