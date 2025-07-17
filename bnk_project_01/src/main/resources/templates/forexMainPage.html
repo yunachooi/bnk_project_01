@@ -69,7 +69,7 @@
 
         .rate-track {
             display: flex;
-            gap: 25px;
+            gap: 15px;
             animation: scroll-slide 60s linear infinite;
         }
 
@@ -218,18 +218,25 @@
         
         /* ✅ 공통 슬라이더 & QR 섹션 wrapper */
 		.dual-slider-wrapper {
+		  width: 1000px; /* ✅ container와 동일하게 고정 */
+		  margin: 0 auto; /* ✅ 가운데 정렬 */
 		  display: flex;
-		  justify-content: center;
+		  justify-content: space-between; /* ✅ 좌우 정렬 */
 		  align-items: flex-start;
-		  gap: 40px;              /* 슬라이더와 QR 박스 사이 간격 */
 		  padding: 10px 0;
-		  flex-wrap: wrap;        /* 모바일 대응 */
+		  flex-wrap: nowrap;
 		}
+		
+		.slider-section-bg {
+		  background: linear-gradient(to bottom, #fffdf8 0%, #f3f7ff 100%);
+		  padding: 10px 0;              /* 상하 여백 추가 */
+		}
+
 		
 		/* ✅ 슬라이더 공통 스타일 */
 		.slider {
 		  position: relative;
-		  width: 500px;
+		  width: 680px;
 		  height: 300px;
 		  overflow: hidden;
 		  border-radius: 16px;
@@ -257,7 +264,9 @@
 		
 		.slide img {
 		  width: 100%;
-		  height: auto;
+		  /* height: auto; */
+		  height: 100%;
+		  object-fit: cover;
 		  border-radius: 16px;
 		  display: block;
 		  box-shadow:
@@ -314,24 +323,27 @@
 		
 		/* ✅ QR 안내 박스 (오른쪽) */
 		.app-download-box {
+		  border-radius: 16px;
 		  border: 1px solid #eee;
 		  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 		  padding: 20px;
-		  width: 250px;
+		  width: 240px;
 		  box-sizing: border-box;
 		  text-align: center;
-		  flex-shrink: 0;  /* 사이즈 줄어들지 않게 */
+		  flex-shrink: 0;
+		  
 		}
+
 		
 		.app-info h3 {
-		  font-size: 18px;
+		  font-size: 22px;
 		  color: #d7191f;
 		  margin-bottom: 14px;
 		  font-weight: 800;
 		}
 		
 		.app-info .desc {
-		  font-size: 14px;
+		  font-size: 16px;
 		  color: #333;
 		  line-height: 1.6;
 		  margin-bottom: 20px;
@@ -339,7 +351,7 @@
 		}
 		
 		.qr-image {
-		  width: 120px;
+		  width: 160px;
 		  height: auto;
 		  border-radius: 12px;
 		  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -347,23 +359,20 @@
 		}
 		
 		.subtext {
-		  font-size: 13px;
+		  font-size: 14px;
 		  color: #555;
 		}
-		
-		/* ✅ 전체 배경을 줄 wrapper */
-		.menu-bg-wrapper {
-		  background: linear-gradient(to bottom, #fffaf4 0%, #f1f8ff 100%);
-		  padding: 80px 0;
-		  border-radius: 0 0 24px 24px;
-		}
-
-				
 
 
         /* ================================
            ✅ 3. 메뉴 (menu-section)
         ================================ */
+        
+        .menu-bg-wrapper {
+		  background: linear-gradient(to bottom, #fffaf4 0%, #f1f8ff 100%);
+		  padding: 80px 0;
+		  border-radius: 0 0 24px 24px;
+		}
         
         .menu-grid {
 		  display: grid;
@@ -423,25 +432,24 @@
 		}
 				
 		.menu-card a {
-		  display: flex;                         /* ✅ 텍스트 + 화살표 수평 정렬 */
-		  justify-content: space-between;       /* ✅ 텍스트는 왼쪽, 화살표는 오른쪽 */
-		  align-items: center;
-		  width: 100%;                           /* ✅ a 태그 전체 너비 사용 */
 		  text-decoration: none;
 		  font-size: 18px;
 		  font-weight: bold;
 		  padding: 8px 16px;
+		  display: flex;                   /* ✅ 핵심: flex 적용 */
+		  justify-content: space-between; /* ✅ 왼쪽(텍스트) / 오른쪽(화살표) */
+		  align-items: center;
+		  width: 100%;                    /* ✅ a 전체 넓이 차지 */
+		  box-sizing: border-box;
 		  transition: all 0.2s ease;
 		  color: #000;
-		  box-sizing: border-box;
 		}
-
 		.menu-card a::after {
-		  content: '›';                  /* 오른쪽 화살표 */
+		  content: '›';  /* 오른쪽 화살표 */
 		  display: inline-block;
+		  margin-left: 8px;
 		  font-size: 18px;
-		  color: #999;                   /* 연한 회색 화살표 */
-		  flex-shrink: 0;                /* 크기 줄어들지 않게 */
+		  vertical-align: middle;
 		}
 		
 		
@@ -555,6 +563,11 @@
             justify-content: space-between;
             gap: 30px;
             margin-top: 48px;
+            background-color: #fdfdfd;           /* 은은한 흰 배경 */
+		  padding: 32px;                        /* 안쪽 여백 */
+		  border-radius: 20px;                  /* 부드러운 라운드 */
+		  box-shadow: 0 4px 12px rgba(0,0,0,0.04); /* 부드러운 음영 */
+		  border: 1px solid #f2f2f2;
         }
         .main-service-item {
             flex: 1;
@@ -659,7 +672,7 @@
         </div>
     </div>
 
-
+<div class="slider-section-bg">
     <div class="dual-slider-wrapper">
 	  <!-- 🎈 왼쪽: 상품 슬라이더만 유지 -->
 	  <div class="slider left-slider">
@@ -678,18 +691,18 @@
 	    <div class="app-info">
 	      <h3>📱 스마트 계좌 개설</h3>
 	      <p class="desc">
-	        영업점 방문 없이 언제 어디서나<br>
-	        QR 코드를 스캔하여 BNK를 방문하고<br>
-	        계좌를 간편하게 개설할 수 있습니다.
+	       QR코드를 스캔하여 <br>
+			계좌를 간편하게 개설 가능
 	      </p>
 	      <img src="/img/qr/app.png" alt="BNK 앱 QR" class="qr-image" />
 	      <p class="subtext">BNK 앱 설치 및 계좌 개설</p>
 	    </div>
 	  </div>
 	</div>
+</div>
+
 
 <div class="menu-bg-wrapper">
-
    <div class="menu-section">
 		  <div class="container">
 		    <div class="menu-grid">
