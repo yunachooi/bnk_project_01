@@ -91,3 +91,9 @@
   height: 100%;
   border: none;
 }
+
+.modal-title {
+  color: white !important;
+  font-weight: 800;
+  font-size: 22px;
+}

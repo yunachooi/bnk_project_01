@@ -114,7 +114,9 @@ nav {width: 100%; background: #fff; position: relative; border-bottom: 1px solid
 .submenu-quick li a:hover {
   color: #fff;
   font-weight: bold;
+  position: relative;  /* ✅ 추가 필요 */
 }
+
 .submenu-quick li.active a::before,
 .submenu-quick li a:hover::before {
   content: '';
@@ -132,12 +134,25 @@ nav {width: 100%; background: #fff; position: relative; border-bottom: 1px solid
 /* 평상시에는 막대 숨김 */
 .submenu-quick li a::before {
   content: '';
-  display: none;
+  position: absolute;
+  left: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 32px;
+  background: #c92026;
+  border-radius: 6px;
+  opacity: 0; /* 👈 기본 상태는 투명하게 */
+  transition: all .18s;
 }
+
 .submenu-quick li.active a::before,
 .submenu-quick li a:hover::before {
-  display: inline-block;
+  opacity: 1; /* 👈 hover 또는 active일 때 보이게 */
 }
+
+
+
 
 /* ------------------- Footer ------------------- */
 .footer-bnk {
