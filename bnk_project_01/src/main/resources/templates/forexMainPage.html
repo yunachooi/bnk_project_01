@@ -6,656 +6,580 @@
 	<title>BNK 외환 정보</title>
 	<link rel="stylesheet" th:href="@{/css/common.css}" />
 	<link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
+	<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 	
 	<style>
-        /* ================================
-       ✅ 공통 설정 및 색상 변수
-        ================================ */
-        @font-face {
-            font-family: 'BNKFont';
-            src: url('/fonts/BNKGothic-Bold.ttf') format('truetype');
-        }
-
         :root {
-            --bnk-red: #D7191F;
-            --bnk-dark-red: #8B032E;
-            --bnk-dark-gray: #655C4F;
-            --bnk-light-gray: #B7A997;
-            --bnk-gold: #896E4A;
-            --bnk-silver: #909394;
-        }
-
-        body {
-            font-family: 'Spoqa Han Sans Neo', 'BNKFont', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            color: var(--bnk-dark-gray);
-        }
-
-        .container {
-            width: 1000px;
-            margin: 0 auto;
-        }
-
-
-        /* 화면 전체에 걸친 그레이 라인 */
-        .full-gray-line {
-            width: 100%;
-            height: 1px;
-            background-color: var(--bnk-silver);
-        }
-
-
-        /* ================================
-           ✅ 1. 환율 정보 (rate-section)
-        ================================ */
-        .rate-section {
-            background-color: #ffffff;
-            text-align: center;
-            padding: 10px 0;
-        }
-
-        .rate-section h1 {
-            color: var(--bnk-red);
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .rate-container {
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .rate-track {
-            display: flex;
-            gap: 15px;
-            animation: scroll-slide 60s linear infinite;
-        }
-
-        .rate-container:hover .rate-track {
-            animation-play-state: paused;
-        }
-
-        @keyframes scroll-slide {
-            2% {
-                transform: translateX(-2%);
-            }
-
-            100% {
-                transform: translateX(-100%);
-            }
-        }
-
-        .rate-box {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px 20px 10px 20px;
-            border-radius: 6px;
-            background: white;
-            min-width: 190px;
-            font-size: 18px;
-            font-weight: bold;
-            margin-right: 16px;
-            white-space: nowrap;
-            line-height: 1;
-        }
-
-        .flag-icon {
-            width: 26px;
-            height: 18px;
-            margin-right: 10px;
-            flex-shrink: 0;
-        }
-
-        .rate-text {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            line-height: 1;
-        }
-
-        .rate-date-label {
-            text-align: right;
-            margin-top: 3px;
-            font-size: 14px;
-            color: #555;
-            padding-right: 4px;
-        }
-
-
-        .rcode {
-            color: var(--bnk-dark-red);
-        }
-
-        .rvalue {
-            color: #665c4d;
-        }
-
-        /* ================================
-           ✅ 1-1 환율 정보 비교 모달창
-        ================================ */
-        .modal.hidden {
-            display: none;
-        }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 9999;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: #fff;
-            padding: 24px;
-            border-radius: 14px;
-            width: 460px;
-            position: relative;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 12px;
-            right: 18px;
-            font-size: 22px;
-            cursor: pointer;
-        }
-
-        .modal-title {
-            text-align: center;
-            color: var(--bnk-red);
-            margin-bottom: 10px;
-        }
-
-        .modal-date {
-            text-align: center;
-            margin-bottom: 14px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .rate-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-        }
-
-        .rate-table th,
-        .rate-table td {
-            padding: 10px;
-            border: 1px solid #ccc;
-        }
-
-        .change-up {
-            color: #d7191f;
-            /* 🔺 빨간색: 상승 */
-            font-weight: bold;
-        }
-
-        .change-down {
-            color: #0070c0;
-            /* 🔻 파란색: 하락 */
-            font-weight: bold;
-        }
-
-        .change-same {
-            color: #888888;
-            /* 보합 또는 '-' */
-        }
-
-
-        /* ================================
-           ✅ 2. 배너 (banner-section)
-        ================================ */
-
-        /* ✅ 공통 슬라이더 & QR 섹션 wrapper */
-        .dual-slider-wrapper {
-            width: 1000px; /* ✅ container와 동일하게 고정 */
-            margin: 0 auto; /* ✅ 가운데 정렬 */
-            display: flex;
-            justify-content: space-between; /* ✅ 좌우 정렬 */
-            align-items: flex-start;
-            padding: 10px 0;
-            flex-wrap: nowrap;
-            margin-bottom: 20px;
-        }
-
-        
-
-        /* ✅ 슬라이더 공통 스타일 */
-        .slider {
-            position: relative;
-            width: 750px;
-            height: 460px;
-            overflow: hidden;
-            border-radius: 16px;
-            background: transparent;
-        }
-
-        .slide-track-wrapper {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .slide-track {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
-
-        .slide {
-            flex: 0 0 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-       .slide img {
-	    width: auto;
-	    height: 100%; /* 부모(slider)의 높이 460px에 맞춤 */
-	    max-width: 100%;
-	    object-fit: contain;  /* 잘리지 않게 비율 유지 */
-	    border-radius: 16px;
-	    display: block;
-	    box-shadow:
-	        0 6px 12px rgba(0, 0, 0, 0.15),
-	        0 0 20px rgba(215, 25, 31, 0.05);
-	    transition: all 0.3s ease;
-	    position: relative;
-	    z-index: 2;
-	}
+		  --bnk-red: #D7191F;
+		  --bnk-dark-red: #8B032E;
+		  --bnk-dark-gray: #655C4F;
+		  --bnk-light-gray: #B7A997;
+		  --bnk-gold: #896E4A;
+		  --bnk-silver: #909394;
+		}
+		
+		html, body, * {
+		  font-family: 'Noto Sans KR', sans-serif !important;
+		}
+		
+		a, h1, h2, h3, h4, h5, h6, p, li, span, button, strong, div {
+		  font-family: 'Noto Sans KR', sans-serif !important;
+		}
+		
+		/* 기본 설정 */
+		body {
+		  margin: 0;
+		  padding: 0;
+		  background-color: #ffffff;
+		  color: var(--bnk-dark-gray);
+		}
+		
+		.container {
+		  width: 1000px;
+		  margin: 0 auto;
+		}
+		
+		.full-gray-line {
+		  width: 100%;
+		  height: 1px;
+		  background-color: var(--bnk-silver);
+		}
+		
+		/* ======= 환율 정보 ======= */
+		.rate-section {
+		  background-color: #ffffff;
+		  text-align: center;
+		  padding: 10px 0;
+		}
+		
+		.rate-section h1 {
+		  color: var(--bnk-red);
+		  font-size: 28px;
+		  margin-bottom: 8px;
+		  font-weight: 700;
+		}
+		
+		.rate-container {
+		  width: 100%;
+		  overflow: hidden;
+		  position: relative;
+		}
+		
+		.rate-track {
+		  display: flex;
+		  gap: 15px;
+		  animation: scroll-slide 60s linear infinite;
+		}
+		
+		.rate-container:hover .rate-track {
+		  animation-play-state: paused;
+		}
+		
+		@keyframes scroll-slide {
+		  2% { transform: translateX(-2%); }
+		  100% { transform: translateX(-100%); }
+		}
+		
+		.rate-box {
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		  padding: 10px 20px;
+		  border-radius: 6px;
+		  background: white;
+		  min-width: 190px;
+		  font-size: 18px;
+		  font-weight: bold;
+		  margin-right: 16px;
+		  white-space: nowrap;
+		  line-height: 1;
+		}
+		
+		.flag-icon {
+		  width: 26px;
+		  height: 18px;
+		  margin-right: 10px;
+		  flex-shrink: 0;
+		}
+		
+		.rate-text {
+		  display: inline-flex;
+		  align-items: center;
+		  gap: 4px;
+		  line-height: 1;
+		}
+		
+		.rate-date-label {
+		  text-align: right;
+		  margin-top: 3px;
+		  font-size: 14px;
+		  color: #555;
+		  padding-right: 4px;
+		}
+		
+		.rcode { color: var(--bnk-dark-red); }
+		.rvalue { color: #665c4d; }
+		
+		/* ======= 모달창 ======= */
+		.modal.hidden { display: none; }
+		
+		.modal {
+		  position: fixed;
+		  top: 0;
+		  left: 0;
+		  z-index: 9999;
+		  width: 100vw;
+		  height: 100vh;
+		  background: rgba(0, 0, 0, 0.6);
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		}
+		
+		.modal-content {
+		  background: #fff;
+		  padding: 24px;
+		  border-radius: 14px;
+		  width: 460px;
+		  position: relative;
+		}
+		
+		.close-button {
+		  position: absolute;
+		  top: 12px;
+		  right: 18px;
+		  font-size: 22px;
+		  cursor: pointer;
+		}
+		
+		.modal-title {
+		  text-align: center;
+		  color: var(--bnk-red);
+		  margin-bottom: 10px;
+		  font-weight: 700;
+		}
+		
+		.modal-date {
+		  text-align: center;
+		  margin-bottom: 14px;
+		  font-weight: bold;
+		  color: #333;
+		}
+		
+		.rate-table {
+		  width: 100%;
+		  border-collapse: collapse;
+		  text-align: center;
+		}
+		
+		.rate-table th,
+		.rate-table td {
+		  padding: 10px;
+		  border: 1px solid #ccc;
+		}
+		
+		.change-up { color: #d7191f; font-weight: bold; }
+		.change-down { color: #0070c0; font-weight: bold; }
+		.change-same { color: #888888; }
+		
+		/* ======= 배너 & 슬라이더 ======= */
+		.dual-slider-wrapper {
+		  width: 1000px;
+		  margin: 0 auto;
+		  display: flex;
+		  justify-content: space-between;
+		  align-items: flex-start;
+		  padding: 20px 0;
+		  margin-bottom: 40px;
+		}
+		
+		.slider {
+		  position: relative;
+		  width: 750px;
+		  height: 460px;
+		  overflow: hidden;
+		  border-radius: 16px;
+		}
+		
+		.slide-track-wrapper {
+		  width: 100%;
+		  height: 100%;
+		  overflow: hidden;
+		}
+		
+		.slide-track {
+		  display: flex;
+		  transition: transform 0.5s ease;
+		}
+		
+		.slide {
+		  flex: 0 0 100%;
+		  display: flex;
+		  justify-content: center;
+		  align-items: center;
+		  position: relative;
+		}
+		
+		.slide img {
+		  width: auto;
+		  height: 100%;
+		  max-width: 100%;
+		  object-fit: contain;
+		  border-radius: 16px;
+		  display: block;
+		  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15),
+		              0 0 20px rgba(215, 25, 31, 0.05);
+		  transition: all 0.3s ease;
+		  z-index: 2;
+		}
 		
 		.slide img:hover {
-		    transform: translateY(-5px) scale(1.02);
-		    box-shadow:
-		        0 12px 24px rgba(0, 0, 0, 0.2),
-		        0 0 30px rgba(215, 25, 31, 0.15);
+		  transform: translateY(-5px) scale(1.02);
+		  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2),
+		              0 0 30px rgba(215, 25, 31, 0.15);
 		}
-
-        .slide::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 90%;
-            height: 90%;
-            background-color: rgba(255, 255, 255, 0.3);
-            filter: blur(12px);
-            border-radius: 20px;
-            z-index: 1;
-        }
-
-        .dots {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 3;
-        }
-
-        .dots button {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            border: none;
-            background: #ccc;
-            cursor: pointer;
-        }
-
-        .dots button.active {
-            background: #d7191f;
-        }
-
-
-        /* ✅ QR 안내 박스 (오른쪽) */
-        .app-download-box {
-            border-radius: 16px;
-            border: 1px solid #eee;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            padding: 20px;
-            width: 240px;
-            box-sizing: border-box;
-            text-align: center;
-            flex-shrink: 0;
-
-        }
-        .qr-toggle {
-		    cursor: pointer;
-		    font-size: 15px;
-		    color: var(--bnk-red);
-		    margin-top: 8px;
-		    margin-bottom: 10px;
-		    font-weight: 600;
-		    transition: color 0.2s;
-		    user-select: none;
+		
+		.slide::before {
+		  content: '';
+		  position: absolute;
+		  top: 20px;
+		  left: 20px;
+		  width: 90%;
+		  height: 90%;
+		  background-color: rgba(255, 255, 255, 0.3);
+		  filter: blur(12px);
+		  border-radius: 20px;
+		  z-index: 1;
+		}
+		
+		.dots {
+		  position: absolute;
+		  bottom: 10px;
+		  left: 50%;
+		  transform: translateX(-50%);
+		  display: flex;
+		  gap: 8px;
+		  z-index: 3;
+		}
+		
+		.dots button {
+		  width: 10px;
+		  height: 10px;
+		  border-radius: 50%;
+		  border: none;
+		  background: #ccc;
+		  cursor: pointer;
+		}
+		
+		.dots button.active {
+		  background: #d7191f;
+		}
+		
+		/* ======= QR 안내 ======= */
+		.app-download-box {
+		  border-radius: 16px;
+		  border: 1px solid #eee;
+		  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+		  padding: 20px;
+		  width: 240px;
+		  box-sizing: border-box;
+		  text-align: center;
+		  flex-shrink: 0;
+		}
+		
+		.qr-toggle {
+		  cursor: pointer;
+		  font-size: 15px;
+		  color: var(--bnk-red);
+		  margin: 8px 0 10px;
+		  font-weight: 600;
+		  user-select: none;
 		}
 		
 		.qr-toggle:hover {
-		    color: #b31313;
+		  color: #b31313;
 		}
 		
 		.qr-toggle-box.hidden {
-		    display: none;
+		  display: none;
 		}
-
-
-        .app-info h3 {
-            font-size: 22px;
-            color: #000000;
-            margin-bottom: 14px;
-            font-weight: 800;
-        }
-
-        .app-info .desc {
-            font-size: 16px;
-            color: #333;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        .qr-image {
-            width: 160px;
-            height: auto;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            margin-bottom: 10px;
-        }
-
-        .subtext {
-            font-size: 14px;
-            color: #555;
-        }
-
-
-        /* ================================
-           ✅ 3. 메뉴 (menu-section)
-        ================================ */
-
- 
-		 .menu-bg-wrapper {
+		
+		.app-info h3 {
+		  font-size: 22px;
+		  color: #000;
+		  margin-bottom: 14px;
+		  font-weight: 800;
+		}
+		
+		.app-info .desc {
+		  font-size: 16px;
+		  color: #333;
+		  line-height: 1.6;
+		  margin-bottom: 20px;
+		  font-weight: 500;
+		}
+		
+		.qr-image {
+		  width: 160px;
+		  height: auto;
+		  border-radius: 12px;
+		  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+		  margin-bottom: 10px;
+		}
+		
+		.subtext {
+		  font-size: 14px;
+		  color: #555;
+		}
+		
+		/* ======= 메뉴 ======= */
+		.fade-section {
+		  opacity: 0;
+		  transform: translateY(50px);
+		  transition: opacity 1.6s ease-out, transform 1.6s ease-out;
+		}
+		
+		.fade-section.show {
+		  opacity: 1;
+		  transform: translateY(0);
+		}
+		
+		.menu-bg-wrapper {
 		  background: linear-gradient(to bottom, #fffaf4 0%, #f1f8ff 100%);
-		  padding: 30px 0;
+		  padding: 60px 0;
 		  border-radius: 0 0 24px 24px;
 		}
-
-        .menu-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* ✅ 유지 */
-            gap: 12px;
-        }
-
-        .menu-card {
-            background-color: #fffff1;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            min-height: 220px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* 카드 상단: 아이콘 + 텍스트 나란히 */
-        .menu-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 12px;
-        }
-        
-        .menu-card {
-		    position: relative;
-		    padding-top: 50px; /* 상단 공간 확보 */
+		
+		.menu-grid {
+		  display: grid;
+		  grid-template-columns: repeat(3, 1fr);
+		  gap: 12px;
+		}
+		
+		.menu-card {
+		  background-color: #fffff1;
+		  border-radius: 12px;
+		  padding: 20px;
+		  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+		  min-height: 220px;
+		  display: flex;
+		  flex-direction: column;
+		  align-items: center;
+		  position: relative;
+		  padding-top: 50px;
 		}
 		
 		.pin-icon {
-		    position: absolute;
-		    top: 10px;
-		    left: 50%;
-		    transform: translateX(-50%);
-		    width: 40px;
-		    height: 40px;
-		    z-index: 10;
+		  position: absolute;
+		  top: -20px;
+		  left: 50%;
+		  transform: translateX(-50%);
+		  width: 43px;
+		  height: 43px;
+		  z-index: 10;
 		}
 		
 		.pin-icon img {
-		    width: 100%;
-		    height: 100%;
-		    object-fit: cover;
-		    border-radius: 30%; /* 🎯 핀셋 느낌의 살짝 둥근 사각형 */
-		    background-color: #fff;
-		    padding: 2px;
-		    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25); /* 🎯 입체감 */
+		  width: 100%;
+		  height: 100%;
+		  object-fit: cover;
+		  border-radius: 30%;
+		  background-color: #fff;
+		  padding: 2px;
+		  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 		}
-        
-
-        
-
-
-        .menu-title {
-            font-size: 22px;
-            font-weight: 500;
-            color : #000000;
-        }
-
-        /* 리스트 스타일 */
-        .menu-card ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            width: 100%;
-        }
-
-        .menu-card li {
-            border-bottom: 1px solid #ddd; /* ✅ 얇은 밑줄 */
-            padding: 12px 0;
-        }
-
-        .menu-card a:hover {
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transform: translateY(-1px);
-        }
-
-        .menu-card a {
-            text-decoration: none;
-            font-size: 17px;
-            font-weight: 500;
-            padding: 8px 16px;
-            display: flex;                   /* ✅ 핵심: flex 적용 */
-            justify-content: space-between; /* ✅ 왼쪽(텍스트) / 오른쪽(화살표) */
-            align-items: center;
-            width: 100%;                    /* ✅ a 전체 넓이 차지 */
-            box-sizing: border-box;
-            transition: all 0.2s ease;
-            color: #000;
-        }
-        .menu-card a::after {
-            content: '›';  /* 오른쪽 화살표 */
-            display: inline-block;
-            margin-left: 8px;
-            font-size: 18px;
-            vertical-align: middle;
-        }
-
-
-        /* 각 카드 배경/링크 색상 */
-
-        .yellow-bg {
-            background: linear-gradient(135deg, #fde4e4 0%, #e8f0ff 100%);
-        }
-        .yellow-bg a {
-            color: #000000;
-        }
-
-        .blue-bg {
-            background: linear-gradient(135deg, #e0f5e9 0%, #f0f5ff 100%);
-        }
-        .blue-bg a {
-            color: #000000;
-        }
-
-        .deep-blue-bg {
-            background: linear-gradient(135deg, #fff3e5 0%, #e5f3ff 100%);
-        }
-        .deep-blue-bg a {
-            color: #000000;
-        }
-
-
-        .main-fx-ad-wrap {
-            display: flex;
-            justify-content: space-between;
-            gap: 28px;
-        }
-        .main-fx-ad {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 28px;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-            font-weight: 700;
-            color: #222;
-            transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none; /* ✅ 밑줄 제거 */
-        }
-        .main-fx-ad:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-        }
-        .fx-color1 { background: linear-gradient(135deg, #fde4e4 0%, #e8f0ff 100%); }
-        .fx-color2 { background: linear-gradient(135deg, #e0f5e9 0%, #f0f5ff 100%); }
-        .fx-color3 { background: linear-gradient(135deg, #fff3e5 0%, #e5f3ff 100%); }
-
-        /* ✅ 아이콘 스타일 */
-        .main-fx-ad .fx-icon {
-            flex-shrink: 0;
-            width: 48px;
-            height: 48px;
-            background: #fff;
-            border-radius: 20%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        }
-
-        /* ✅ 텍스트 블록 전체 */
-        .main-fx-ad .desc {
-            flex: 1;
-            text-decoration: none; /* 밑줄 제거 */
-            font-weight: 500;
-            font-size: 1.05rem;
-            line-height: 1.5;
-        }
-
-        /* ✅ 제목 텍스트 (strong) */
-        .main-fx-ad .desc strong {
-            display: block;
-            margin-bottom: 2px; /* 제목 아래 간격 조절 */
-            font-size: 1.1rem;
-            font-weight: 700;
-            line-height: 1.4;
-        }
-
-        /* ✅ 설명 텍스트 (p) */
-        .main-fx-ad .desc p {
-            margin: 0;
-            padding: 0;
-            font-size: 1.05rem;
-            line-height: 1.4;
-            text-decoration: none;
-        }
-
-        /* ✅ 화살표 스타일 */
-        .main-fx-ad .more-arrow {
-            font-size: 1.5rem;
-            opacity: 0.7;
-        }
-
-
-
-
-        /* ================================
-           ✅ 3-2. 서비스 메뉴
-        ================================ */
-
-
-        .main-service-menu {
-		    display: flex;
-		    justify-content: center; /* space-between → center */
-		    gap: 30px;
-		    margin-top: 48px;
-		    margin-bottom: 80px;      /* ✅ 푸터와의 여백 추가 */
-		    background-color: #fdfdfd;
-		    padding: 32px;
-		    border-radius: 20px;
-		    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-		    border: 1px solid #f2f2f2;
-		    flex-wrap: wrap; /* ✅ 반응형 대응 */
+		
+		.menu-header {
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		  gap: 12px;
+		  margin-bottom: 8px;
+		  margin-top: -6px;
 		}
-        .main-service-item {
-		    width: 120px;              /* ✅ 정사각형 설정 */
-		    height: 120px;
-		    background: #fff;
-		    border-radius: 18px;
-		    box-shadow: 0 4px 18px rgba(120,120,140,0.07);
-		    display: flex;
-		    flex-direction: column;
-		    align-items: center;
-		    justify-content: center;
-		    padding: 12px;             /* 안쪽 여백 줄임 */
-		    border: 1.5px solid #f2f2f2;
-		    transition: transform 0.15s, box-shadow 0.15s;
-		    cursor: pointer;
+		
+		.menu-title {
+		  font-size: 22px;
+		  font-weight: 700;
+		  color: #000;
 		}
-        .main-service-item:hover {
-            box-shadow: 0 8px 32px rgba(120,120,140,0.13);
-            transform: translateY(-5px) scale(1.04);
-            background: #f3f7ff;
-            border-color: #c3d2f8;
-        }
-        .main-service-item .icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            transition: transform .17s;
-        }
-        .main-service-item:hover .icon {
-            transform: scale(1.19) rotate(-4deg);
-        }
-        .main-service-item .text {
-		            font-size: 1rem;
-		    font-weight: 700;
-		    color: #2e3650;
-		    letter-spacing: -0.01em;
-		    text-align: center;
+		
+		.menu-card ul {
+		  list-style: none;
+		  padding: 0;
+		  margin: 0;
+		  width: 100%;
 		}
-
-        /* ================================
-           ✅ 5. 푸터 (footer)
-        ================================ */
-        .footer {
-            text-align: center;
-            margin: 40px 0 20px;
-            font-size: 15px;
-            color: var(--bnk-silver);
-        }
+		
+		.menu-card li {
+		  border-bottom: 1px solid #ddd;
+		  padding: 12px 0;
+		}
+		
+		.menu-card a {
+		  text-decoration: none;
+		  font-size: 17px;
+		  font-weight: 500;
+		  padding: 8px 16px;
+		  display: flex;
+		  justify-content: space-between;
+		  align-items: center;
+		  width: 100%;
+		  box-sizing: border-box;
+		  transition: all 0.25s ease;
+		  border-radius: 6px;
+		  color: #000;
+		}
+		
+		.menu-card a::after {
+		  content: '›';
+		  margin-left: 8px;
+		  font-size: 18px;
+		  color: #000;
+		  transition: transform 0.2s ease, color 0.2s ease;
+		}
+		
+		.menu-card a:hover {
+		  transform: scale(1.03);
+		  background-color: rgba(215, 25, 31, 0.08);
+		  color: #8B032E;
+		  box-shadow: 0 8px 24px rgba(215, 25, 31, 0.12);
+		}
+		
+		.menu-card a:hover::after {
+		  transform: translateX(4px);
+		  color: #D7191F;
+		}
+		
+		.yellow-bg {
+		  background: linear-gradient(135deg, #fdeaea 0%, #eaf2ff 100%);
+		}
+		.blue-bg {
+		  background: linear-gradient(135deg, #d8f5e4 0%, #e8f1ff 100%);
+		}
+		.deep-blue-bg {
+		  background: linear-gradient(135deg, #fff0e2 0%, #eaf4ff 100%);
+		}
+		
+		.main-fx-ad-wrap {
+		  display: flex;
+		  justify-content: space-between;
+		  gap: 28px;
+		}
+		
+		.main-fx-ad {
+		  flex: 1;
+		  display: flex;
+		  align-items: center;
+		  gap: 12px;
+		  padding: 28px;
+		  border-radius: 12px;
+		  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+		  font-weight: 700;
+		  color: #222;
+		  transition: transform 0.2s, box-shadow 0.2s;
+		  text-decoration: none;
+		}
+		
+		.main-fx-ad:hover {
+		  transform: translateY(-4px);
+		  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+		}
+		
+		.main-fx-ad .fx-icon {
+		  width: 48px;
+		  height: 48px;
+		  background: #fff;
+		  border-radius: 20%;
+		  display: flex;
+		  align-items: center;
+		  justify-content: center;
+		  font-size: 1.6rem;
+		  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		}
+		
+		.main-fx-ad .desc {
+		  flex: 1;
+		  font-weight: 500;
+		  font-size: 1.05rem;
+		  line-height: 1.5;
+		}
+		
+		.main-fx-ad .desc strong {
+		  display: block;
+		  margin-bottom: 2px;
+		  font-size: 1.1rem;
+		  font-weight: 700;
+		  line-height: 1.4;
+		}
+		
+		.main-fx-ad .desc p {
+		  margin: 0;
+		  padding: 0;
+		  font-size: 1.05rem;
+		  line-height: 1.4;
+		}
+		
+		.main-fx-ad .more-arrow {
+		  font-size: 1.5rem;
+		  opacity: 0.7;
+		}
+		
+		.main-service-menu {
+		  display: flex;
+		  justify-content: center;
+		  gap: 30px;
+		  margin-top: 48px;
+		  margin-bottom: 80px;
+		  flex-wrap: wrap;
+		}
+		
+		.main-service-item {
+		  width: 140px;
+		  height: 140px;
+		  background: #fff;
+		  border-radius: 18px;
+		  box-shadow: 0 4px 18px rgba(120,120,140,0.07);
+		  display: flex;
+		  flex-direction: column;
+		  align-items: center;
+		  justify-content: center;
+		  padding: 12px;
+		  border: 1.5px solid #f2f2f2;
+		  transition: transform 0.15s, box-shadow 0.15s;
+		  cursor: pointer;
+		}
+		
+		.main-service-item:hover {
+		  box-shadow: 0 8px 32px rgba(120,120,140,0.13);
+		  transform: translateY(-5px) scale(1.04);
+		  background: #f3f7ff;
+		  border-color: #c3d2f8;
+		}
+		
+		.main-service-item .icon {
+		  font-size: 2.5rem;
+		  margin-bottom: 10px;
+		  transition: transform .17s;
+		}
+		
+		.main-service-item:hover .icon {
+		  transform: scale(1.19) rotate(-4deg);
+		}
+		
+		.main-service-item .text {
+		  font-size: 1rem;
+		  font-weight: 700;
+		  color: #2e3650;
+		  text-align: center;
+		}
+		
+		.footer {
+		  text-align: center;
+		  margin: 40px 0 20px;
+		  font-size: 15px;
+		  color: var(--bnk-silver);
+		}
     </style>
 </head>
 
@@ -713,9 +637,11 @@
         <div class="slider left-slider">
             <div class="slide-track-wrapper">
                 <div class="slide-track">
-                    <div class="slide"><img src="/img/main/슬라이더10.png" alt="상품1"></div>
-                    <div class="slide"><img src="/img/main/슬라이더11.png" alt="상품2"></div>
-                    <div class="slide"><img src="/img/main/슬라이더12.png" alt="상품3"></div>
+                	<div class="slide"><img src="/img/main/배너1.png" alt="배너1"></div>
+                    <div class="slide"><img src="/img/main/외화예금.png" alt="상품1"></div>
+                    <div class="slide"><img src="/img/main/ONE환전1.png" alt="상품2"></div>
+                    <div class="slide"><img src="/img/main/기업수출.png" alt="상품3"></div>
+                    <div class="slide"><img src="/img/main/환율우대.png" alt="상품4"></div>
                 </div>
             </div>
             <div class="dots"></div>
@@ -738,9 +664,20 @@
 
 
 
-<div class="menu-bg-wrapper">
+<div class="menu-bg-wrapper fade-section">
     <div class="menu-section">
         <div class="container">
+        
+        <!-- ✅ 외환 뱅킹 제목 추가 -->
+            <h2 style="
+                font-size: 28px;
+                font-weight: 800;
+                font-family: 'Noto Sans KR', sans-serif;
+                color: #000;
+                margin-bottom: 36px;
+                text-align: center;
+            ">외환 뱅킹</h2>
+            
             <div class="menu-grid">
                 <!-- 외환 예금 -->
                 <div class="menu-card yellow-bg">
@@ -795,9 +732,9 @@
         <h2 style="
 		    font-size: 28px;
 		    font-weight: 800;
-		    font-family: 'Spoqa Han Sans Neo', 'Noto Sans KR', sans-serif;
+		    font-family: 'Noto Sans KR', sans-serif;
 		    color: #000;
-		    margin-bottom: 8px;
+		    margin-bottom: 16px;
 		  ">자주 찾는 서비스</h2>
     </div>
 
@@ -852,6 +789,78 @@
 
 <script>
 
+	//✅ 상품 배너 슬라이더만 초기화
+	function initSlider(sliderSelector) {
+	    const slider = document.querySelector(sliderSelector);
+	    const track = slider.querySelector('.slide-track');
+	    const slides = slider.querySelectorAll('.slide');
+	    const dotsContainer = slider.querySelector('.dots');
+	
+	    let currentIndex = 0;
+	    let slideWidth = slider.clientWidth;
+	    const total = slides.length;
+	
+	    dotsContainer.innerHTML = '';
+	
+	    for (let i = 0; i < total; i++) {
+	        const dot = document.createElement('button');
+	        dot.setAttribute('aria-label', `슬라이드 ${i + 1}`);
+	        dot.addEventListener('click', () => {
+	            currentIndex = i;
+	            update();
+	            resetInterval();
+	        });
+	        dotsContainer.appendChild(dot);
+	    }
+	
+	    const dots = dotsContainer.querySelectorAll('button');
+	
+	    function update() {
+	        track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+	        dots.forEach(dot => dot.classList.remove('active'));
+	        dots[currentIndex].classList.add('active');
+	    }
+	
+	    function autoSlide() {
+	        currentIndex = (currentIndex + 1) % total;
+	        update();
+	    }
+	
+	    let interval = setInterval(autoSlide, 3000);
+	
+	    function resetInterval() {
+	        clearInterval(interval);
+	        interval = setInterval(autoSlide, 3000);
+	    }
+	
+	    window.addEventListener('resize', () => {
+	        slideWidth = slides[0].clientWidth;
+	        update();
+	    });
+	
+	    update();
+	}
+	
+	// ✅ 오른쪽 슬라이더 제거 -> left만 초기화
+	initSlider('.left-slider');
+
+	document.addEventListener("DOMContentLoaded", () => {
+	    const observer = new IntersectionObserver((entries) => {
+	        entries.forEach(entry => {
+	            if (entry.isIntersecting) {
+	                entry.target.classList.add("show");
+	                observer.unobserve(entry.target); // 1회만 작동
+	            }
+	        });
+	    }, {
+	        threshold: 0.15 // 15% 정도 보일 때 발동
+	    });
+	
+	    document.querySelectorAll('.fade-section').forEach(el => {
+	        observer.observe(el);
+	    });
+	});
+
 
     document.addEventListener("DOMContentLoaded", () => {
         const modal = document.getElementById('rateModal');
@@ -902,63 +911,8 @@
                 track.appendChild(clone);
             });
         }
-
-        // ✅ 상품 배너 슬라이더만 초기화
-        function initSlider(sliderSelector) {
-            const slider = document.querySelector(sliderSelector);
-            const track = slider.querySelector('.slide-track');
-            const slides = slider.querySelectorAll('.slide');
-            const dotsContainer = slider.querySelector('.dots');
-
-            let currentIndex = 0;
-            let slideWidth = slider.clientWidth;
-            const total = slides.length;
-
-            dotsContainer.innerHTML = '';
-
-            for (let i = 0; i < total; i++) {
-                const dot = document.createElement('button');
-                dot.setAttribute('aria-label', `슬라이드 ${i + 1}`);
-                dot.addEventListener('click', () => {
-                    currentIndex = i;
-                    update();
-                    resetInterval();
-                });
-                dotsContainer.appendChild(dot);
-            }
-
-            const dots = dotsContainer.querySelectorAll('button');
-
-            function update() {
-                track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-                dots.forEach(dot => dot.classList.remove('active'));
-                dots[currentIndex].classList.add('active');
-            }
-
-            function autoSlide() {
-                currentIndex = (currentIndex + 1) % total;
-                update();
-            }
-
-            let interval = setInterval(autoSlide, 3000);
-
-            function resetInterval() {
-                clearInterval(interval);
-                interval = setInterval(autoSlide, 3000);
-            }
-
-            window.addEventListener('resize', () => {
-                slideWidth = slides[0].clientWidth;
-                update();
-            });
-
-            update();
-        }
-
-        // ✅ 오른쪽 슬라이더 제거 -> left만 초기화
-        initSlider('.left-slider');
-
-        // ✅ 환율 비교 모달 연결
+        
+     // ✅ 환율 비교 모달 연결
         track.addEventListener('click', (e) => {
             const box = e.target.closest('.rate-box');
             if (!box) return;
@@ -1003,6 +957,9 @@
             if (e.target === modal) modal.classList.add('hidden');
         });
     });
+
+   
+   
 
 </script>
 </body>
