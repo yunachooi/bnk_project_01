@@ -15,7 +15,7 @@
     }
     .container-main {
       width: 1000px; max-width: 98vw;
-      margin: 0 auto; padding: 0 0 60px 0; position: relative;
+      margin: 0 auto; padding: 0 0 220px 0; position: relative;
       z-index: 2;
     }
     .main-title { font-size:2.1rem; font-weight:900; margin:56px 0 32px 0; text-align: center;}
@@ -100,7 +100,7 @@
     }
     .badge + .badge {         /* 두 번째 배지 */
  	 left: auto;
-  	right: 5px;           /* 필요에 따라 조정 */
+  	right: 105px;           /* 필요에 따라 조정 */
 	}
     @media (max-width: 1200px) {
       .container-main { width:97vw;}
@@ -121,6 +121,8 @@
       transition: transform 0.23s, box-shadow 0.23s, border 0.25s;
       max-width:340px; margin:0 auto;
       outline: none;
+      cursor: pointer;          /* ← 추가 */
+      padding-bottom: 10px;
     }
     .product-card.selected {
       border: 2.2px solid #e60012 !important;
@@ -143,6 +145,7 @@
       text-align:center;opacity:0;transition:opacity .33s cubic-bezier(.43,.44,.55,1.05);
       pointer-events:none;z-index:4;display:flex;align-items:center;justify-content:center;
       padding:0 16px;line-height:1.7;word-break:keep-all;
+      cursor: pointer;
     }
     .product-card:hover .card-hover-overlay,
     .product-card:focus .card-hover-overlay.card-tts-on {opacity:1;pointer-events:auto;}
@@ -181,7 +184,7 @@
     }
     .product-tags {margin-bottom: 8px;}
     .product-tags span {display: inline-block; font-size: 0.93rem; margin: 0 5px 5px 0; color: #5b5c5f; background: #f4f5fa; border-radius: 8px; padding: 3px 11px; font-weight: 600;}
-    .shield-icon {margin-left:4px;}
+    .shield-icon {margin-left:1px;}
     .product-currency {
       min-height: 48px; margin-top: 6px; margin-bottom: 4px; font-size: 1.18rem; font-weight: 900;
       color: #e60012; letter-spacing: 0.01em; line-height: 1.22; white-space: pre-line;
@@ -302,6 +305,24 @@
       border-style: solid;
       border-color: transparent transparent transparent #212d49;
     }
+    .product-currency{     /* • 한 줄에 여러 알약이 자연스럽게 감기도록 */
+ 	 display:flex; flex-wrap:wrap; gap:6px;
+  	justify-content:center;             /* 가운데 정렬 */
+  	margin-top:6px; margin-bottom:4px;  /* 기존 여백 유지 */
+  	min-height: auto;
+	}
+	.currency-pill{
+	  background:#fff;
+	  border:1.8px solid #e60012;
+	  color:#e60012;
+	  border-radius:18px;
+	  padding:4px 12px;
+	  font-size:0.92rem;
+	  font-weight:700;
+	  letter-spacing:0.02em;
+	  white-space:nowrap;
+	  transition:background .18s,color .18s;
+	}
     /* 다크모드 - 비교표와 선택 강조색 */
     body.dark-mode { background:#1d202a; color:#e6e6e6;}
     body.dark-mode .container-main { color: #fff;}
@@ -320,6 +341,11 @@
     body.dark-mode table.compare-table th:first-child,
     body.dark-mode table.compare-table td:first-child {background:#2c3142 !important; color: #fff;}
     body.dark-mode .compare-product-header {color:#ffe5e5;}
+    body.dark-mode .currency-pill{
+	  background:#27314c;
+	  border-color:#e60012;
+	  color:#fff;
+	}
   </style>
 </head>
 <body>
@@ -388,8 +414,8 @@
   <script>
     // 상품 데이터
     const products = [
-      {  pno: "P001", name: "꿈이룸 외화자유적금", type: "적금", description: "외화도 차곡차곡! 원하는 방식으로 자동이체하고\n 1년마다 재예치로 목돈 마련까지!", tags: ["#자동이체", "#목돈 마련"], currencies: ["USD"], join: ["영업점 가입"], categories: ["study"], img: "img/main/m1.png" },
-      {  pno: "P002", name: "BNK모아드림외화적금", type: "적금", description: "원하는 기간만큼\n 자유롭게 모으는 외화저축", tags: ["#자유적립", "#맞춤예치"], currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"], categories: ["study"], img: "img/main/m5.png" },
+      {  pno: "P001", name: "꿈이룸 외화자유적금", type: "적금", description: "원하는 방식으로 자동이체하고\n 1년마다 재예치로 목돈 마련까지!", tags: ["#자동이체", "#목돈 마련"], currencies: ["USD"], join: ["영업점 가입"], categories: ["study"], img: "img/main/m1.png" },
+      {  pno: "P002", name: "BNK모아드림외화적금", type: "적금", description: "원하는 기간만큼 자유롭게\n 모으는 외화저축", tags: ["#자유적립", "#맞춤예치"], currencies: ["USD", "EUR", "JPY", "AUD"], join: ["영업점 가입"], categories: ["study"], img: "img/main/m5.png" },
       {  pno: "P003", name: "BNK UP & UP 외화정기예금", type: "정기예금", description: "기간이 길수록 금리도 쑥쑥!\n 알찬 외화 정기예금", tags: ["#단계금리", "#중도해지안심"], currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["investment"], img: "img/main/m4.png" },
       {  pno: "P004", name: "업앤업 외화MMDA", type: "입출금예금", description: "입출금 자유롭게!\n 하루만 맡겨도 이자 쌓이는 외화 예금", tags: ["#입출금", "#유동성"], currencies: ["USD", "JPY", "EUR"], join: ["영업점 가입"], categories: ["travel"], img: "img/main/m2.png" },
       {  pno: "P006", name: "외화정기예금", type: "정기예금", description: "자유롭게 넣고, 원하는 시점에 만기 설정까지!", tags: ["#맞춤만기", "#자유적립예금"], currencies: ["USD", "JPY", "GBP", "CHF", "EUR", "AUD", "CAD"], join: ["영업점 가입", "인터넷 가입"], categories: ["investment"], img: "img/main/m6.png" },
@@ -567,12 +593,11 @@
 
     // 통화 줄바꿈 (4개 이하 한줄, 이상은 줄바꿈)
     function formatCurrencyList(curArr) {
-      if(!curArr || curArr.length===0) return '';
-      let arr = curArr.map(c=>c.toUpperCase());
-      if(arr.length<=4) return `<span style="color:#e60012;">${arr.join(', ')}</span>`;
-      return `<span style="color:#e60012;">${arr.slice(0,4).join(', ')}<br>${arr.slice(4).join(', ')}</span>`;
-    }
-
+    	  if (!curArr || curArr.length === 0) return '';
+    	  return curArr
+    	    .map(c => `<span class="currency-pill">${c.toUpperCase()}</span>`)
+    	    .join('');
+    	}
     // 비교 영역 표시/비활성화 & 타이틀
     function showCompareArea() {
       document.getElementById('compareArea').classList.add('active');
