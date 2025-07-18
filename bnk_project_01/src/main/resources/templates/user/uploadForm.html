@@ -4,35 +4,34 @@
   <meta charset="UTF-8">
   <title>수입서류 제출 페이지</title>
   <link rel="stylesheet" th:href="@{/css/common.css}" />
-  
+  <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
+
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      background-color: #eef3f9;
-      color: #212d49;
+      background-color: #f2f2f2; /* #f9f6f5, #fff1f1*/
+      color: #000; /* 전체 폰트 검정 */
       margin: 0;
-      
     }
 
     .container2 {
       max-width: 1000px;
-      margin: 20px auto;
+      margin: auto auto 300px auto; /* 헤더·푸터와 간격 확보 */
     }
 
-    .back-btn {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background-color: #212d49;
-      color: #fff;
-      border-radius: 50%;
-      width: 44px;
-      height: 44px;
-      font-size: 20px;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
+.back-btn {
+  display: inline-block;
+  margin: 30px 0 10px 30px; /* 헤더 아래 여백 + 왼쪽 위치 */
+  background-color: #000;
+  color: #fff;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
 
     .back-btn:hover {
       background-color: #e60012;
@@ -40,7 +39,7 @@
 
     h2 {
       font-size: 2rem;
-      color: #212d49;
+      color: #000; /* 제목도 검정 */
       text-align: center;
       margin-bottom: 40px;
       font-weight: 700;
@@ -54,29 +53,29 @@
       margin-bottom: 40px;
     }
 
-	table {
-	  width: 100%;
-	  border-collapse: collapse;
-	  margin-top: 10px;
-	  background-color: #fff;
-	  border: 1px solid #d0d7e2;
-	  border-radius: 16px;
-	  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
-	  overflow: hidden;
-	}
-	
-	th, td {
-	  padding: 14px 10px;
-	  border: 1px solid #d0d7e2;
-	  text-align: center;
-	  font-size: 0.96rem;
-	}
-	
-	th {
-	  background-color: #dde4f1;
-	  color: #212d49;
-	  font-weight: 600;
-	}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 16px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+}
+
+th, td {
+  padding: 14px 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 0.96rem;
+  color: #000;
+}
+
+th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+}
 
     tr:last-child td {
       border-bottom: none;
@@ -116,7 +115,7 @@
     }
 
     .button-group button[type="submit"] {
-      background-color: #212d49;
+      background-color: #000; /* 검정 버튼 */
       color: white;
       padding: 12px 30px;
       font-size: 1rem;
@@ -148,6 +147,7 @@
       border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.2s;
+      color: #000;
     }
 
     .delete-btn:hover {
@@ -156,13 +156,11 @@
       color: #e60012;
     }
   </style>
-
-  <!-- 사전버튼 전용 CSS -->
-  <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
 </head>
+
 <body>
-	<div th:replace="~{fragments/header2 :: header}"></div>
-	
+  <div th:replace="~{fragments/header2 :: header}"></div>
+
   <button class="back-btn" onclick="location.href='/user/import'">◀</button>
 
   <div class="container2">
@@ -182,14 +180,13 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Invoice -->
             <tr>
               <td>Invoice</td>
               <td>
                 <input type="file" name="invoice" id="invoice" onchange="toggleClearBtn('invoice')" />
                 <button type="button" id="clear-invoice" class="clear-btn" style="display: none;" onclick="clearInput('invoice')">선택취소</button>
               </td>
-              <td th:text="${hasInvoice} ? '✅' : '❌'"></td>
+              <td th:text="${hasInvoice} ? '☑️' : '❌'"></td>
               <td th:text="${invoiceImport != null} ? ${invoiceImport.iname} : '-'"></td>
               <td th:text="${invoiceImport != null} ? ${#temporals.format(invoiceImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
               <td>
@@ -199,14 +196,13 @@
               </td>
             </tr>
 
-            <!-- Packing List -->
             <tr>
               <td>Packing List (PL)</td>
               <td>
                 <input type="file" name="pl" id="pl" onchange="toggleClearBtn('pl')" />
                 <button type="button" id="clear-pl" class="clear-btn" style="display: none;" onclick="clearInput('pl')">선택취소</button>
               </td>
-              <td th:text="${hasPL} ? '✅' : '❌'"></td>
+              <td th:text="${hasPL} ? '☑️' : '❌'"></td>
               <td th:text="${plImport != null} ? ${plImport.iname} : '-'"></td>
               <td th:text="${plImport != null} ? ${#temporals.format(plImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
               <td>
@@ -216,14 +212,13 @@
               </td>
             </tr>
 
-            <!-- BL -->
             <tr>
               <td>Bill of Lading (BL)</td>
               <td>
                 <input type="file" name="bl" id="bl" onchange="toggleClearBtn('bl')" />
                 <button type="button" id="clear-bl" class="clear-btn" style="display: none;" onclick="clearInput('bl')">선택취소</button>
               </td>
-              <td th:text="${hasBL} ? '✅' : '❌'"></td>
+              <td th:text="${hasBL} ? '☑️' : '❌'"></td>
               <td th:text="${blImport != null} ? ${blImport.iname} : '-'"></td>
               <td th:text="${blImport != null} ? ${#temporals.format(blImport.icreatedate, 'yyyy-MM-dd HH:mm')} : '-'"></td>
               <td>
@@ -244,7 +239,6 @@
     </div>
   </div>
 
-  <!-- 입력 취소 기능 -->
   <script>
     function toggleClearBtn(id) {
       const fileInput = document.getElementById(id);
@@ -259,8 +253,7 @@
     }
   </script>
 
-  <!-- 사전버튼 include -->
   <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
-<div th:replace="~{fragments/footer :: footer}"></div>
+  <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

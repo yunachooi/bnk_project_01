@@ -3,170 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>기업 시스템</title>
-  
+
   <link rel="stylesheet" th:href="@{/css/header.css}" />
   <link rel="stylesheet" th:href="@{/css/common.css}" />
-  <style>
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background-color: #eef3f9;
-      margin: 0;
-     
-    }
-
-    .container {
-      width: 90%;
-      max-width: 1000px;
-      margin: 20px auto;
-    }
-
-    h2 {
-      text-align: center;
-      font-size: 2.2rem;
-      color: #212d49;
-      margin-bottom: 30px;
-    }
-
-    .slider-card {
-      background: white;
-      border-radius: 16px;
-      min-height: 400px;
-      padding: 60px;
-      margin-bottom: 40px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    .slide-header {
-      font-size: 1.5rem;
-      color: #212d49;
-      margin-bottom: 30px;
-      text-align: center;
-      font-weight: 700;
-      height: 30px;
-    }
-    
-    .slide-title {
-	  font-size: 1.6rem; /* ← 이 값을 조절하세요 */
-	  font-weight: 700;
-	  color: #212d49;
-	  margin-bottom: 20px;
-	  display: flex;
-	  align-items: center;
-	  gap: 8px;
-	}
-
-    .slide-text-wrapper {
-      position: relative;
-      width: 100%;
-      min-height: 300px;
-    }
-
-	.slide-text {
-	  position: absolute;
-	  top: 0;
-	  left: 0;
-	  opacity: 0;
-	  transition: opacity 0.3s ease;
-	  font-size: 1.2rem;
-	  line-height: 2;
-	  max-width: 800px;
-	  margin: 0 auto;
-	  padding: 20px 20px 20px 80px; /* ← 여기서 왼쪽 패딩을 증가시켜 오른쪽으로 이동 */
-	  box-sizing: border-box;
-	}
-
-    .slide-text.active {
-      opacity: 1;
-      position: absolute;
-    }
-
-    .slide-text strong {
-      color: #e60012;
-      font-weight: 700;
-    }
-
-    .nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: #212d49;
-      color: white;
-      border: none;
-      width: 40px;
-      height: 40px;
-      font-size: 1.4rem;
-      border-radius: 50%;
-      cursor: pointer;
-      transition: background-color 0.2s;
-      z-index: 10;
-    }
-
-    .nav-btn:hover {
-      background-color: #e60012;
-    }
-
-    .prev-btn {
-      left: 20px;
-    }
-
-    .next-btn {
-      right: 20px;
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      background-color: white;
-      border-radius: 16px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      text-align: left;
-    }
-
-    .card-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #212d49;
-      margin-bottom: 12px;
-    }
-
-    .card-desc {
-      font-size: 1rem;
-      color: #444;
-      margin-bottom: 20px;
-    }
-
-    .card-btn {
-      background-color: #212d49;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-
-    .card-btn:hover {
-      background-color: #e60012;
-    }
-  </style>
+  <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
+  <link rel="stylesheet" th:href="@{/css/import.css}" />
 
   <script>
     let currentSlide = 0;
     let slideInterval;
+    let isPaused = false;
 
     function showSlide(index) {
       const texts = document.querySelectorAll('.slide-text');
@@ -187,130 +33,131 @@
       currentSlide = index;
     }
 
-    function nextSlide() {
-      showSlide(currentSlide + 1);
-    }
+    function nextSlide() { showSlide(currentSlide + 1); }
+    function prevSlide() { showSlide(currentSlide - 1); }
 
-    function prevSlide() {
-      showSlide(currentSlide - 1);
-    }
-
-    function startAutoSlide() {
-      slideInterval = setInterval(() => {
-        nextSlide();
-      }, 6000);
+    function toggleSlidePause() {
+      const btnIcon = document.getElementById('pause-icon');
+      if (isPaused) {
+        slideInterval = setInterval(nextSlide, 6000);
+        btnIcon.textContent = '⏸';
+        isPaused = false;
+      } else {
+        clearInterval(slideInterval);
+        btnIcon.textContent = '▶';
+        isPaused = true;
+      }
     }
 
     window.onload = () => {
       showSlide(0);
-      startAutoSlide();
+      slideInterval = setInterval(nextSlide, 6000);
     };
   </script>
-  
-  	<!-- --------------------------------- 사전CSS --------------------------------- -->    
-    <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
-    <!-- -------------------------------------------------------------------------- -->
-  
-  
 </head>
+
 <body>
+  <div th:replace="~{fragments/header2 :: header}"></div>
 
-	<div th:replace="~{fragments/header2 :: header}"></div>
+  <div class="container">
+    <h2>개인사업자 수입업무 서류제출 서비스</h2>
 
+    <div class="slider-card">
+      <div id="slideHeaders">
+        <div class="slide-header">시스템 개요 안내</div>
+        <div class="slide-header" style="display: none;">시스템 종류 설명</div>
+        <div class="slide-header" style="display: none;">제출 대상 서류 안내</div>
+      </div>
 
-<div class="container">
-  <h2>개인사업자 수입업무 서류제출 서비스</h2>
+      <div class="slide-text-wrapper">
+        <div class="slide-text slide-text-medium">
+          <p>
+            본 페이지는 <span class="text-red">개인사업자를 위한 수입서류 제출 시스템</span>입니다.<br>
+            해외에서 물품을 수입하는 경우, 관련 기관 및 금융기관에 필수 서류를 제출해야 합니다.
+          </p>
+          <br>
+          <p>
+            <strong class="text-bold">제공 기능:</strong><br>
+            • FIND 및 OneClick 시스템 연동<br>
+            • 서류 업로드 및 제출 이력 확인<br>
+            • 업로드한 서류 삭제 및 재제출 기능
+          </p>
+        </div>
 
-  <div class="slider-card">
-    <div id="slideHeaders">
-      <div class="slide-header">시스템 개요 안내</div>
-      <div class="slide-header" style="display: none;">시스템 종류 설명</div>
-      <div class="slide-header" style="display: none;">제출 대상 서류 안내</div>
+        <div class="slide-text slide-text-medium">
+          <p>
+            <span class="text-red">FIND / OneClick</span> 시스템이란?<br>
+            FIND와 OneClick은 <strong class="text-bold">정부24 등 국가 기관에서 발급받은 서류</strong>를 은행에<br>
+            <strong class="text-bold">직접 연동·제출</strong>할 수 있도록 지원하는 서비스입니다.
+          </p>
+          <br>
+          <p>
+            <span class="text-red">기업 자체 서류 업로드</span>란?<br>
+            고객이 <strong class="text-bold">기업 자체 제작서류</strong>를 직접 업로드하여 제출하는 방식으로,<br>
+            제출된 서류는 <strong class="text-bold">BNK가 자체적으로 검토</strong>한 후 처리됩니다.
+          </p>
+        </div>
+
+        <div class="slide-text">
+          <div class="doc-row">
+            <img src="/img/import/red.png" alt="Invoice Icon">
+            <div>
+              <p class="doc-title text-red">인보이스 (Invoice)</p>
+              <p>거래 금액 및 내역이 명시된 문서로, 수입의 근거 자료가 됩니다.</p>
+            </div>
+          </div>
+
+          <div class="doc-row">
+            <img src="/img/import/green.png" alt="Packing List Icon">
+            <div>
+              <p class="doc-title text-red">포장명세서 (Packing List)</p>
+              <p>포장 단위, 수량, 중량 등의 정보를 포함하며, 화물의 구성 내역을 확인할 수 있습니다.</p>
+            </div>
+          </div>
+
+          <div class="doc-row">
+            <img src="/img/import/blue.png" alt="BL Icon">
+            <div>
+              <p class="doc-title text-red">선하증권 (BL: Bill of Lading)</p>
+              <p>운송 정보 및 수취인을 확인할 수 있는 가장 중요한 운송 서류입니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="nav-btn prev-btn" onclick="prevSlide()">&lt;</button>
+      <button class="nav-btn next-btn" onclick="nextSlide()">&gt;</button>
+
+      <!-- ▶ / ⏸ 버튼 -->
+      <div class="slider-control">
+        <button class="pause-btn" onclick="toggleSlidePause()" title="자동 슬라이드 정지 또는 재생">
+          <span id="pause-icon">⏸</span>
+        </button>
+      </div>
     </div>
 
-    <div class="slide-text-wrapper">
-      <!-- Slide 1 -->
-      <div class="slide-text active">
-        <p>
-          본 페이지는 <strong>개인사업자를 위한 수입서류 제출 시스템</strong>입니다.<br>
-          해외에서 물품을 수입하는 경우, 관련 기관 및 금융기관에 필수 서류를 제출해야 합니다.
-        </p>
-        <p>
-          <strong>제공 기능:</strong><br>
-          • FIND 및 OneClick 시스템 연동<br>
-          • 서류 업로드 및 제출 이력 확인<br>
-          • 업로드한 서류 삭제 및 재제출 기능
-        </p>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">FIND 시스템 접속</div>
+        <div class="card-desc">정부 발급 서류를 KOFIND를 통해 손쉽게 연동하세요.</div>
+        <button class="card-btn" onclick="location.href='/user/goFind'">바로가기</button>
       </div>
 
-      <!-- Slide 2 -->
-      <div class="slide-text">
-        <p>
-          <strong>FIND / OneClick </strong>시스템이란?<br>
-          FIND와 OneClick은 <strong>정부24 등 국가 기관에서 발급받은 서류</strong>를 은행에 <strong>직접 연동·제출</strong>할 수 있도록 지원하는 서비스입니다.
-        </p>
-        <p>
-          <strong>기업 자체 서류 업로드</strong>란?<br>
-          고객이 <strong>기업 자체 제작서류</strong>를 직접 업로드하여 제출하는 방식으로,<br>
-          제출된 서류는 <strong>BNK가 자체적으로 검토</strong>한 후 처리됩니다.
-        </p>
+      <div class="card">
+        <div class="card-title">OneClick 시스템 접속</div>
+        <div class="card-desc">정부24 연동을 통한 간편한 서류 제출 서비스입니다.</div>
+        <button class="card-btn" onclick="location.href='/user/goOneclick'">바로가기</button>
       </div>
 
-      <!-- Slide 3 -->
-      <div class="slide-text">
-        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
-          <img src="/img/import/red.png" alt="Invoice Icon" style="width: 36px; height: auto;">
-          <div>
-            <p style="color: #e60012; font-weight: bold; font-size: 1.15rem; margin: 0;">인보이스 (Invoice)</p>
-            <p style="margin: 4px 0 0;">거래 금액 및 내역이 명시된 문서로, 수입의 근거 자료가 됩니다.</p>
-          </div>
-        </div>
-
-        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px;">
-          <img src="/img/import/green.png" alt="Packing List Icon" style="width: 36px; height: auto;">
-          <div>
-            <p style="color: #e60012; font-weight: bold; font-size: 1.15rem; margin: 0;">포장명세서 (Packing List)</p>
-            <p style="margin: 4px 0 0;">포장 단위, 수량, 중량 등의 정보를 포함하며, 화물의 구성 내역을 확인할 수 있습니다.</p>
-          </div>
-        </div>
-
-        <div style="display: flex; align-items: center; gap: 16px;">
-          <img src="/img/import/blue.png" alt="BL Icon" style="width: 36px; height: auto;">
-          <div>
-            <p style="color: #e60012; font-weight: bold; font-size: 1.15rem; margin: 0;">선하증권 (BL: Bill of Lading)</p>
-            <p style="margin: 4px 0 0;">운송 정보 및 수취인을 확인할 수 있는 가장 중요한 운송 서류입니다.</p>
-          </div>
-        </div>
+      <div class="card">
+        <div class="card-title">기업 자체 서식 업로드</div>
+        <div class="card-desc">기업에서 보유한 서류를 직접 업로드하여 제출할 수 있습니다.</div>
+        <button class="card-btn" onclick="location.href='/user/uploadForm'">업로드하기</button>
       </div>
     </div>
-
-    <button class="nav-btn prev-btn" onclick="prevSlide()">&lt;</button>
-    <button class="nav-btn next-btn" onclick="nextSlide()">&gt;</button>
   </div>
 
-	<div class="card-grid">
-	  <div class="card">
-	    <div class="card-title">FIND 시스템 접속</div>
-	    <div class="card-desc">정부 발급 서류를 KOFIND를 통해 손쉽게 연동하세요.</div>
-	    <button class="card-btn" onclick="location.href='/user/goFind'">바로가기</button>
-	  </div>
-	
-	  <div class="card">
-	    <div class="card-title">OneClick 시스템 접속</div>
-	    <div class="card-desc">정부24 연동을 통한 간편한 서류 제출 서비스입니다.</div>
-	    <button class="card-btn" onclick="location.href='/user/goOneclick'">바로가기</button>
-	  </div>
-	
-	  <div class="card">
-	    <div class="card-title">기업 자체 서식 업로드</div>
-	    <div class="card-desc">기업에서 보유한 서류를 직접 업로드하여 제출할 수 있습니다.</div>
-	    <button class="card-btn" onclick="location.href='/user/uploadForm'">업로드하기</button>
-	  </div>
-	</div>
-</div>
-	<!-- --------------------------------- 사전버튼 --------------------------------- -->
-    <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
-    <!-- -------------------------------------------------------------------------- -->
-    <div th:replace="~{fragments/footer :: footer}"></div>
+  <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
+  <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

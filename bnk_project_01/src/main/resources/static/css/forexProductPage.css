@@ -4,21 +4,23 @@
   --bnk-border: #ddd;
 }
 
-/* 🎥 비디오 영역: 블러 + 중앙 콘텐츠 비디오 */
+/* 🎥 비디오 영역 */
 .video-section {
   position: relative;
   width: 100%;
-  height: 100vh; /* ✅ 전체 화면 꽉 차게 */
+  height: auto;
+  background-color: black;
   overflow: hidden;
 }
 
 .background-video {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  top: 50%;
+  left: 50%;
+  width: 1200px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  object-fit: contain;
   filter: blur(10px) brightness(0.6);
   z-index: 1;
 }
@@ -26,114 +28,64 @@
 .video-overlay {
   position: relative;
   z-index: 2;
-  height: 100%;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 60px 0;
   pointer-events: none;
 }
 
 .foreground-video {
-  height: 100%;        /* ✅ 높이 동일하게 */
-  width: auto;         /* ✅ 비율 유지 */
-  max-width: 80vw;     /* ✅ 전체 화면의 80% 너비까지만 */
+  width: 1000px;
+  height: auto;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   object-fit: contain;
 }
 
-/* ✅ ONE 주요 혜택 섹션 */
+/* ✅ 카드형 혜택 UI */
 .one-benefit-section {
   max-width: 1000px;
-  margin: 60px auto;
+  margin: 80px auto;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 60px;
 }
 
-.benefit-box {
-  background-color: #fff;
-  padding: 50px 30px;
+.benefit-card {
+  background: white;
+  padding: 80px 60px;
   text-align: center;
-  max-width: 700px;
+  width: 1000px;
   margin: 0 auto;
+  border-radius: 24px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.06);
 }
 
-.benefit-sub {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #555;
-  margin-bottom: 10px;
+.badge {
+  display: inline-block;
+  background-color: #fba94c;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
-.benefit-title {
-  font-size: 2rem;
+.main-title {
+  font-size: 2.5rem;
   font-weight: 900;
   color: #212d49;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
-.benefit-desc {
-  font-size: 1rem;
+.desc {
+  font-size: 1.2rem;
   color: #555;
-  line-height: 1.6;
-}
-
-/* ✅ 회색 박스 섹션 (1000px 제한) */
-.gray-section {
-  width: 100%;
-  background-color: #f5f5f5;
-  padding: 60px 0;
-}
-
-.gray-section .benefit-box {
-  background-color: transparent;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 50px 30px;
-  text-align: center;
-}
-
-/* 🎞 슬라이더 */
-.slider-container {
-  overflow: hidden;
-  width: 100%;
-  background-color: var(--bnk-light-gray);
-}
-
-.slider-track {
-  display: flex;
-  transition: transform 0.5s ease;
-}
-
-.slide {
-  min-width: 100%;
-  box-sizing: border-box;
-  padding: 40px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.slide-box {
-  background: white;
-  padding: 30px 40px;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  max-width: 700px;
-}
-
-.slide-box h3 {
-  color: var(--bnk-red);
-  font-size: 1.5rem;
+  line-height: 1.7;
   margin-bottom: 10px;
-}
-
-.slide-box p {
-  font-size: 1.1rem;
-  color: #333;
 }
 
 /* 📑 탭 메뉴 */
@@ -166,6 +118,12 @@
   transition: all 0.2s ease;
 }
 
+.js-tabA li a:hover {
+  border-color: var(--bnk-red);
+  background-color: var(--bnk-red);
+  color: white;
+}
+
 .js-tabA li a.active {
   background-color: var(--bnk-red);
   color: white;
@@ -174,12 +132,12 @@
 /* 📄 탭 콘텐츠 */
 .tab-content,
 #tabContentArea {
+  display: none;
   background-color: #fafafa;
   border-top: 1px solid var(--bnk-border);
   padding: 30px;
 }
 
-/* ✅ 탭 내부 콘텐츠 스타일 */
 #tabContentArea h3 {
   font-size: 1.3rem;
   color: var(--bnk-red);
@@ -205,7 +163,7 @@
   color: #212d49;
 }
 
-/* ✅ 테이블 스타일 */
+/* ✅ 테이블 */
 .guide-table,
 .discount-table {
   width: 100%;
@@ -234,14 +192,14 @@
   overflow-x: auto;
 }
 
-/* ✅ 메모 */
+/* 메모 */
 #tabContentArea .note {
   font-size: 0.9rem;
   color: #777;
   margin-top: 20px;
 }
 
-/* 📱 반응형 */
+/* 📱 반응형 스타일 */
 @media (max-width: 768px) {
   .js-tabA {
     flex-direction: column;
@@ -265,11 +223,32 @@
     padding: 8px;
   }
 
-  .benefit-title {
-    font-size: 1.6rem;
+  /* ✅ 혜택 카드 반응형 대응 */
+  .benefit-card {
+    width: 90%;
+    padding: 40px 20px;
+    border-radius: 16px;
   }
 
-  .benefit-sub {
-    font-size: 1.1rem;
+  .badge {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+  }
+
+  .main-title {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+  }
+
+  .desc {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  /* 섹션 여백도 축소 */
+  .one-benefit-section {
+    gap: 40px;
+    margin: 40px auto;
   }
 }

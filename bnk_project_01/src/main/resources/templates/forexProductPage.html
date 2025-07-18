@@ -10,7 +10,7 @@
 <body>
 <div th:replace="~{fragments/header2 :: header}"></div>
 
-<!-- 🎥 비디오 영역 -->
+<!-- 비디오 영역 -->
 <section class="video-section">
   <video class="background-video" src="/videos/ONE%20환전.mp4" autoplay muted loop playsinline></video>
   <div class="video-overlay">
@@ -18,34 +18,30 @@
   </div>
 </section>
 
-<!-- ✅ 혜택 소개 -->
+<!-- 혜택 소개 -->
 <section class="one-benefit-section">
-  <div class="benefit-box">
-    <p class="benefit-sub">ONE 하는 날에</p>
-    <h2 class="benefit-title">365일 24시간</h2>
-    <p class="benefit-desc">외화를 수령하고, 배달하며 금고보관까지 가능한 서비스</p>
+  <div class="benefit-card">
+    <span class="badge">ONE 하는 날에</span>
+    <h2 class="main-title">365일 24시간</h2>
+    <p class="desc">외화를 수령하고, 배달하며 금고보관까지 가능한 서비스</p>
   </div>
 
-  <div class="gray-section">
-    <div class="benefit-box">
-      <p class="benefit-sub">ONE 하는 분께</p>
-      <h2 class="benefit-title">누구나 이용 가능</h2>
-      <p class="benefit-desc">국내 거주 중인 개인 고객부터 기업 고객까지</p>
-    </div>
+  <div class="benefit-card">
+    <span class="badge">ONE 하는 분께</span>
+    <h2 class="main-title">누구나 이용 가능</h2>
+    <p class="desc">국내 거주 중인 개인 고객부터 기업 고객까지</p>
   </div>
 
-  <div class="benefit-box">
-    <p class="benefit-sub">ONE 하는 곳에</p>
-    <h2 class="benefit-title">언제 어디서나</h2>
-    <p class="benefit-desc">해외여행이든 출장지든 외화를 손쉽게 신청하고 수령 가능</p>
+  <div class="benefit-card">
+    <span class="badge">ONE 하는 곳에</span>
+    <h2 class="main-title">언제 어디서나</h2>
+    <p class="desc">해외여행이든 출장지든 외화를 손쉽게 신청하고 수령 가능</p>
   </div>
 
-  <div class="gray-section">
-    <div class="benefit-box">
-      <p class="benefit-sub">여행을 ONE할 때</p>
-      <h2 class="benefit-title">간편한 환전</h2>
-      <p class="benefit-desc">USD, JPY, EUR, CNY 등 원하는 통화로</p>
-    </div>
+  <div class="benefit-card">
+    <span class="badge">여행을 ONE할 때</span>
+    <h2 class="main-title">간편한 환전</h2>
+    <p class="desc">USD, JPY, EUR, CNY 등 원하는 통화로</p>
   </div>
 </section>
 
@@ -63,7 +59,7 @@
 <div th:replace="~{fragments/footer :: footer}"></div>
 
 
-<!-- ✅ 탭 토글 스크립트 -->
+<!-- 탭 토글 스크립트 -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const tabs = document.querySelectorAll(".js-tab");
@@ -76,24 +72,28 @@ document.addEventListener("DOMContentLoaded", function () {
       const target = tab.getAttribute("data-target");
 
       if (activeTab === target) {
-        tab.classList.remove("active");
-        tabContentArea.innerHTML = "";
-        activeTab = null;
-      } else {
-        tabs.forEach(t => t.classList.remove("active"));
-        tab.classList.add("active");
+    	  tab.classList.remove("active");
+    	  tabContentArea.innerHTML = "";
+    	  tabContentArea.style.display = "none";
+    	  activeTab = null;
+    	} else {
+    	  tabs.forEach(t => t.classList.remove("active"));
+    	  tab.classList.add("active");
 
-        fetch(`/forex/${target}`)
-          .then(res => res.text())
-          .then(html => {
-            tabContentArea.innerHTML = html;
-            activeTab = target;
-          })
-          .catch(err => {
-            console.error("탭 로딩 실패:", err);
-            tabContentArea.innerHTML = "<p>내용을 불러오지 못했습니다.</p>";
-          });
-      }
+    	  fetch(`/forex/${target}`)
+    	    .then(res => res.text())
+    	    .then(html => {
+    	      tabContentArea.innerHTML = html;
+    	      tabContentArea.style.display = "block";
+    	      activeTab = target;
+    	    })
+    	    .catch(err => {
+    	      console.error("탭 로딩 실패:", err);
+    	      tabContentArea.innerHTML = "<p>내용을 불러오지 못했습니다.</p>";
+    	      tabContentArea.style.display = "block";
+    	      activeTab = target;
+    	    });
+    	}
     });
   });
 });
