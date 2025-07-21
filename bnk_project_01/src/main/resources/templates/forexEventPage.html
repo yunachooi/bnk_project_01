@@ -30,25 +30,41 @@
     100% { color: red; }
   }
 
+  .coupon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+    padding: 10px;
+  }
+
   .coupon-bg{
     background:url("/img/coupon/coupon-main2.png") center/contain no-repeat;
-    aspect-ratio:18 / 13;
     width:100%;
-    height:90%;
-    display:flex;justify-content:center;align-items:center;
-    padding:0;
+    max-width: 1100px;
+    height: 500px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom: 30px;
     position: relative;
   }
 
   #couponBtn{
-    background:none;border:none;cursor:pointer;transition:.2s;
-    font-size:40px;font-weight:700;
-    position: absolute;
-    top: 30.75rem;
-    right: 63.5rem;
+    background: #000000;
     border: none;
-    background-color: #000000;
+    cursor: pointer;
+    transition: .2s;
+    font-size: clamp(16px, 2.2vw, 24px);
+    font-weight: 700;
+    padding: clamp(6px, 1vw, 10px) clamp(12px, 1.8vw, 20px);
+    border-radius: 8px;
     animation: rainbow 3s infinite linear;
+    position: absolute;
+    left: 23.67%;
+    top: 69.67%;
+    transform: translate(-50%, -50%);
   }
 
   #couponBtn span {
@@ -56,15 +72,39 @@
     animation: rainbow 2s infinite linear;
   }
 
-  #couponBtn span:nth-child(1) { animation-delay: 0s; padding-left:20px; }
+  #couponBtn span:nth-child(1) { animation-delay: 0s; padding-left: clamp(6px, 0.9vw, 10px); }
   #couponBtn span:nth-child(2) { animation-delay: 0.2s; }
   #couponBtn span:nth-child(3) { animation-delay: 0.4s; }
   #couponBtn span:nth-child(4) { animation-delay: 0.6s; }
   #couponBtn span:nth-child(5) { animation-delay: 0.8s; }
   #couponBtn span:nth-child(6) { animation-delay: 1s; }
-  #couponBtn span:nth-child(7) { animation-delay: 1.2s; padding-right:20px; }
+  #couponBtn span:nth-child(7) { animation-delay: 1.2s; padding-right: clamp(6px, 0.9vw, 10px); }
 
-  #couponBtn:hover{color:#ff3030;}
+  #couponBtn:hover{
+    color:#ff3030;
+  }
+
+  /* 반응형 디자인 */
+  @media (max-width: 768px) {
+    #couponBtn {
+      font-size: 28px;
+      padding: 12px 24px;
+    }
+    
+    .coupon-bg {
+      margin-bottom: 20px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    #couponBtn {
+      font-size: 24px;
+      padding: 10px 20px;
+    }
+    
+    #couponBtn span:nth-child(1) { padding-left: 10px; }
+    #couponBtn span:nth-child(7) { padding-right: 10px; }
+  }
 
   .modal {
     display: none;
@@ -166,10 +206,12 @@
 
   <header th:replace="~{fragments/header2 :: header}"></header>
 
-  <div class="coupon-bg">
-    <button id="couponBtn" onclick="openForm()">
-      <span>쿠</span><span>폰</span><span> </span><span>발</span><span>행</span><span>하</span><span>기</span>
-    </button>
+  <div class="coupon-container">
+    <div class="coupon-bg">
+      <button id="couponBtn" onclick="openForm()">
+        <span>쿠</span><span>폰</span><span> </span><span>발</span><span>행</span><span>하</span><span>기</span>
+      </button>
+    </div>
   </div>
 
   <footer th:replace="~{fragments/footer :: footer}"></footer>
