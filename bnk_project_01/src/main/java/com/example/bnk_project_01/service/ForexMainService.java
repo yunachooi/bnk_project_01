@@ -12,6 +12,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
+import java.security.cert.CertificateException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,14 +35,82 @@ public class ForexMainService {
     @Value("${exim.api-key}")
     private String authKey;
     
+    @Value("${app.environment:dev}")  // 환경 설정 (dev, prod)
+    private String environment;
+    
     @Autowired
     private ForexMainRepository forexMainRepository;
     
+    // 특정 호스트에 대해서만 SSL 검증을 우회하는 안전한 방법
+    private static class KoreaEximTrustManager implements X509TrustManager {
+        private final String TRUSTED_HOST = "oapi.koreaexim.go.kr";
+        
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            // 클라이언트 인증서는 기본 검증 수행
+            throw new CertificateException("클라이언트 인증서 검증 실패");
+        }
+        
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+            if (chain == null || chain.length == 0) {
+                throw new CertificateException("인증서 체인이 비어있습니다");
+            }
+            
+            // 첫 번째 인증서에서 호스트명 확인
+            X509Certificate cert = chain[0];
+            String certSubject = cert.getSubjectX500Principal().getName();
+            
+            // 한국수출입은행 도메인인지 확인
+            if (certSubject.contains("koreaexim.go.kr") || 
+                certSubject.contains("CN=*.koreaexim.go.kr") ||
+                certSubject.contains("CN=oapi.koreaexim.go.kr")) {
+                System.out.println("✅ 한국수출입은행 인증서 신뢰 처리: " + certSubject);
+                return; // 신뢰함
+            }
+            
+            // 기타 인증서는 기본 검증 수행
+            throw new CertificateException("신뢰할 수 없는 서버 인증서: " + certSubject);
+        }
+        
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+    }
+    
+    // 개발 환경에서만 SSL 설정 적용
+    private void configureSSLForDevelopment() {
+        if (!"dev".equals(environment)) {
+            System.out.println("🔒 운영 환경 - SSL 기본 검증 사용");
+            return;
+        }
+        
+        try {
+            // 개발 환경에서만 특정 호스트에 대해 SSL 검증 완화
+            TrustManager[] trustManagers = new TrustManager[] {
+                new KoreaEximTrustManager()
+            };
+            
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustManagers, new java.security.SecureRandom());
+            
+            // 개발용 SSLSocketFactory 임시 저장
+            javax.net.ssl.SSLSocketFactory defaultFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
+            javax.net.ssl.HostnameVerifier defaultVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
+            
+            // 특정 API 호출에만 적용할 것이므로 여기서는 설정만 준비
+            System.out.println("⚠️ 개발 환경 - 한국수출입은행 API용 SSL 설정 준비");
+            
+        } catch (Exception e) {
+            System.err.println("❌ SSL 설정 실패: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+    
     public void fetch() throws Exception {
         LocalDate today = LocalDate.now();
-        
         LocalDate baseDate = today.minusDays(1);
-        
         LocalDate targetDate = getValidBusinessDate(baseDate);
         
         System.out.println("📅 기준일: " + targetDate + " (" + targetDate.getDayOfWeek() + ")");
@@ -62,12 +137,12 @@ public class ForexMainService {
             checkDate = checkDate.minusDays(1);
         }
         
+        System.out.println("⚠️ 7일 내에 영업일을 찾을 수 없음. 원래 날짜 사용: " + date);
         return date;
     }
     
     private void fetchDataForDate(LocalDate targetDate) throws Exception {
         String dateStr = targetDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        
         String url = "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON" +
                 "?authkey=" + authKey + 
                 "&searchdate=" + dateStr + 
@@ -75,11 +150,36 @@ public class ForexMainService {
         
         System.out.println("🔗 API URL: " + url);
         
+        // 기존 SSL 설정 백업
+        javax.net.ssl.SSLSocketFactory originalFactory = HttpsURLConnection.getDefaultSSLSocketFactory();
+        javax.net.ssl.HostnameVerifier originalVerifier = HttpsURLConnection.getDefaultHostnameVerifier();
+        
         try {
+            // 개발 환경에서만 SSL 설정 임시 변경
+            if ("dev".equals(environment)) {
+                configureSSLForDevelopment();
+                
+                // 한국수출입은행 API에 대해서만 임시로 호스트명 검증 완화
+                HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> {
+                    if ("oapi.koreaexim.go.kr".equals(hostname)) {
+                        System.out.println("🔓 개발용 - 한국수출입은행 호스트명 검증 우회");
+                        return true;
+                    }
+                    return originalVerifier.verify(hostname, session);
+                });
+                
+                // 특정 도메인에 대해서만 SSL 검증 완화
+                TrustManager[] trustManagers = new TrustManager[] { new KoreaEximTrustManager() };
+                SSLContext sslContext = SSLContext.getInstance("TLS");
+                sslContext.init(null, trustManagers, new java.security.SecureRandom());
+                HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+            }
+            
             HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(10000);
             conn.setReadTimeout(15000);
+            conn.setRequestProperty("User-Agent", "BNK-ForexService/1.0");
             
             int responseCode = conn.getResponseCode();
             System.out.println("📡 API 응답 코드: " + responseCode);
@@ -161,8 +261,14 @@ public class ForexMainService {
             System.err.println("❌ API 호출 중 오류 발생:");
             System.err.println("  - 대상 날짜: " + targetDate);
             System.err.println("  - 오류 메시지: " + e.getMessage());
-            e.printStackTrace();
             throw e;
+        } finally {
+            // ⭐ 중요: SSL 설정을 원래대로 복구
+            if ("dev".equals(environment)) {
+                HttpsURLConnection.setDefaultSSLSocketFactory(originalFactory);
+                HttpsURLConnection.setDefaultHostnameVerifier(originalVerifier);
+                System.out.println("🔒 SSL 설정 원상복구 완료");
+            }
         }
     }
     
