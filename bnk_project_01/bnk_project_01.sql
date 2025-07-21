@@ -6,9 +6,11 @@ CREATE TABLE bnk_access_log (
   device_type VARCHAR(100)
 ); 
 
+
+-- 권한부여
 INSERT INTO BNK_USER(username, password, role) VALUES ('supervisor', '1234', 'ROLE_SUP');
 INSERT INTO BNK_USER(username, password, role) VALUES ('admin', '1234', 'ROLE_ADMIN');
-INSERT INTO BNK_USER(username, password, role) VALUES ('user_ceo', '1234', 'ROLE_CEO');
+INSERT INTO BNK_USER(username, password, role) VALUES ('ceo', '1234', 'ROLE_CEO');
 INSERT INTO BNK_USER(username, password, role) VALUES ('user', '1234', 'ROLE_USER');
 
 
