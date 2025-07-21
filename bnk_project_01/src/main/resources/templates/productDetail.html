@@ -2,205 +2,446 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>BNK 상품 상세</title>
+  <title th:text="${productName}">통장이름</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" th:href="@{/css/common.css}" />
-  <link rel="stylesheet" th:href="@{/css/productDetail.css}" />
   <link rel="stylesheet" th:href="@{/css/dictionary-button.css}" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans+KR:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR','Montserrat',sans-serif;
+      background: #f5f7fa;
+      color: #212121;
+    }
+    .container2 { max-width: 1100px; margin: 60px auto; padding: 0 20px; }
+    .slider-area-main {
+      background: #fff; border-radius: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      overflow: hidden; margin-bottom: 40px;
+    }
+    .slider-inner-header {
+      padding: 20px 0; text-align: center;
+      font-size: 2rem; font-weight: 900; color: #000;
+      background: #fff; border-bottom: 1px solid #ececf0;
+    }
+    .slider-body { display: flex; min-height: 410px; }
+    .slider-nav {
+      width: 200px; background: #fafafb;
+      border-right: 1px solid #ececf0;
+      display: flex; flex-direction: column;
+    }
+    .slider-nav button {
+      flex: 1; font-size: 1.3rem; font-weight: 700;
+      background: none; border: none;
+      border-bottom: 1px solid #eee; cursor: pointer;
+      transition: background .2s, color .2s; color: #222;
+    }
+    .slider-nav button.active {
+      background: #e6332b; color: #fff;
+    }
+    .slider-content {
+      flex: 1; position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 410px;
+    }
+    .slider-content img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      max-width: 580px;
+      max-height: 410px;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: opacity .4s;
+      background: #f4f6fa;
+    }
+    .slider-arrow {
+      position: absolute; top: 50%;
+      transform: translateY(-50%);
+      width: 40px; height: 40px;
+      background: #fff; border: 1px solid #ddd;
+      border-radius: 50%; font-size: 1.6rem;
+      color: #555; display: flex; align-items: center;
+      justify-content: center; cursor: pointer;
+      transition: background .2s; z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .slider-arrow:hover { background: #f0f0f0; }
+    .slider-arrow.left { left: 16px; }
+    .slider-arrow.right { right: 16px; }
+    .accordion-area-wrap { margin-bottom: 60px; }
+    .accordion-wrap {
+      background: #fff; border-radius: 1.4rem;
+      box-shadow: 0 0 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+    .accordion-item + .accordion-item {
+      border-top: 1px solid #e4e6ee;
+    }
+    .accordion-header {
+      width: 100%; padding: 16px 24px;
+      font-size: 1.15rem; font-weight: 900;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; background: #f8f8fa; border: none;
+    }
+    .accordion-header:hover { background: #eef7fe; }
+    .accordion-body {
+      display: none; padding: 16px 24px; background: #fff;
+      font-size: 1.05rem; color: #394256; line-height: 1.6;
+    }
+    .accordion-item.active .accordion-body {
+      display: block;
+    }
+    .accordion-arrow {
+      font-size: 1.4rem; transition: transform .2s;
+    }
+    .accordion-item.active .accordion-arrow {
+      transform: rotate(180deg);
+    }
+    .detail-table {
+      width: 100%; border-collapse: collapse; margin-top: 12px;
+    }
+    .detail-table th, .detail-table td {
+      border: 1px solid #e4e6ee; padding: 10px 14px;
+      text-align: left; vertical-align: top;
+    }
+    .detail-table th {
+      width: 160px; background: #f1f2f6; font-weight: 700;
+    }
+    @media (max-width: 768px) {
+      .slider-body { flex-direction: column; min-height: auto; }
+      .slider-nav {
+        flex-direction: row; width: 100%;
+        border-right: none; border-bottom: 1px solid #ececf0;
+        height: auto;
+      }
+      .slider-nav button {
+        flex: 1; border-bottom: none;
+        border-right: 1px solid #eee;
+      }
+      .slider-nav button:last-child { border-right: none; }
+      .slider-content { height: 280px; }
+    }
+  </style>
 </head>
 <body>
-
-<div th:replace="~{fragments/header2 :: header}"></div>
-
-<!-- ✅ 탭 + 슬라이드 구조 -->
-<div class="slider-container">
-  <div class="left-panel">
-    <div class="product-title" id="productTitle">상품명</div>
-    <div class="tab-buttons" id="tabButtons"></div>
-  </div>
-  <div class="slide-area">
-    <div class="arrow-group">
-      <div class="arrow" onclick="prevSlide()">‹</div>
-      <div class="arrow" onclick="nextSlide()">›</div>
+  <div th:replace="~{fragments/header2 :: header}"></div>
+  <div class="container2">
+    <div class="slider-area-main">
+      <!-- 슬라이더 상단 제목 -->
+      <div class="slider-inner-header" th:text="${productName}">통장이름</div>
+      <div class="slider-body">
+        <!-- 좌측 탭 -->
+        <div class="slider-nav" id="sliderTabs">
+          <button class="active">안내</button>
+          <button>추천 대상</button>
+          <button>상품 특징</button>
+          <button>핵심 요약</button>
+          <button>예금자보호</button>
+          <button>가입</button>
+        </div>
+        <!-- 우측 이미지 -->
+        <div class="slider-content">
+          <span class="slider-arrow left" onclick="changeSlide(-1)">‹</span>
+          <img id="mainImage" alt="슬라이드 이미지" />
+          <span class="slider-arrow right" onclick="changeSlide(1)">›</span>
+        </div>
+      </div>
     </div>
-    <div id="slideImagesWrapper"></div>
-  </div>
-</div>
-
-<!-- ✅ 아코디언 정보 영역 -->
+    <!-- ✅ 아코디언 정보 영역 -->
+<!-- ... 상단 동일 ... -->
 <div class="accordion-area-wrap">
   <div class="accordion-wrap">
+    <!-- 상품개요 -->
     <div class="accordion-item">
       <button class="accordion-header" onclick="toggleAccordion(this)">
         상품개요 <span class="accordion-arrow">▼</span>
       </button>
       <div class="accordion-body">
         <table class="detail-table">
-          <tr><th>설명</th><td th:text="${attributes['PR001'][0].avalue}">내용</td></tr>
+          <tr th:if="${attributes['PR001'] != null and #lists.size(attributes['PR001']) > 0}">
+            <th>상품개요</th>
+            <td th:utext="${attributes['PR001'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR002'] != null and #lists.size(attributes['PR002']) > 0}">
+            <th>예금과목</th>
+            <td th:utext="${attributes['PR002'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR025'] != null and #lists.size(attributes['PR025']) > 0}">
+            <th>유의사항</th>
+            <td th:utext="${attributes['PR025'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR030'] != null and #lists.size(attributes['PR030']) > 0}">
+            <th>세금우대</th>
+            <td th:utext="${attributes['PR030'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR031'] != null and #lists.size(attributes['PR031']) > 0}">
+            <th>예금지급제한</th>
+            <td th:utext="${attributes['PR031'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR034'] != null and #lists.size(attributes['PR034']) > 0}">
+            <th>원금/이자지급제한</th>
+            <td th:utext="${attributes['PR034'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR036'] != null and #lists.size(attributes['PR036']) > 0}">
+            <th>자료열람요구권</th>
+            <td th:utext="${attributes['PR036'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR037'] != null and #lists.size(attributes['PR037']) > 0}">
+            <th>위법계약해지권</th>
+            <td th:utext="${attributes['PR037'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
         </table>
       </div>
     </div>
-
+    <!-- 가입조건 -->
     <div class="accordion-item">
       <button class="accordion-header" onclick="toggleAccordion(this)">
         가입조건 <span class="accordion-arrow">▼</span>
       </button>
       <div class="accordion-body">
         <table class="detail-table">
-          <tr><th>가입대상</th><td th:text="${attributes['PR005'][0].avalue}">내용</td></tr>
-          <tr><th>가입금액</th><td th:text="${attributes['PR006'][0].avalue}">내용</td></tr>
-          <tr><th>가입기간</th><td th:text="${attributes['PR007'][0].avalue}">내용</td></tr>
-          <tr><th>납입한도</th><td th:text="${attributes['PR008'][0].avalue}">내용</td></tr>
+          <tr th:if="${attributes['PR003'] != null and #lists.size(attributes['PR003']) > 0}">
+            <th>가입자격</th>
+            <td th:utext="${attributes['PR003'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR004'] != null and #lists.size(attributes['PR004']) > 0}">
+            <th>가입가능통화</th>
+            <td th:utext="${attributes['PR004'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR005'] != null and #lists.size(attributes['PR005']) > 0}">
+            <th>가입대상</th>
+            <td th:utext="${attributes['PR005'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR006'] != null and #lists.size(attributes['PR006']) > 0}">
+            <th>가입금액</th>
+            <td th:utext="${attributes['PR006'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR007'] != null and #lists.size(attributes['PR007']) > 0}">
+            <th>가입기간</th>
+            <td th:utext="${attributes['PR007'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR008'] != null and #lists.size(attributes['PR008']) > 0}">
+            <th>납입한도</th>
+            <td th:utext="${attributes['PR008'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR009'] != null and #lists.size(attributes['PR009']) > 0}">
+            <th>가입방법</th>
+            <td th:utext="${attributes['PR009'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR010'] != null and #lists.size(attributes['PR010']) > 0}">
+            <th>필요서류</th>
+            <td th:utext="${attributes['PR010'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR011'] != null and #lists.size(attributes['PR011']) > 0}">
+            <th>계좌당<br>거래가능통화</th>
+            <td th:utext="${attributes['PR011'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR013'] != null and #lists.size(attributes['PR013']) > 0}">
+            <th>자동이체적립<br>서비스</th>
+            <td th:utext="${attributes['PR013'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR021'] != null and #lists.size(attributes['PR021']) > 0}">
+            <th>분할인출</th>
+            <td th:utext="${attributes['PR021'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR023'] != null and #lists.size(attributes['PR023']) > 0}">
+            <th>거래중지계좌관리</th>
+            <td th:utext="${attributes['PR023'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR024'] != null and #lists.size(attributes['PR024']) > 0}">
+            <th>적립방법</th>
+            <td th:utext="${attributes['PR024'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR026'] != null and #lists.size(attributes['PR026']) > 0}">
+            <th>지정환율매매주문서비스</th>
+            <td th:utext="${attributes['PR026'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR028'] != null and #lists.size(attributes['PR028']) > 0}">
+            <th>계좌잔액관리</th>
+            <td th:utext="${attributes['PR028'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR029'] != null and #lists.size(attributes['PR029']) > 0}">
+            <th>자동재예치</th>
+            <td th:utext="${attributes['PR029'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR032'] != null and #lists.size(attributes['PR032']) > 0}">
+            <th>자동갱신(리볼빙)</th>
+            <td th:utext="${attributes['PR032'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR033'] != null and #lists.size(attributes['PR033']) > 0}">
+            <th>지정환율통지<br>서비스</th>
+            <td th:utext="${attributes['PR033'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
         </table>
       </div>
     </div>
-
+    <!-- 금리·환율정보 -->
     <div class="accordion-item">
       <button class="accordion-header" onclick="toggleAccordion(this)">
-        금리정보 <span class="accordion-arrow">▼</span>
+        금리·환율정보 <span class="accordion-arrow">▼</span>
       </button>
       <div class="accordion-body">
         <table class="detail-table">
-          <tr><th>기본금리</th><td th:text="${attributes['PR014'][0].avalue}">내용</td></tr>
-          <tr><th>우대금리</th><td th:text="${attributes['PR015'][0].avalue}">내용</td></tr>
+          <tr th:if="${attributes['PR012'] != null and #lists.size(attributes['PR012']) > 0}">
+            <th>이자율안내</th>
+            <td th:utext="${attributes['PR012'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR014'] != null and #lists.size(attributes['PR014']) > 0}">
+            <th>기본금리</th>
+            <td th:utext="${attributes['PR014'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR015'] != null and #lists.size(attributes['PR015']) > 0}">
+            <th>우대금리</th>
+            <td th:utext="${attributes['PR015'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR016'] != null and #lists.size(attributes['PR016']) > 0}">
+            <th>수수료우대</th>
+            <td th:utext="${attributes['PR016'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR022'] != null and #lists.size(attributes['PR022']) > 0}">
+            <th>적용환율</th>
+            <td th:utext="${attributes['PR022'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR027'] != null and #lists.size(attributes['PR027']) > 0}">
+            <th>외화현찰수수료</th>
+            <td th:utext="${attributes['PR027'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
         </table>
       </div>
     </div>
-
+    <!-- 만기·중도해지 이율 -->
     <div class="accordion-item">
       <button class="accordion-header" onclick="toggleAccordion(this)">
         만기·중도해지 이율 <span class="accordion-arrow">▼</span>
       </button>
       <div class="accordion-body">
         <table class="detail-table">
-          <tr><th>만기 후</th><td th:text="${attributes['PR017'][0].avalue}">내용</td></tr>
-          <tr><th>중도해지</th><td th:text="${attributes['PR018'][0].avalue}">내용</td></tr>
-          <tr><th>특별중도해지</th><td th:text="${attributes['PR019'][0].avalue}">내용</td></tr>
+          <tr th:if="${attributes['PR017'] != null and #lists.size(attributes['PR017']) > 0}">
+            <th>만기</th>
+            <td th:utext="${attributes['PR017'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR018'] != null and #lists.size(attributes['PR018']) > 0}">
+            <th>중도해지</th>
+            <td th:utext="${attributes['PR018'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR019'] != null and #lists.size(attributes['PR019']) > 0}">
+            <th>특별중도해지</th>
+            <td th:utext="${attributes['PR019'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
         </table>
       </div>
     </div>
-
+    <!-- 기타정보·공시 -->
     <div class="accordion-item">
       <button class="accordion-header" onclick="toggleAccordion(this)">
-        기타 정보 <span class="accordion-arrow">▼</span>
+        기타정보·공시 <span class="accordion-arrow">▼</span>
       </button>
       <div class="accordion-body">
         <table class="detail-table">
-          <tr><th>이자지급</th><td th:text="${attributes['PR020'][0].avalue}">내용</td></tr>
-          <tr><th>적립방법</th><td th:text="${attributes['PR024'][0].avalue}">내용</td></tr>
-          <tr><th>예금자보호</th><td th:text="${attributes['PR035'][0].avalue}">내용</td></tr>
-          <tr><th>공시승인번호</th><td th:text="${attributes['PR038'][0].avalue}">내용</td></tr>
+          <tr th:if="${attributes['PR020'] != null and #lists.size(attributes['PR020']) > 0}">
+            <th>이자지급방식</th>
+            <td th:utext="${attributes['PR020'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR035'] != null and #lists.size(attributes['PR035']) > 0}">
+            <th>예금자보호</th>
+            <td th:utext="${attributes['PR035'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR038'] != null and #lists.size(attributes['PR038']) > 0}">
+            <th>공시승인번호</th>
+            <td th:utext="${attributes['PR038'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
+          <tr th:if="${attributes['PR039'] != null and #lists.size(attributes['PR039']) > 0}">
+            <th>예금보험금융상품</th>
+            <td th:utext="${attributes['PR039'][0].avalue.replaceAll('\n', '<br>')}">내용</td>
+          </tr>
         </table>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 고정 사전 버튼 & 푸터 -->
-<div th:replace="fragments/dictionary-button :: dictionary-button"></div>
-<div th:replace="~{fragments/footer :: footer}"></div>
+</div>
+  <div th:replace="fragments/dictionary-button :: dictionary-button"></div>
+  <div th:replace="~{fragments/footer :: footer}"></div>
 
-<!-- ✅ 스크립트 -->
-<script>
-  const products = [
-    { pno: "P001", name: "꿈이룸 외화자유적금", imgPrefix: "m1", imageCount: 6 },
-    { pno: "P002", name: "BNK모아드림외화적금", imgPrefix: "m5", imageCount: 6 },
-    { pno: "P003", name: "BNK UP & UP 외화정기예금", imgPrefix: "m4", imageCount: 6 },
-    { pno: "P004", name: "업앤업 외화MMDA", imgPrefix: "m2", imageCount: 6 },
-    { pno: "P005", name: "EASY 환테크 듀얼통장", imgPrefix: "m3", imageCount: 6 },
-    { pno: "P006", name: "외화정기예금", imgPrefix: "m6", imageCount: 6 },
-    { pno: "P007", name: "외화당좌예금", imgPrefix: "m7", imageCount: 6 },
-    { pno: "P008", name: "외화보통예금", imgPrefix: "m8", imageCount: 6 }
-  ];
+  <script>
+    // 상품 정의 (prefix, 이미지 갯수 등)
+    const products = [
+      { pno: "P001", name: "꿈이룸 외화자유적금", imgPrefix: "m1", imageCount: 6 },
+      { pno: "P002", name: "BNK모아드림외화적금", imgPrefix: "m5", imageCount: 6 },
+      { pno: "P003", name: "BNK UP & UP 외화정기예금", imgPrefix: "m4", imageCount: 6 },
+      { pno: "P004", name: "업앤업 외화MMDA", imgPrefix: "m2", imageCount: 6 },
+      { pno: "P005", name: "EASY 환테크 듀얼통장", imgPrefix: "m3", imageCount: 6 },
+      { pno: "P006", name: "외화정기예금", imgPrefix: "m6", imageCount: 6 },
+      { pno: "P007", name: "외화당좌예금", imgPrefix: "m7", imageCount: 6 },
+      { pno: "P008", name: "외화보통예금", imgPrefix: "m8", imageCount: 6 }
+    ];
 
-  const tabLabels = ["", "추천 대상", "상품 특징", "핵심 요약", "예금자보호", "가입"];
-  let currentIndex = 0;
-  let slides = [], tabs = [];
+    const tabLabels = ["안내", "추천 대상", "상품 특징", "핵심 요약", "예금자보호", "가입"];
+    let currentProduct = products[0], currentIdx = 1, autoTimer;
 
-  function getPnoFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get("pno") || "P001";
-  }
+    function getPnoFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("pno") || "P001";
+    }
 
-  function buildSlider(product) {
-    document.getElementById("productTitle").textContent = product.name;
-    const tabWrapper = document.getElementById("tabButtons");
-    tabWrapper.innerHTML = "";
-    tabs = [];
-
-    const total = Math.min(1 + product.imageCount, 6);
-    for (let i = 0; i < 6; i++) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "tab-btn" + (i === 0 ? " star" : "");
-      if (i >= total) {
-        btn.classList.add("disabled");
-        btn.disabled = true;
-      }
-      btn.innerHTML = i === 0 ? "<span></span>" : `<span>${tabLabels[i]}</span>`;
-      btn.addEventListener("click", () => {
-        if (!btn.disabled) changeSlide(i);
+    function goSlide(idx) {
+      const count = currentProduct.imageCount;
+      if (idx < 1) idx = count;
+      if (idx > count) idx = 1;
+      currentIdx = idx;
+      document.getElementById('mainImage').src = `/img/main/${currentProduct.imgPrefix}_${currentIdx}.png`;
+      document.querySelectorAll('#sliderTabs button').forEach((t, i) => {
+        t.classList.toggle('active', i === (currentIdx - 1));
       });
-      tabWrapper.appendChild(btn);
-      tabs.push(btn);
     }
 
-    const imgWrapper = document.getElementById("slideImagesWrapper");
-    imgWrapper.innerHTML = "";
-    slides = [];
-
-    for (let i = 0; i < 6; i++) {
-      const img = document.createElement("img");
-      img.className = "slide-img";
-      img.src = `img/main/${product.imgPrefix}_${i+1}.png`;
-      img.alt = tabLabels[i] || "별";
-      if (i >= total) img.style.display = "none";
-      imgWrapper.appendChild(img);
-      slides.push(img);
+    function changeSlide(dir) {
+      goSlide(currentIdx + dir);
     }
 
-    changeSlide(0, true);
-  }
+    // 탭 클릭 연결
+    document.addEventListener('DOMContentLoaded', () => {
+      const pno = getPnoFromURL();
+      currentProduct = products.find(p => p.pno === pno) || products[0];
+      document.querySelector('.slider-inner-header').textContent = currentProduct.name;
 
-  function changeSlide(index, init=false) {
-    slides.forEach((img, i) => {
-      const active = i === index && !tabs[i].disabled;
-      img.classList.toggle("active", active);
-      img.style.display = tabs[i].disabled ? "none" : (active ? "block" : "none");
+      // 탭 클릭시 연결
+      document.querySelectorAll('#sliderTabs button').forEach((tab, i) => {
+        tab.onclick = () => goSlide(i + 1);
+      });
+
+      goSlide(1); // 첫 이미지
+
+      // 자동 슬라이드
+      function startAuto() {
+        clearInterval(autoTimer);
+        autoTimer = setInterval(() => changeSlide(1), 4000);
+      }
+      function stopAuto() { clearInterval(autoTimer); }
+
+      const sliderArea = document.querySelector('.slider-area-main');
+      sliderArea.addEventListener('mouseenter', stopAuto);
+      sliderArea.addEventListener('mouseleave', startAuto);
+
+      startAuto();
+
+      // 방향키
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft') changeSlide(-1);
+        if (e.key === 'ArrowRight') changeSlide(1);
+      });
     });
-    tabs.forEach((btn, i) => {
-      btn.classList.toggle("active", i === index && !btn.disabled);
-    });
-    currentIndex = index;
-    if (!init && tabs[index].disabled) nextSlide();
-  }
 
-  function prevSlide() {
-    let idx = currentIndex;
-    do { idx = (idx - 1 + tabs.length) % tabs.length; }
-    while (tabs[idx].disabled);
-    changeSlide(idx);
-  }
-
-  function nextSlide() {
-    let idx = currentIndex;
-    do { idx = (idx + 1) % tabs.length; }
-    while (tabs[idx].disabled);
-    changeSlide(idx);
-  }
-
-  function toggleAccordion(btn) {
-    const item = btn.parentNode;
-    item.classList.toggle("active");
-    btn.querySelector(".accordion-arrow").textContent = item.classList.contains("active") ? "▲" : "▼";
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const pno = getPnoFromURL();
-    const product = products.find(p => p.pno === pno) || products[0];
-    buildSlider(product);
-  });
-</script>
+    // 아코디언
+    function toggleAccordion(btn) {
+      const item = btn.parentNode;
+      item.classList.toggle("active");
+      btn.querySelector(".accordion-arrow").textContent = item.classList.contains("active") ? "▲" : "▼";
+    }
+  </script>
 </body>
 </html>
