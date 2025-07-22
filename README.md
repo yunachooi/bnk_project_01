@@ -33,7 +33,7 @@
 <th>용도</th>
 </tr>
 <tr>
-<td><strong>📦 상품 관리</strong></td>
+<td><strong>상품 관리</strong></td>
 <td><code>bnk_product</code></td>
 <td>외화예금 상품 정보</td>
 </tr>
@@ -48,7 +48,7 @@
 <td>상품별 속성값</td>
 </tr>
 <tr>
-<td><strong>👥 고객 관리</strong></td>
+<td><strong>고객 관리</strong></td>
 <td><code>bnk_customer</code></td>
 <td>고객 정보</td>
 </tr>
@@ -58,7 +58,7 @@
 <td>계좌 정보</td>
 </tr>
 <tr>
-<td><strong>💰 거래 관리</strong></td>
+<td><strong>거래 관리</strong></td>
 <td><code>bnk_transaction</code></td>
 <td>거래 내역</td>
 </tr>
@@ -83,32 +83,32 @@
 <th>주요 업무</th>
 </tr>
 <tr>
-<td><strong>🔧 관리자 시스템</strong></td>
+<td><strong>관리자 시스템</strong></td>
 <td><strong>대용환</strong></td>
 <td>카테고리 관리, 결재 시스템, 대시보드</td>
 </tr>
 <tr>
-<td><strong>🔧 관리자 시스템</strong></td>
+<td><strong>관리자 시스템</strong></td>
 <td><strong>최유나</strong></td>
 <td>상품 관리, 약관 관리, 보안 설정(SSL)</td>
 </tr>
 <tr>
-<td><strong>👤 고객 시스템</strong></td>
+<td><strong>고객 시스템</strong></td>
 <td><strong>김유진</strong></td>
 <td>상품 조회 및 상세 페이지</td>
 </tr>
 <tr>
-<td><strong>👤 고객 시스템</strong></td>
+<td><strong>고객 시스템</strong></td>
 <td><strong>김민수</strong></td>
 <td>로그인, 기업 전용 서비스, 외화 사전</td>
 </tr>
 <tr>
-<td><strong>👤 고객 시스템</strong></td>
+<td><strong>고객 시스템</strong></td>
 <td><strong>김선엽</strong></td>
 <td>환전, 환율 관리</td>
 </tr>
 <tr>
-<td><strong>🌐 공통 서비스</strong></td>
+<td><strong>공통 서비스</strong></td>
 <td><strong>김선엽</strong></td>
 <td>외화 메인 페이지</td>
 </tr>
