@@ -212,6 +212,7 @@ input[type="text"]:focus, select:focus {
     text-overflow: ellipsis;
 }
 
+/* 기본 테이블 컬럼 너비 (product, property용) */
 #resultTable th:nth-child(1), 
 #resultTable td:nth-child(1) {
     width: 50px;
@@ -254,6 +255,58 @@ input[type="text"]:focus, select:focus {
     max-width: 100px;
 }
 
+.table-container:has(#resultTable th:nth-child(8)) #resultTable {
+    min-width: 1000px;
+}
+
+.table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(1),
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(1) {
+    width: 3%;
+    min-width: 40px;
+}
+
+.table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(2),
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(2) {
+    width: 4%;
+    min-width: 50px;
+}
+
+.table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(3),
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(3) {
+    width: 6.67%;
+    min-width: 80px;
+}
+
+.table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(4),
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(4) {
+    width: 6.67%;
+    min-width: 80px;
+}
+
+.table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(5),
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(5) {
+    width: 10%;
+    min-width: 120px;
+}
+
+.table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(6),
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(6) {
+    width: 6.67%;
+    min-width: 80px;
+}
+
+.table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(7),
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(7) {
+    width: 10%;
+    min-width: 120px;
+}
+
+.table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(8),
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(8) {
+    width: 50%;
+    min-width: 300px;
+}
+
 #resultTable td {
     padding: 8px;
     text-align: center;
@@ -263,6 +316,16 @@ input[type="text"]:focus, select:focus {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(5),
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(7),
+.table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(8) {
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-all;
+    line-height: 1.4;
+    padding: 8px 6px;
 }
 
 #resultTable td:nth-child(3), 
@@ -403,18 +466,40 @@ input[type="checkbox"] {
         min-width: 900px;
     }
     
-    #resultTable th:nth-child(3), 
-    #resultTable td:nth-child(3) {
+    .table-container:not(:has(#resultTable th:nth-child(8))) #resultTable th:nth-child(3), 
+    .table-container:not(:has(#resultTable th:nth-child(8))) #resultTable td:nth-child(3) {
         width: 250px;
         min-width: 250px;
         max-width: 250px;
     }
     
-    #resultTable th:nth-child(4), 
-    #resultTable td:nth-child(4) {
+    .table-container:not(:has(#resultTable th:nth-child(8))) #resultTable th:nth-child(4), 
+    .table-container:not(:has(#resultTable th:nth-child(8))) #resultTable td:nth-child(4) {
         width: 300px;
         min-width: 300px;
         max-width: 300px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable {
+        min-width: 1000px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(5),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(5) {
+        width: 9%;
+        min-width: 100px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(7),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(7) {
+        width: 9%;
+        min-width: 100px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(8),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(8) {
+        width: 52%;
+        min-width: 250px;
     }
 }
 
@@ -423,17 +508,69 @@ input[type="checkbox"] {
         min-width: 800px;
     }
     
-    #resultTable th:nth-child(3), 
-    #resultTable td:nth-child(3) {
+    .table-container:not(:has(#resultTable th:nth-child(8))) #resultTable th:nth-child(3), 
+    .table-container:not(:has(#resultTable th:nth-child(8))) #resultTable td:nth-child(3) {
         width: 200px;
         min-width: 200px;
         max-width: 200px;
     }
     
-    #resultTable th:nth-child(4), 
-    #resultTable td:nth-child(4) {
+    .table-container:not(:has(#resultTable th:nth-child(8))) #resultTable th:nth-child(4), 
+    .table-container:not(:has(#resultTable th:nth-child(8))) #resultTable td:nth-child(4) {
         width: 250px;
         min-width: 250px;
         max-width: 250px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable {
+        min-width: 800px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(1),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(1) {
+        width: 4%;
+        min-width: 35px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(2),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(2) {
+        width: 5%;
+        min-width: 40px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(3),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(3) {
+        width: 8%;
+        min-width: 60px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(4),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(4) {
+        width: 8%;
+        min-width: 60px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(5),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(5) {
+        width: 8%;
+        min-width: 70px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(6),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(6) {
+        width: 8%;
+        min-width: 60px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(7),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(7) {
+        width: 8%;
+        min-width: 70px;
+    }
+    
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable th:nth-child(8),
+    .table-container:has(#resultTable th:nth-child(8)) #resultTable td:nth-child(8) {
+        width: 51%;
+        min-width: 200px;
     }
 }
