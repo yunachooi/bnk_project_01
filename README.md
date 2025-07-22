@@ -95,17 +95,17 @@
 <tr>
 <td><strong>👤 고객 시스템</strong></td>
 <td><strong>김유진</strong></td>
-<td>개인고객 페이지, 계좌 관리, 상품 조회/신청</td>
+<td>외화 상품 조회 신청</td>
 </tr>
 <tr>
 <td><strong>👤 고객 시스템</strong></td>
 <td><strong>김민수</strong></td>
-<td>기업고객 페이지, 대량 거래, 기업 전용 서비스</td>
+<td>로그인, 기업 전용 서비스, 외화 사전</td>
 </tr>
 <tr>
 <td><strong>👤 고객 시스템</strong></td>
 <td><strong>김선엽</strong></td>
-<td>환전 서비스, 환율 관리</td>
+<td>환전, 환율 관리</td>
 </tr>
 <tr>
 <td><strong>🌐 공통 서비스</strong></td>
