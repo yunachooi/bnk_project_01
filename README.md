@@ -95,7 +95,7 @@
 <tr>
 <td><strong>👤 고객 시스템</strong></td>
 <td><strong>김유진</strong></td>
-<td>외화 상품 조회 신청</td>
+<td>상품 조회 및 상세 페이지</td>
 </tr>
 <tr>
 <td><strong>👤 고객 시스템</strong></td>
